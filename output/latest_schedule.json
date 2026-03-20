@@ -22,135 +22,135 @@
       "value": 45
     },
     {
-      "task_id": "g4_63",
-      "start": 40,
-      "end": 45,
-      "attitude_angle_deg": 352.68121317720704,
-      "value": 40
+      "task_id": "g5_82",
+      "start": 45,
+      "end": 50,
+      "attitude_angle_deg": 177.83271730375816,
+      "value": 41
     },
     {
       "task_id": "g5_72",
-      "start": 50,
-      "end": 55,
+      "start": 55,
+      "end": 60,
       "attitude_angle_deg": 256.3037914338278,
       "value": 29
     },
     {
       "task_id": "g1_2",
-      "start": 55,
-      "end": 65,
+      "start": 60,
+      "end": 70,
       "attitude_angle_deg": 262.63047003110506,
       "value": 39
     },
     {
-      "task_id": "g1_7",
-      "start": 65,
-      "end": 75,
-      "attitude_angle_deg": 270.24092007302033,
-      "value": 46
-    },
-    {
-      "task_id": "g2_35",
-      "start": 80,
-      "end": 85,
-      "attitude_angle_deg": 240.93823817870583,
-      "value": 41
-    },
-    {
       "task_id": "g3_36",
-      "start": 90,
-      "end": 95,
+      "start": 75,
+      "end": 80,
       "attitude_angle_deg": 207.22924255562785,
       "value": 29
     },
     {
+      "task_id": "g2_35",
+      "start": 85,
+      "end": 90,
+      "attitude_angle_deg": 240.93823817870583,
+      "value": 41
+    },
+    {
       "task_id": "g2_18",
-      "start": 100,
-      "end": 110,
+      "start": 95,
+      "end": 105,
       "attitude_angle_deg": 220.14282788476945,
       "value": 46
     },
     {
       "task_id": "g3_49",
-      "start": 115,
-      "end": 125,
+      "start": 110,
+      "end": 120,
       "attitude_angle_deg": 169.15674114623056,
       "value": 31
     },
     {
-      "task_id": "g2_23",
-      "start": 130,
-      "end": 140,
-      "attitude_angle_deg": 69.50741081914234,
-      "value": 26
+      "task_id": "g1_7",
+      "start": 125,
+      "end": 135,
+      "attitude_angle_deg": 270.24092007302033,
+      "value": 46
+    },
+    {
+      "task_id": "g4_63",
+      "start": 140,
+      "end": 145,
+      "attitude_angle_deg": 352.68121317720704,
+      "value": 40
     },
     {
       "task_id": "g3_50",
-      "start": 145,
-      "end": 160,
+      "start": 150,
+      "end": 165,
       "attitude_angle_deg": 41.720184355001734,
       "value": 30
     },
     {
       "task_id": "g4_57",
-      "start": 160,
-      "end": 165,
+      "start": 165,
+      "end": 170,
       "attitude_angle_deg": 35.429681185312944,
       "value": 45
     },
     {
       "task_id": "g4_56",
-      "start": 165,
-      "end": 170,
+      "start": 170,
+      "end": 175,
       "attitude_angle_deg": 28.9054838765437,
       "value": 26
     },
     {
       "task_id": "g5_83",
-      "start": 170,
-      "end": 180,
+      "start": 175,
+      "end": 185,
       "attitude_angle_deg": 26.701217156766237,
       "value": 34
     },
     {
-      "task_id": "g1_0",
+      "task_id": "g2_22",
       "start": 190,
       "end": 195,
+      "attitude_angle_deg": 291.7886790351226,
+      "value": 22
+    },
+    {
+      "task_id": "g1_0",
+      "start": 200,
+      "end": 205,
       "attitude_angle_deg": 243.54414552350576,
       "value": 39
     },
     {
+      "task_id": "g1_10",
+      "start": 205,
+      "end": 210,
+      "attitude_angle_deg": 241.74013677381805,
+      "value": 28
+    },
+    {
       "task_id": "g1_12",
-      "start": 195,
-      "end": 200,
+      "start": 210,
+      "end": 215,
       "attitude_angle_deg": 237.16789155032723,
       "value": 27
     },
     {
       "task_id": "g3_38",
-      "start": 200,
-      "end": 210,
+      "start": 215,
+      "end": 225,
       "attitude_angle_deg": 234.09962330462523,
       "value": 44
     },
     {
-      "task_id": "g1_11",
-      "start": 215,
-      "end": 220,
-      "attitude_angle_deg": 325.8606626809054,
-      "value": 26
-    },
-    {
-      "task_id": "g1_10",
-      "start": 225,
-      "end": 230,
-      "attitude_angle_deg": 241.74013677381805,
-      "value": 28
-    },
-    {
       "task_id": "g1_5",
-      "start": 235,
-      "end": 240,
+      "start": 230,
+      "end": 235,
       "attitude_angle_deg": 318.3974670838242,
       "value": 46
     }
@@ -295,6 +295,32 @@
         "g1_1"
       ],
       "attitude_angle_deg": 351.97661927447257,
+      "is_key_task": false
+    },
+    {
+      "task_id": "g1_11",
+      "earliest_start": 150,
+      "latest_end": 222,
+      "duration": 2,
+      "value": 26,
+      "cpu": 1,
+      "gpu": 2,
+      "memory": 15,
+      "storage": 71,
+      "bus": 10,
+      "concurrency_cores": 3,
+      "power": 6,
+      "thermal_load": 17,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [
+        "P1"
+      ],
+      "predecessors": [
+        "g1_0"
+      ],
+      "attitude_angle_deg": 325.8606626809054,
       "is_key_task": false
     },
     {
@@ -485,25 +511,25 @@
       "is_key_task": false
     },
     {
-      "task_id": "g2_22",
-      "earliest_start": 188,
-      "latest_end": 213,
-      "duration": 4,
-      "value": 22,
-      "cpu": 2,
-      "gpu": 2,
-      "memory": 6,
-      "storage": 97,
-      "bus": 0,
-      "concurrency_cores": 3,
-      "power": 7,
-      "thermal_load": 6,
-      "payload_type_requirements": [
-        "relay"
+      "task_id": "g2_23",
+      "earliest_start": 89,
+      "latest_end": 176,
+      "duration": 9,
+      "value": 26,
+      "cpu": 4,
+      "gpu": 0,
+      "memory": 17,
+      "storage": 89,
+      "bus": 10,
+      "concurrency_cores": 4,
+      "power": 12,
+      "thermal_load": 17,
+      "payload_type_requirements": [],
+      "payload_id_requirements": [
+        "P3"
       ],
-      "payload_id_requirements": [],
       "predecessors": [],
-      "attitude_angle_deg": 291.7886790351226,
+      "attitude_angle_deg": 69.50741081914234,
       "is_key_task": false
     },
     {
@@ -1609,32 +1635,6 @@
       "is_key_task": false
     },
     {
-      "task_id": "g5_82",
-      "earliest_start": 26,
-      "latest_end": 68,
-      "duration": 5,
-      "value": 41,
-      "cpu": 7,
-      "gpu": 2,
-      "memory": 20,
-      "storage": 80,
-      "bus": 2,
-      "concurrency_cores": 3,
-      "power": 2,
-      "thermal_load": 15,
-      "payload_type_requirements": [
-        "relay"
-      ],
-      "payload_id_requirements": [
-        "P3"
-      ],
-      "predecessors": [
-        "g5_81"
-      ],
-      "attitude_angle_deg": 177.83271730375816,
-      "is_key_task": false
-    },
-    {
       "task_id": "g5_84",
       "earliest_start": 152,
       "latest_end": 227,
@@ -1762,7 +1762,7 @@
       "is_key_task": false
     }
   ],
-  "objective_value": 84892.0,
+  "objective_value": 85972.0,
   "constraint_stats": {
     "scheduled_count": 22,
     "unscheduled_count": 68,
