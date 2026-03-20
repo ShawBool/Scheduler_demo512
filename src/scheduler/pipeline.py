@@ -29,14 +29,12 @@ def run_pipeline(config_path: str, seed: int | None = None, output_dir: str | Pa
     violations = {
         "missing_key_tasks": _collect_missing_key_tasks(tasks, result),
         "resource_overflow_count": int(result.constraint_stats.get("resource_overflow_count", 0)),
-        "danger_rule_block_count": int(result.constraint_stats.get("danger_rule_block_count", 0)),
-        "link_window_violation_count": int(result.constraint_stats.get("link_window_violation_count", 0)),
     }
 
     replan_decision = evaluate_replan_trigger(
         {
-            "temp": float(result.constraint_stats.get("danger_rule_block_count", 0)) * 10.0 + 60.0,
-            "power": float(result.constraint_stats.get("link_window_violation_count", 0)) + 50.0,
+            "temp": float(result.constraint_stats.get("unscheduled_count", 0)) + 60.0,
+            "power": float(result.constraint_stats.get("resource_overflow_count", 0)) + 50.0,
         },
         cfg,
         predicted_gain=float(max(0, len(result.unscheduled_tasks))),

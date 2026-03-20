@@ -24,10 +24,8 @@ def generate_task_pool(config: dict, seed: int) -> list[Task]:
     time_horizon = runtime["time_horizon"]
     critical_payload_ids = cst.get("critical_payload_ids", [])
     payload_types = list(cst.get("payload_type_capacity", {}).keys()) or ["camera"]
-    sim_comm_kinds = sim.get("comm_kinds")
-    link_kinds = sorted({w.get("kind") for w in cst.get("link_windows", []) if w.get("kind")})
-    available_comm_kinds = [None] + (sim_comm_kinds if sim_comm_kinds else link_kinds)
-    attitude_modes = sim.get("attitude_modes", ["earth", "agile", "sun_safe"])
+    angle_min = float(sim.get("attitude_angle_min", 0.0))
+    angle_max = float(sim.get("attitude_angle_max", 359.9))
     predecessor_prob = float(sim.get("predecessor_probability", 0.65))
     max_predecessors = int(sim.get("max_predecessors", 2))
     duration_min = int(sim.get("duration_min", 2))
@@ -60,8 +58,7 @@ def generate_task_pool(config: dict, seed: int) -> list[Task]:
 
             payload_type_req = [rng.choice(payload_types)] if rng.random() < 0.5 else []
             payload_id_req = [rng.choice(critical_payload_ids)] if critical_payload_ids and rng.random() < 0.35 else []
-            attitude_mode = rng.choice(attitude_modes)
-            comm_kind = rng.choice(available_comm_kinds)
+            attitude_angle_deg = rng.uniform(angle_min, angle_max)
 
             task = Task(
                 task_id=tid,
@@ -74,14 +71,13 @@ def generate_task_pool(config: dict, seed: int) -> list[Task]:
                 memory=_rint(rng, 0, cst["memory_capacity"]),
                 storage=_rint(rng, 0, cst["storage_capacity"]),
                 bus=_rint(rng, 0, cst["bus_capacity"]),
-                container_slots=_rint(rng, 0, cst["container_capacity"]),
+                concurrency_cores=_rint(rng, 0, cst["max_concurrency_cores"]),
                 power=_rint(rng, 0, cst["power_capacity"]),
                 thermal_load=_rint(rng, 0, cst["thermal_capacity"]),
                 payload_type_requirements=payload_type_req,
                 payload_id_requirements=payload_id_req,
                 predecessors=preds,
-                attitude_mode=attitude_mode,
-                comm_kind=comm_kind,
+                attitude_angle_deg=attitude_angle_deg,
                 is_key_task=False,
             )
             tasks.append(task)
@@ -99,14 +95,13 @@ def generate_task_pool(config: dict, seed: int) -> list[Task]:
         memory=min(int(sim.get("key_task_memory", 2)), cst["memory_capacity"]),
         storage=min(int(sim.get("key_task_storage", 2)), cst["storage_capacity"]),
         bus=min(int(sim.get("key_task_bus", 1)), cst["bus_capacity"]),
-        container_slots=min(int(sim.get("key_task_container_slots", 1)), cst["container_capacity"]),
+        concurrency_cores=min(int(sim.get("key_task_concurrency_cores", 1)), cst["max_concurrency_cores"]),
         power=min(int(sim.get("key_task_power", 2)), cst["power_capacity"]),
         thermal_load=min(int(sim.get("key_task_thermal_load", 2)), cst["thermal_capacity"]),
         payload_type_requirements=[payload_types[0]],
         payload_id_requirements=critical_payload_ids[:1],
         predecessors=[],
-        attitude_mode=str(sim.get("key_task_attitude_mode", "earth")),
-        comm_kind=None,
+        attitude_angle_deg=float(sim.get("key_task_attitude_angle_deg", 0.0)),
         is_key_task=True,
     )
     tasks.append(key_task)

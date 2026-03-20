@@ -19,14 +19,13 @@ class Task:
     memory: int  # 内存占用
     storage: int  # 存储占用
     bus: int  # 总线占用
-    container_slots: int  # 容器并发槽位占用
+    concurrency_cores: int  # 并发度：任务执行时预计占用计算核心数
     power: int  # 功率占用
     thermal_load: int  # 热负载
     payload_type_requirements: list[str] = field(default_factory=list)  # 载荷类型约束
     payload_id_requirements: list[str] = field(default_factory=list)  # 指定载荷ID约束
     predecessors: list[str] = field(default_factory=list)  # 前置依赖任务ID列表
-    attitude_mode: str = "earth"  # 姿态模式
-    comm_kind: str | None = None  # 通信类型
+    attitude_angle_deg: float = 0.0  # 姿态角（度，0-360）
     is_key_task: bool = False  # 是否关键任务（必须规划）
 
 
@@ -40,30 +39,10 @@ class ResourceSnapshot:
     memory: int
     storage: int
     bus: int
-    container: int
+    concurrency_cores: int
+    attitude_angle_deg: float
     power: int
     thermal: int
-
-
-@dataclass(slots=True)
-class LinkWindow:
-    """通信窗口模型：描述某类链路可用时间段。"""
-
-    kind: str
-    start: int
-    end: int
-    bandwidth: int = 1
-
-
-@dataclass(slots=True)
-class DangerRule:
-    """危险组合规则：禁止特定功率/热/姿态组合。"""
-
-    rule_id: str
-    min_power: int
-    min_thermal: int
-    forbidden_attitudes: list[str]
-    description: str
 
 
 @dataclass(slots=True)
@@ -73,8 +52,7 @@ class ScheduleItem:
     task_id: str
     start: int
     end: int
-    attitude_mode: str
-    comm_kind: str | None
+    attitude_angle_deg: float
     value: int
 
 
