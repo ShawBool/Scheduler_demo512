@@ -23,8 +23,22 @@ def _ensure_positive(value: Any, key: str) -> None:
 
 def load_config(path: str | Path) -> dict[str, Any]:
     config_path = Path(path)
-    with config_path.open("r", encoding="utf-8") as f:
-        cfg = json.load(f)
+    if config_path.is_dir():
+        file_map = {
+            "runtime": "runtime.json",
+            "simulation": "simulation.json",
+            "constraints": "constraints.json",
+            "objective_weights": "objective_weights.json",
+            "replan": "replan.json",
+            "logging": "logging.json",
+        }
+        cfg: dict[str, Any] = {}
+        for section, name in file_map.items():
+            with (config_path / name).open("r", encoding="utf-8") as f:
+                cfg[section] = json.load(f)
+    else:
+        with config_path.open("r", encoding="utf-8") as f:
+            cfg = json.load(f)
 
     cfg.setdefault("runtime", {})
     cfg["runtime"].setdefault("solver_timeout_sec", 10)
@@ -32,6 +46,7 @@ def load_config(path: str | Path) -> dict[str, Any]:
     cfg.setdefault("objective_weights", {})
     cfg["objective_weights"].setdefault("task_value", 1)
     cfg["objective_weights"].setdefault("lateness_penalty", 0)
+    cfg.setdefault("replan", {})
     return cfg
 
 
@@ -55,9 +70,10 @@ def validate_config(cfg: dict[str, Any]) -> None:
         "memory_capacity",
         "storage_capacity",
         "bus_capacity",
-        "container_capacity",
+        "max_concurrency_cores",
         "power_capacity",
         "thermal_capacity",
+        "attitude_time_per_degree",
     )
     for key in numeric_positive_keys:
         _ensure_positive(constraints.get(key), key)

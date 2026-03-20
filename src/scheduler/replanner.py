@@ -28,6 +28,8 @@ def evaluate_replan_trigger(state: dict[str, float], cfg: dict[str, Any], predic
 def _classify_level(state: dict[str, float], rules: dict[str, dict[str, float]]) -> str:
     temp = float(state.get("temp", 0))
     power = float(state.get("power", 0))
+    if not rules:
+        return "NONE"
     for level in ("L3", "L2", "L1"):
         r = rules.get(level, {})
         if temp >= float(r.get("temp_high", 1e9)) or power >= float(r.get("power_high", 1e9)):

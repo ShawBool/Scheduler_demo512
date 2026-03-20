@@ -1,0 +1,22 @@
+{
+  "cpu_capacity": 8,
+  "gpu_capacity": 2,
+  "memory_capacity": 32,
+  "storage_capacity": 128,
+  "bus_capacity": 10,
+  "max_concurrency_cores": 4,
+  "power_capacity": 20,
+  "thermal_capacity": 20,
+  "attitude_time_per_degree": 0.05,
+  "critical_payload_ids": [
+    "P1",
+    "P2",
+    "P3"
+  ],
+  "payload_type_capacity": {
+    "camera": 2,
+    "radar": 1,
+    "relay": 2
+  },
+  "rolling_window_size": 60
+}

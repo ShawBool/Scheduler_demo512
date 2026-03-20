@@ -4,225 +4,155 @@
       "task_id": "position_service_0",
       "start": 0,
       "end": 5,
-      "attitude_mode": "earth",
-      "comm_kind": null,
+      "attitude_angle_deg": 0.0,
       "value": 100
-    },
-    {
-      "task_id": "g4_65",
-      "start": 5,
-      "end": 10,
-      "attitude_mode": "earth",
-      "comm_kind": "uplink",
-      "value": 34
     },
     {
       "task_id": "g3_47",
       "start": 15,
       "end": 20,
-      "attitude_mode": "agile",
-      "comm_kind": "uplink",
-      "value": 12
+      "attitude_angle_deg": 331.53719117545296,
+      "value": 33
     },
     {
-      "task_id": "g4_69",
-      "start": 20,
-      "end": 30,
-      "attitude_mode": "agile",
-      "comm_kind": "uplink",
-      "value": 28
-    },
-    {
-      "task_id": "g2_20",
-      "start": 30,
+      "task_id": "g5_81",
+      "start": 25,
       "end": 35,
-      "attitude_mode": "agile",
-      "comm_kind": "downlink",
-      "value": 40
+      "attitude_angle_deg": 27.488937952540308,
+      "value": 45
     },
     {
       "task_id": "g4_63",
-      "start": 35,
-      "end": 40,
-      "attitude_mode": "agile",
-      "comm_kind": "downlink",
-      "value": 28
+      "start": 40,
+      "end": 45,
+      "attitude_angle_deg": 352.68121317720704,
+      "value": 40
+    },
+    {
+      "task_id": "g5_72",
+      "start": 50,
+      "end": 55,
+      "attitude_angle_deg": 256.3037914338278,
+      "value": 29
     },
     {
       "task_id": "g1_2",
-      "start": 45,
-      "end": 55,
-      "attitude_mode": "sun_safe",
-      "comm_kind": "uplink",
+      "start": 55,
+      "end": 65,
+      "attitude_angle_deg": 262.63047003110506,
       "value": 39
     },
     {
-      "task_id": "g5_78",
-      "start": 60,
-      "end": 70,
-      "attitude_mode": "agile",
-      "comm_kind": null,
-      "value": 13
-    },
-    {
-      "task_id": "g4_66",
-      "start": 70,
-      "end": 80,
-      "attitude_mode": "agile",
-      "comm_kind": null,
-      "value": 48
-    },
-    {
-      "task_id": "g3_49",
-      "start": 80,
-      "end": 90,
-      "attitude_mode": "agile",
-      "comm_kind": "uplink",
-      "value": 31
-    },
-    {
-      "task_id": "g2_35",
-      "start": 95,
-      "end": 100,
-      "attitude_mode": "sun_safe",
-      "comm_kind": null,
-      "value": 41
-    },
-    {
-      "task_id": "g4_71",
-      "start": 100,
-      "end": 105,
-      "attitude_mode": "sun_safe",
-      "comm_kind": null,
+      "task_id": "g1_7",
+      "start": 65,
+      "end": 75,
+      "attitude_angle_deg": 270.24092007302033,
       "value": 46
     },
     {
       "task_id": "g3_36",
-      "start": 105,
-      "end": 110,
-      "attitude_mode": "sun_safe",
-      "comm_kind": "downlink",
+      "start": 80,
+      "end": 85,
+      "attitude_angle_deg": 207.22924255562785,
       "value": 29
     },
     {
-      "task_id": "g5_79",
-      "start": 110,
-      "end": 115,
-      "attitude_mode": "sun_safe",
-      "comm_kind": "downlink",
+      "task_id": "g2_35",
+      "start": 90,
+      "end": 95,
+      "attitude_angle_deg": 240.93823817870583,
+      "value": 41
+    },
+    {
+      "task_id": "g2_18",
+      "start": 100,
+      "end": 110,
+      "attitude_angle_deg": 220.14282788476945,
+      "value": 46
+    },
+    {
+      "task_id": "g3_49",
+      "start": 115,
+      "end": 125,
+      "attitude_angle_deg": 169.15674114623056,
       "value": 31
     },
     {
-      "task_id": "g2_25",
-      "start": 115,
-      "end": 125,
-      "attitude_mode": "sun_safe",
-      "comm_kind": null,
-      "value": 24
-    },
-    {
-      "task_id": "g5_84",
+      "task_id": "g2_23",
       "start": 130,
       "end": 140,
-      "attitude_mode": "earth",
-      "comm_kind": "downlink",
-      "value": 46
+      "attitude_angle_deg": 69.50741081914234,
+      "value": 26
     },
     {
-      "task_id": "g4_56",
-      "start": 140,
-      "end": 145,
-      "attitude_mode": "earth",
-      "comm_kind": "uplink",
-      "value": 48
-    },
-    {
-      "task_id": "g2_24",
+      "task_id": "g3_50",
       "start": 145,
       "end": 160,
-      "attitude_mode": "earth",
-      "comm_kind": "uplink",
-      "value": 41
-    },
-    {
-      "task_id": "g5_85",
-      "start": 160,
-      "end": 165,
-      "attitude_mode": "earth",
-      "comm_kind": "downlink",
-      "value": 46
+      "attitude_angle_deg": 41.720184355001734,
+      "value": 30
     },
     {
       "task_id": "g4_57",
+      "start": 160,
+      "end": 165,
+      "attitude_angle_deg": 35.429681185312944,
+      "value": 45
+    },
+    {
+      "task_id": "g4_56",
       "start": 165,
       "end": 170,
-      "attitude_mode": "earth",
-      "comm_kind": "downlink",
-      "value": 50
+      "attitude_angle_deg": 28.9054838765437,
+      "value": 26
     },
     {
-      "task_id": "g2_28",
-      "start": 175,
+      "task_id": "g5_83",
+      "start": 170,
       "end": 180,
-      "attitude_mode": "sun_safe",
-      "comm_kind": "downlink",
-      "value": 29
-    },
-    {
-      "task_id": "g1_10",
-      "start": 180,
-      "end": 185,
-      "attitude_mode": "sun_safe",
-      "comm_kind": "downlink",
-      "value": 28
+      "attitude_angle_deg": 26.701217156766237,
+      "value": 34
     },
     {
       "task_id": "g1_0",
-      "start": 185,
-      "end": 190,
-      "attitude_mode": "sun_safe",
-      "comm_kind": "downlink",
+      "start": 190,
+      "end": 195,
+      "attitude_angle_deg": 243.54414552350576,
       "value": 39
     },
     {
-      "task_id": "g4_54",
-      "start": 190,
+      "task_id": "g1_12",
+      "start": 195,
       "end": 200,
-      "attitude_mode": "sun_safe",
-      "comm_kind": null,
-      "value": 41
-    },
-    {
-      "task_id": "g5_72",
-      "start": 200,
-      "end": 210,
-      "attitude_mode": "sun_safe",
-      "comm_kind": "uplink",
-      "value": 28
+      "attitude_angle_deg": 237.16789155032723,
+      "value": 27
     },
     {
       "task_id": "g3_38",
-      "start": 210,
-      "end": 220,
-      "attitude_mode": "sun_safe",
-      "comm_kind": "uplink",
+      "start": 200,
+      "end": 210,
+      "attitude_angle_deg": 234.09962330462523,
       "value": 44
     },
     {
-      "task_id": "g1_8",
-      "start": 225,
-      "end": 230,
-      "attitude_mode": "earth",
-      "comm_kind": "downlink",
-      "value": 38
+      "task_id": "g1_11",
+      "start": 215,
+      "end": 220,
+      "attitude_angle_deg": 325.8606626809054,
+      "value": 26
     },
     {
-      "task_id": "g5_73",
+      "task_id": "g1_10",
+      "start": 225,
+      "end": 230,
+      "attitude_angle_deg": 241.74013677381805,
+      "value": 28
+    },
+    {
+      "task_id": "g1_5",
       "start": 235,
       "end": 240,
-      "attitude_mode": "agile",
-      "comm_kind": "downlink",
-      "value": 12
+      "attitude_angle_deg": 318.3974670838242,
+      "value": 46
     }
   ],
   "unscheduled_tasks": [
@@ -231,13 +161,13 @@
       "earliest_start": 154,
       "latest_end": 167,
       "duration": 10,
-      "value": 49,
+      "value": 15,
       "cpu": 6,
       "gpu": 1,
       "memory": 17,
       "storage": 39,
       "bus": 3,
-      "container_slots": 2,
+      "concurrency_cores": 2,
       "power": 3,
       "thermal_load": 2,
       "payload_type_requirements": [
@@ -247,8 +177,7 @@
       "predecessors": [
         "g1_0"
       ],
-      "attitude_mode": "earth",
-      "comm_kind": null,
+      "attitude_angle_deg": 2.3389036081341597,
       "is_key_task": false
     },
     {
@@ -256,13 +185,13 @@
       "earliest_start": 180,
       "latest_end": 189,
       "duration": 5,
-      "value": 22,
-      "cpu": 7,
-      "gpu": 2,
+      "value": 29,
+      "cpu": 4,
+      "gpu": 1,
       "memory": 23,
       "storage": 41,
       "bus": 5,
-      "container_slots": 2,
+      "concurrency_cores": 2,
       "power": 6,
       "thermal_load": 8,
       "payload_type_requirements": [],
@@ -270,8 +199,7 @@
       "predecessors": [
         "g1_1"
       ],
-      "attitude_mode": "earth",
-      "comm_kind": "uplink",
+      "attitude_angle_deg": 311.8474716652215,
       "is_key_task": false
     },
     {
@@ -285,7 +213,7 @@
       "memory": 14,
       "storage": 8,
       "bus": 5,
-      "container_slots": 3,
+      "concurrency_cores": 3,
       "power": 8,
       "thermal_load": 2,
       "payload_type_requirements": [
@@ -297,152 +225,76 @@
       "predecessors": [
         "g1_1"
       ],
-      "attitude_mode": "sun_safe",
-      "comm_kind": "downlink",
-      "is_key_task": false
-    },
-    {
-      "task_id": "g1_5",
-      "earliest_start": 233,
-      "latest_end": 240,
-      "duration": 5,
-      "value": 14,
-      "cpu": 4,
-      "gpu": 0,
-      "memory": 15,
-      "storage": 67,
-      "bus": 9,
-      "container_slots": 3,
-      "power": 18,
-      "thermal_load": 12,
-      "payload_type_requirements": [
-        "relay"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_mode": "sun_safe",
-      "comm_kind": "uplink",
+      "attitude_angle_deg": 247.6694888401494,
       "is_key_task": false
     },
     {
       "task_id": "g1_6",
-      "earliest_start": 56,
-      "latest_end": 98,
-      "duration": 7,
-      "value": 43,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 24,
-      "storage": 119,
-      "bus": 8,
-      "container_slots": 2,
-      "power": 17,
-      "thermal_load": 0,
+      "earliest_start": 109,
+      "latest_end": 234,
+      "duration": 11,
+      "value": 14,
+      "cpu": 2,
+      "gpu": 2,
+      "memory": 27,
+      "storage": 16,
+      "bus": 6,
+      "concurrency_cores": 3,
+      "power": 19,
+      "thermal_load": 14,
       "payload_type_requirements": [],
       "payload_id_requirements": [
         "P1"
       ],
       "predecessors": [
-        "g1_0"
+        "g1_1",
+        "g1_5"
       ],
-      "attitude_mode": "sun_safe",
-      "comm_kind": "uplink",
+      "attitude_angle_deg": 309.910937189033,
       "is_key_task": false
     },
     {
-      "task_id": "g1_7",
-      "earliest_start": 184,
-      "latest_end": 203,
-      "duration": 12,
-      "value": 23,
-      "cpu": 6,
-      "gpu": 0,
-      "memory": 29,
-      "storage": 0,
-      "bus": 4,
-      "container_slots": 4,
-      "power": 5,
-      "thermal_load": 16,
+      "task_id": "g1_8",
+      "earliest_start": 195,
+      "latest_end": 216,
+      "duration": 10,
+      "value": 28,
+      "cpu": 2,
+      "gpu": 2,
+      "memory": 0,
+      "storage": 82,
+      "bus": 7,
+      "concurrency_cores": 0,
+      "power": 3,
+      "thermal_load": 11,
       "payload_type_requirements": [],
-      "payload_id_requirements": [
-        "P3"
+      "payload_id_requirements": [],
+      "predecessors": [
+        "g1_4"
       ],
-      "predecessors": [],
-      "attitude_mode": "agile",
-      "comm_kind": null,
+      "attitude_angle_deg": 71.58810552512742,
       "is_key_task": false
     },
     {
       "task_id": "g1_9",
-      "earliest_start": 14,
-      "latest_end": 80,
-      "duration": 5,
-      "value": 13,
+      "earliest_start": 61,
+      "latest_end": 81,
+      "duration": 6,
+      "value": 39,
       "cpu": 2,
-      "gpu": 2,
+      "gpu": 0,
       "memory": 30,
       "storage": 42,
       "bus": 4,
-      "container_slots": 4,
+      "concurrency_cores": 4,
       "power": 19,
       "thermal_load": 13,
       "payload_type_requirements": [],
-      "payload_id_requirements": [
-        "P2"
-      ],
-      "predecessors": [],
-      "attitude_mode": "earth",
-      "comm_kind": "downlink",
-      "is_key_task": false
-    },
-    {
-      "task_id": "g1_11",
-      "earliest_start": 150,
-      "latest_end": 222,
-      "duration": 2,
-      "value": 9,
-      "cpu": 8,
-      "gpu": 0,
-      "memory": 17,
-      "storage": 124,
-      "bus": 3,
-      "container_slots": 4,
-      "power": 4,
-      "thermal_load": 18,
-      "payload_type_requirements": [
-        "relay"
-      ],
-      "payload_id_requirements": [
-        "P1"
-      ],
+      "payload_id_requirements": [],
       "predecessors": [
-        "g1_0"
+        "g1_1"
       ],
-      "attitude_mode": "earth",
-      "comm_kind": "uplink",
-      "is_key_task": false
-    },
-    {
-      "task_id": "g1_12",
-      "earliest_start": 121,
-      "latest_end": 163,
-      "duration": 11,
-      "value": 27,
-      "cpu": 6,
-      "gpu": 1,
-      "memory": 29,
-      "storage": 13,
-      "bus": 10,
-      "container_slots": 0,
-      "power": 1,
-      "thermal_load": 12,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [
-        "P1"
-      ],
-      "predecessors": [],
-      "attitude_mode": "sun_safe",
-      "comm_kind": "uplink",
+      "attitude_angle_deg": 351.97661927447257,
       "is_key_task": false
     },
     {
@@ -456,7 +308,7 @@
       "memory": 6,
       "storage": 12,
       "bus": 10,
-      "container_slots": 4,
+      "concurrency_cores": 4,
       "power": 0,
       "thermal_load": 2,
       "payload_type_requirements": [],
@@ -466,8 +318,7 @@
       "predecessors": [
         "g1_3"
       ],
-      "attitude_mode": "agile",
-      "comm_kind": "uplink",
+      "attitude_angle_deg": 100.24839756563186,
       "is_key_task": false
     },
     {
@@ -475,15 +326,15 @@
       "earliest_start": 42,
       "latest_end": 151,
       "duration": 5,
-      "value": 34,
-      "cpu": 4,
+      "value": 21,
+      "cpu": 7,
       "gpu": 1,
-      "memory": 31,
-      "storage": 39,
-      "bus": 3,
-      "container_slots": 2,
-      "power": 6,
-      "thermal_load": 1,
+      "memory": 27,
+      "storage": 124,
+      "bus": 2,
+      "concurrency_cores": 1,
+      "power": 9,
+      "thermal_load": 6,
       "payload_type_requirements": [
         "camera"
       ],
@@ -493,48 +344,46 @@
       "predecessors": [
         "g1_13"
       ],
-      "attitude_mode": "agile",
-      "comm_kind": "uplink",
+      "attitude_angle_deg": 354.61265287632335,
       "is_key_task": false
     },
     {
       "task_id": "g1_15",
-      "earliest_start": 188,
-      "latest_end": 233,
-      "duration": 11,
-      "value": 8,
-      "cpu": 8,
-      "gpu": 0,
-      "memory": 11,
-      "storage": 17,
-      "bus": 9,
-      "container_slots": 0,
-      "power": 7,
-      "thermal_load": 12,
+      "earliest_start": 148,
+      "latest_end": 219,
+      "duration": 2,
+      "value": 15,
+      "cpu": 0,
+      "gpu": 2,
+      "memory": 5,
+      "storage": 47,
+      "bus": 1,
+      "concurrency_cores": 4,
+      "power": 2,
+      "thermal_load": 7,
       "payload_type_requirements": [],
       "payload_id_requirements": [],
       "predecessors": [
         "g1_0",
         "g1_14"
       ],
-      "attitude_mode": "sun_safe",
-      "comm_kind": null,
+      "attitude_angle_deg": 306.8938891481779,
       "is_key_task": false
     },
     {
       "task_id": "g1_16",
-      "earliest_start": 227,
-      "latest_end": 239,
-      "duration": 3,
-      "value": 18,
-      "cpu": 5,
-      "gpu": 0,
-      "memory": 16,
-      "storage": 101,
-      "bus": 2,
-      "container_slots": 2,
-      "power": 14,
-      "thermal_load": 10,
+      "earliest_start": 30,
+      "latest_end": 183,
+      "duration": 8,
+      "value": 21,
+      "cpu": 3,
+      "gpu": 2,
+      "memory": 20,
+      "storage": 61,
+      "bus": 4,
+      "concurrency_cores": 3,
+      "power": 4,
+      "thermal_load": 20,
       "payload_type_requirements": [
         "relay"
       ],
@@ -542,258 +391,296 @@
       "predecessors": [
         "g1_2"
       ],
-      "attitude_mode": "agile",
-      "comm_kind": "uplink",
+      "attitude_angle_deg": 113.86150756702409,
       "is_key_task": false
     },
     {
       "task_id": "g1_17",
-      "earliest_start": 2,
-      "latest_end": 122,
-      "duration": 3,
-      "value": 9,
-      "cpu": 3,
-      "gpu": 1,
-      "memory": 18,
-      "storage": 40,
-      "bus": 7,
-      "container_slots": 4,
-      "power": 9,
-      "thermal_load": 19,
+      "earliest_start": 117,
+      "latest_end": 163,
+      "duration": 6,
+      "value": 11,
+      "cpu": 1,
+      "gpu": 2,
+      "memory": 13,
+      "storage": 67,
+      "bus": 2,
+      "concurrency_cores": 2,
+      "power": 2,
+      "thermal_load": 7,
       "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "g1_2"
+      "payload_id_requirements": [
+        "P3"
       ],
-      "attitude_mode": "earth",
-      "comm_kind": "uplink",
-      "is_key_task": false
-    },
-    {
-      "task_id": "g2_18",
-      "earliest_start": 135,
-      "latest_end": 148,
-      "duration": 12,
-      "value": 13,
-      "cpu": 4,
-      "gpu": 0,
-      "memory": 6,
-      "storage": 39,
-      "bus": 4,
-      "container_slots": 2,
-      "power": 19,
-      "thermal_load": 6,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
       "predecessors": [],
-      "attitude_mode": "sun_safe",
-      "comm_kind": null,
+      "attitude_angle_deg": 359.3437532635138,
       "is_key_task": false
     },
     {
       "task_id": "g2_19",
-      "earliest_start": 52,
-      "latest_end": 234,
-      "duration": 7,
-      "value": 5,
-      "cpu": 5,
+      "earliest_start": 39,
+      "latest_end": 118,
+      "duration": 10,
+      "value": 21,
+      "cpu": 0,
       "gpu": 0,
-      "memory": 16,
-      "storage": 41,
-      "bus": 7,
-      "container_slots": 4,
-      "power": 13,
-      "thermal_load": 17,
+      "memory": 27,
+      "storage": 70,
+      "bus": 0,
+      "concurrency_cores": 0,
+      "power": 10,
+      "thermal_load": 4,
       "payload_type_requirements": [
-        "camera"
+        "relay"
       ],
-      "payload_id_requirements": [
-        "P2"
-      ],
+      "payload_id_requirements": [],
       "predecessors": [
         "g2_18"
       ],
-      "attitude_mode": "agile",
-      "comm_kind": null,
+      "attitude_angle_deg": 181.89672000946558,
+      "is_key_task": false
+    },
+    {
+      "task_id": "g2_20",
+      "earliest_start": 67,
+      "latest_end": 120,
+      "duration": 12,
+      "value": 9,
+      "cpu": 2,
+      "gpu": 2,
+      "memory": 2,
+      "storage": 94,
+      "bus": 9,
+      "concurrency_cores": 4,
+      "power": 4,
+      "thermal_load": 13,
+      "payload_type_requirements": [],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 3.4801248890415533,
       "is_key_task": false
     },
     {
       "task_id": "g2_21",
-      "earliest_start": 174,
-      "latest_end": 194,
-      "duration": 5,
-      "value": 14,
-      "cpu": 3,
-      "gpu": 0,
-      "memory": 11,
-      "storage": 105,
-      "bus": 0,
-      "container_slots": 1,
-      "power": 10,
-      "thermal_load": 13,
-      "payload_type_requirements": [
-        "relay"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_mode": "agile",
-      "comm_kind": "downlink",
-      "is_key_task": false
-    },
-    {
-      "task_id": "g2_22",
-      "earliest_start": 221,
-      "latest_end": 236,
-      "duration": 12,
-      "value": 34,
-      "cpu": 5,
-      "gpu": 1,
-      "memory": 14,
-      "storage": 57,
-      "bus": 0,
-      "container_slots": 1,
-      "power": 12,
-      "thermal_load": 10,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "g2_21"
-      ],
-      "attitude_mode": "earth",
-      "comm_kind": null,
-      "is_key_task": false
-    },
-    {
-      "task_id": "g2_23",
-      "earliest_start": 221,
-      "latest_end": 228,
-      "duration": 6,
-      "value": 26,
-      "cpu": 0,
-      "gpu": 0,
-      "memory": 16,
-      "storage": 45,
-      "bus": 9,
-      "container_slots": 2,
-      "power": 1,
-      "thermal_load": 3,
-      "payload_type_requirements": [
-        "relay"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_mode": "sun_safe",
-      "comm_kind": "downlink",
-      "is_key_task": false
-    },
-    {
-      "task_id": "g2_26",
-      "earliest_start": 107,
-      "latest_end": 209,
-      "duration": 5,
+      "earliest_start": 10,
+      "latest_end": 92,
+      "duration": 4,
       "value": 40,
-      "cpu": 0,
-      "gpu": 1,
-      "memory": 18,
-      "storage": 53,
-      "bus": 6,
-      "container_slots": 4,
-      "power": 19,
-      "thermal_load": 20,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_mode": "agile",
-      "comm_kind": "uplink",
-      "is_key_task": false
-    },
-    {
-      "task_id": "g2_27",
-      "earliest_start": 119,
-      "latest_end": 182,
-      "duration": 7,
-      "value": 47,
-      "cpu": 5,
-      "gpu": 0,
-      "memory": 15,
-      "storage": 79,
-      "bus": 3,
-      "container_slots": 1,
-      "power": 4,
-      "thermal_load": 0,
-      "payload_type_requirements": [
-        "relay"
-      ],
-      "payload_id_requirements": [
-        "P1"
-      ],
-      "predecessors": [
-        "g2_26"
-      ],
-      "attitude_mode": "agile",
-      "comm_kind": "downlink",
-      "is_key_task": false
-    },
-    {
-      "task_id": "g2_29",
-      "earliest_start": 45,
-      "latest_end": 228,
-      "duration": 5,
-      "value": 38,
-      "cpu": 8,
+      "cpu": 6,
       "gpu": 2,
-      "memory": 20,
-      "storage": 113,
-      "bus": 9,
-      "container_slots": 4,
+      "memory": 9,
+      "storage": 60,
+      "bus": 2,
+      "concurrency_cores": 1,
       "power": 13,
-      "thermal_load": 17,
+      "thermal_load": 0,
       "payload_type_requirements": [
         "camera"
       ],
       "payload_id_requirements": [],
       "predecessors": [
-        "g2_26"
+        "g2_19"
       ],
-      "attitude_mode": "agile",
-      "comm_kind": "downlink",
+      "attitude_angle_deg": 127.28894059780113,
       "is_key_task": false
     },
     {
-      "task_id": "g2_30",
-      "earliest_start": 229,
-      "latest_end": 238,
-      "duration": 9,
-      "value": 38,
-      "cpu": 7,
+      "task_id": "g2_22",
+      "earliest_start": 188,
+      "latest_end": 213,
+      "duration": 4,
+      "value": 22,
+      "cpu": 2,
       "gpu": 2,
-      "memory": 15,
-      "storage": 70,
-      "bus": 7,
-      "container_slots": 0,
-      "power": 9,
-      "thermal_load": 7,
+      "memory": 6,
+      "storage": 97,
+      "bus": 0,
+      "concurrency_cores": 3,
+      "power": 7,
+      "thermal_load": 6,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 291.7886790351226,
+      "is_key_task": false
+    },
+    {
+      "task_id": "g2_24",
+      "earliest_start": 7,
+      "latest_end": 43,
+      "duration": 7,
+      "value": 11,
+      "cpu": 6,
+      "gpu": 1,
+      "memory": 20,
+      "storage": 111,
+      "bus": 9,
+      "concurrency_cores": 4,
+      "power": 3,
+      "thermal_load": 12,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 95.5413438720164,
+      "is_key_task": false
+    },
+    {
+      "task_id": "g2_25",
+      "earliest_start": 48,
+      "latest_end": 124,
+      "duration": 11,
+      "value": 47,
+      "cpu": 3,
+      "gpu": 1,
+      "memory": 27,
+      "storage": 17,
+      "bus": 10,
+      "concurrency_cores": 2,
+      "power": 19,
+      "thermal_load": 10,
+      "payload_type_requirements": [],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "g2_18",
+        "g2_22"
+      ],
+      "attitude_angle_deg": 258.92285669222986,
+      "is_key_task": false
+    },
+    {
+      "task_id": "g2_26",
+      "earliest_start": 217,
+      "latest_end": 230,
+      "duration": 12,
+      "value": 49,
+      "cpu": 4,
+      "gpu": 2,
+      "memory": 8,
+      "storage": 49,
+      "bus": 6,
+      "concurrency_cores": 3,
+      "power": 5,
+      "thermal_load": 19,
       "payload_type_requirements": [
         "radar"
       ],
       "payload_id_requirements": [],
       "predecessors": [],
-      "attitude_mode": "sun_safe",
-      "comm_kind": "uplink",
+      "attitude_angle_deg": 117.3932274581782,
+      "is_key_task": false
+    },
+    {
+      "task_id": "g2_27",
+      "earliest_start": 77,
+      "latest_end": 191,
+      "duration": 11,
+      "value": 25,
+      "cpu": 7,
+      "gpu": 1,
+      "memory": 28,
+      "storage": 54,
+      "bus": 8,
+      "concurrency_cores": 3,
+      "power": 5,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "g2_22"
+      ],
+      "attitude_angle_deg": 218.33749921566655,
+      "is_key_task": false
+    },
+    {
+      "task_id": "g2_28",
+      "earliest_start": 131,
+      "latest_end": 221,
+      "duration": 6,
+      "value": 7,
+      "cpu": 3,
+      "gpu": 1,
+      "memory": 4,
+      "storage": 116,
+      "bus": 6,
+      "concurrency_cores": 4,
+      "power": 6,
+      "thermal_load": 12,
+      "payload_type_requirements": [],
+      "payload_id_requirements": [
+        "P1"
+      ],
+      "predecessors": [
+        "g2_19",
+        "g2_21"
+      ],
+      "attitude_angle_deg": 53.032691012253586,
+      "is_key_task": false
+    },
+    {
+      "task_id": "g2_29",
+      "earliest_start": 102,
+      "latest_end": 173,
+      "duration": 9,
+      "value": 8,
+      "cpu": 8,
+      "gpu": 0,
+      "memory": 7,
+      "storage": 116,
+      "bus": 2,
+      "concurrency_cores": 3,
+      "power": 16,
+      "thermal_load": 17,
+      "payload_type_requirements": [],
+      "payload_id_requirements": [
+        "P3"
+      ],
+      "predecessors": [
+        "g2_19"
+      ],
+      "attitude_angle_deg": 186.4129943847023,
+      "is_key_task": false
+    },
+    {
+      "task_id": "g2_30",
+      "earliest_start": 81,
+      "latest_end": 205,
+      "duration": 11,
+      "value": 21,
+      "cpu": 3,
+      "gpu": 2,
+      "memory": 17,
+      "storage": 124,
+      "bus": 10,
+      "concurrency_cores": 1,
+      "power": 8,
+      "thermal_load": 14,
+      "payload_type_requirements": [],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "g2_26",
+        "g2_25"
+      ],
+      "attitude_angle_deg": 170.8353298126169,
       "is_key_task": false
     },
     {
       "task_id": "g2_31",
-      "earliest_start": 85,
-      "latest_end": 172,
-      "duration": 6,
+      "earliest_start": 182,
+      "latest_end": 203,
+      "duration": 3,
       "value": 18,
       "cpu": 1,
       "gpu": 1,
       "memory": 26,
       "storage": 84,
       "bus": 8,
-      "container_slots": 3,
+      "concurrency_cores": 3,
       "power": 13,
       "thermal_load": 1,
       "payload_type_requirements": [
@@ -802,9 +689,11 @@
       "payload_id_requirements": [
         "P3"
       ],
-      "predecessors": [],
-      "attitude_mode": "earth",
-      "comm_kind": "downlink",
+      "predecessors": [
+        "g2_23",
+        "g2_26"
+      ],
+      "attitude_angle_deg": 54.994615441115556,
       "is_key_task": false
     },
     {
@@ -818,7 +707,7 @@
       "memory": 26,
       "storage": 56,
       "bus": 7,
-      "container_slots": 1,
+      "concurrency_cores": 1,
       "power": 8,
       "thermal_load": 13,
       "payload_type_requirements": [],
@@ -826,8 +715,7 @@
       "predecessors": [
         "g2_31"
       ],
-      "attitude_mode": "agile",
-      "comm_kind": null,
+      "attitude_angle_deg": 171.66500574739274,
       "is_key_task": false
     },
     {
@@ -835,13 +723,13 @@
       "earliest_start": 7,
       "latest_end": 115,
       "duration": 9,
-      "value": 6,
-      "cpu": 6,
-      "gpu": 2,
+      "value": 39,
+      "cpu": 0,
+      "gpu": 1,
       "memory": 1,
       "storage": 21,
       "bus": 10,
-      "container_slots": 3,
+      "concurrency_cores": 3,
       "power": 4,
       "thermal_load": 14,
       "payload_type_requirements": [],
@@ -850,8 +738,7 @@
         "g2_29",
         "g2_20"
       ],
-      "attitude_mode": "sun_safe",
-      "comm_kind": "downlink",
+      "attitude_angle_deg": 352.9618397090604,
       "is_key_task": false
     },
     {
@@ -859,13 +746,13 @@
       "earliest_start": 12,
       "latest_end": 82,
       "duration": 4,
-      "value": 35,
-      "cpu": 0,
-      "gpu": 2,
+      "value": 10,
+      "cpu": 7,
+      "gpu": 0,
       "memory": 3,
       "storage": 89,
       "bus": 3,
-      "container_slots": 0,
+      "concurrency_cores": 0,
       "power": 20,
       "thermal_load": 1,
       "payload_type_requirements": [
@@ -877,8 +764,7 @@
       "predecessors": [
         "g2_32"
       ],
-      "attitude_mode": "agile",
-      "comm_kind": null,
+      "attitude_angle_deg": 90.79252428847877,
       "is_key_task": false
     },
     {
@@ -892,7 +778,7 @@
       "memory": 21,
       "storage": 3,
       "bus": 6,
-      "container_slots": 3,
+      "concurrency_cores": 3,
       "power": 3,
       "thermal_load": 13,
       "payload_type_requirements": [],
@@ -900,8 +786,7 @@
         "P3"
       ],
       "predecessors": [],
-      "attitude_mode": "agile",
-      "comm_kind": "downlink",
+      "attitude_angle_deg": 154.1732469631845,
       "is_key_task": false
     },
     {
@@ -915,7 +800,7 @@
       "memory": 21,
       "storage": 71,
       "bus": 9,
-      "container_slots": 2,
+      "concurrency_cores": 2,
       "power": 17,
       "thermal_load": 0,
       "payload_type_requirements": [
@@ -926,8 +811,7 @@
         "g3_38",
         "g3_37"
       ],
-      "attitude_mode": "earth",
-      "comm_kind": "uplink",
+      "attitude_angle_deg": 65.44416459105328,
       "is_key_task": false
     },
     {
@@ -941,7 +825,7 @@
       "memory": 5,
       "storage": 75,
       "bus": 3,
-      "container_slots": 3,
+      "concurrency_cores": 3,
       "power": 7,
       "thermal_load": 9,
       "payload_type_requirements": [],
@@ -950,8 +834,7 @@
         "g3_39",
         "g3_38"
       ],
-      "attitude_mode": "sun_safe",
-      "comm_kind": "downlink",
+      "attitude_angle_deg": 232.46045361676872,
       "is_key_task": false
     },
     {
@@ -965,7 +848,7 @@
       "memory": 11,
       "storage": 49,
       "bus": 3,
-      "container_slots": 3,
+      "concurrency_cores": 3,
       "power": 8,
       "thermal_load": 18,
       "payload_type_requirements": [
@@ -978,8 +861,7 @@
         "g3_39",
         "g3_38"
       ],
-      "attitude_mode": "earth",
-      "comm_kind": null,
+      "attitude_angle_deg": 82.97064106333293,
       "is_key_task": false
     },
     {
@@ -993,7 +875,7 @@
       "memory": 17,
       "storage": 11,
       "bus": 0,
-      "container_slots": 4,
+      "concurrency_cores": 4,
       "power": 9,
       "thermal_load": 4,
       "payload_type_requirements": [],
@@ -1001,8 +883,7 @@
         "P2"
       ],
       "predecessors": [],
-      "attitude_mode": "earth",
-      "comm_kind": "uplink",
+      "attitude_angle_deg": 64.58101157237665,
       "is_key_task": false
     },
     {
@@ -1010,15 +891,15 @@
       "earliest_start": 222,
       "latest_end": 240,
       "duration": 12,
-      "value": 21,
-      "cpu": 7,
-      "gpu": 0,
-      "memory": 4,
-      "storage": 102,
-      "bus": 7,
-      "container_slots": 0,
-      "power": 18,
-      "thermal_load": 20,
+      "value": 8,
+      "cpu": 4,
+      "gpu": 1,
+      "memory": 7,
+      "storage": 16,
+      "bus": 6,
+      "concurrency_cores": 3,
+      "power": 2,
+      "thermal_load": 18,
       "payload_type_requirements": [
         "radar"
       ],
@@ -1026,24 +907,23 @@
       "predecessors": [
         "g3_40"
       ],
-      "attitude_mode": "earth",
-      "comm_kind": null,
+      "attitude_angle_deg": 66.3524849733904,
       "is_key_task": false
     },
     {
       "task_id": "g3_44",
-      "earliest_start": 13,
-      "latest_end": 63,
+      "earliest_start": 175,
+      "latest_end": 190,
       "duration": 12,
-      "value": 38,
-      "cpu": 6,
+      "value": 19,
+      "cpu": 8,
       "gpu": 1,
       "memory": 28,
-      "storage": 76,
-      "bus": 9,
-      "container_slots": 3,
-      "power": 9,
-      "thermal_load": 18,
+      "storage": 113,
+      "bus": 4,
+      "concurrency_cores": 4,
+      "power": 13,
+      "thermal_load": 9,
       "payload_type_requirements": [
         "radar"
       ],
@@ -1052,57 +932,54 @@
         "g3_37",
         "g3_43"
       ],
-      "attitude_mode": "sun_safe",
-      "comm_kind": null,
+      "attitude_angle_deg": 284.5876246606466,
       "is_key_task": false
     },
     {
       "task_id": "g3_45",
-      "earliest_start": 15,
-      "latest_end": 182,
+      "earliest_start": 158,
+      "latest_end": 176,
       "duration": 11,
-      "value": 10,
-      "cpu": 2,
+      "value": 16,
+      "cpu": 8,
       "gpu": 0,
-      "memory": 11,
-      "storage": 19,
-      "bus": 2,
-      "container_slots": 0,
-      "power": 13,
-      "thermal_load": 14,
-      "payload_type_requirements": [
-        "camera"
+      "memory": 10,
+      "storage": 0,
+      "bus": 6,
+      "concurrency_cores": 3,
+      "power": 19,
+      "thermal_load": 15,
+      "payload_type_requirements": [],
+      "payload_id_requirements": [
+        "P1"
       ],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_mode": "agile",
-      "comm_kind": "downlink",
+      "predecessors": [
+        "g3_39"
+      ],
+      "attitude_angle_deg": 56.52484790777768,
       "is_key_task": false
     },
     {
       "task_id": "g3_46",
-      "earliest_start": 120,
-      "latest_end": 168,
-      "duration": 11,
-      "value": 47,
+      "earliest_start": 8,
+      "latest_end": 73,
+      "duration": 6,
+      "value": 45,
       "cpu": 3,
       "gpu": 1,
       "memory": 7,
       "storage": 57,
       "bus": 10,
-      "container_slots": 1,
+      "concurrency_cores": 1,
       "power": 8,
       "thermal_load": 4,
-      "payload_type_requirements": [
-        "camera"
-      ],
+      "payload_type_requirements": [],
       "payload_id_requirements": [],
       "predecessors": [
-        "g3_40",
-        "g3_43"
+        "g3_43",
+        "g3_37"
       ],
-      "attitude_mode": "sun_safe",
-      "comm_kind": "downlink",
+      "attitude_angle_deg": 283.5393067901586,
       "is_key_task": false
     },
     {
@@ -1110,13 +987,13 @@
       "earliest_start": 20,
       "latest_end": 182,
       "duration": 9,
-      "value": 42,
+      "value": 41,
       "cpu": 0,
       "gpu": 2,
       "memory": 17,
       "storage": 10,
       "bus": 2,
-      "container_slots": 3,
+      "concurrency_cores": 3,
       "power": 16,
       "thermal_load": 20,
       "payload_type_requirements": [],
@@ -1127,33 +1004,7 @@
         "g3_47",
         "g3_41"
       ],
-      "attitude_mode": "sun_safe",
-      "comm_kind": "downlink",
-      "is_key_task": false
-    },
-    {
-      "task_id": "g3_50",
-      "earliest_start": 102,
-      "latest_end": 218,
-      "duration": 12,
-      "value": 37,
-      "cpu": 0,
-      "gpu": 2,
-      "memory": 29,
-      "storage": 105,
-      "bus": 0,
-      "container_slots": 1,
-      "power": 16,
-      "thermal_load": 11,
-      "payload_type_requirements": [
-        "camera"
-      ],
-      "payload_id_requirements": [
-        "P2"
-      ],
-      "predecessors": [],
-      "attitude_mode": "earth",
-      "comm_kind": "uplink",
+      "attitude_angle_deg": 346.19180567920193,
       "is_key_task": false
     },
     {
@@ -1161,15 +1012,15 @@
       "earliest_start": 193,
       "latest_end": 235,
       "duration": 11,
-      "value": 36,
-      "cpu": 1,
+      "value": 49,
+      "cpu": 7,
       "gpu": 0,
-      "memory": 15,
-      "storage": 40,
-      "bus": 4,
-      "container_slots": 4,
-      "power": 0,
-      "thermal_load": 17,
+      "memory": 1,
+      "storage": 61,
+      "bus": 2,
+      "concurrency_cores": 2,
+      "power": 17,
+      "thermal_load": 0,
       "payload_type_requirements": [
         "camera"
       ],
@@ -1177,45 +1028,45 @@
       "predecessors": [
         "g3_39"
       ],
-      "attitude_mode": "agile",
-      "comm_kind": "downlink",
+      "attitude_angle_deg": 157.67798261654892,
       "is_key_task": false
     },
     {
       "task_id": "g3_52",
-      "earliest_start": 23,
-      "latest_end": 88,
-      "duration": 8,
-      "value": 14,
-      "cpu": 7,
+      "earliest_start": 104,
+      "latest_end": 125,
+      "duration": 10,
+      "value": 50,
+      "cpu": 4,
       "gpu": 2,
-      "memory": 18,
-      "storage": 69,
-      "bus": 6,
-      "container_slots": 3,
-      "power": 15,
-      "thermal_load": 7,
+      "memory": 17,
+      "storage": 106,
+      "bus": 7,
+      "concurrency_cores": 3,
+      "power": 7,
+      "thermal_load": 14,
       "payload_type_requirements": [],
       "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_mode": "earth",
-      "comm_kind": "downlink",
+      "predecessors": [
+        "g3_50"
+      ],
+      "attitude_angle_deg": 55.414207681755265,
       "is_key_task": false
     },
     {
       "task_id": "g3_53",
-      "earliest_start": 141,
-      "latest_end": 168,
-      "duration": 9,
-      "value": 23,
+      "earliest_start": 37,
+      "latest_end": 145,
+      "duration": 10,
+      "value": 5,
       "cpu": 4,
       "gpu": 2,
-      "memory": 31,
-      "storage": 38,
-      "bus": 7,
-      "container_slots": 4,
-      "power": 15,
-      "thermal_load": 11,
+      "memory": 19,
+      "storage": 125,
+      "bus": 2,
+      "concurrency_cores": 3,
+      "power": 17,
+      "thermal_load": 15,
       "payload_type_requirements": [
         "radar"
       ],
@@ -1225,33 +1076,49 @@
       "predecessors": [
         "g3_38"
       ],
-      "attitude_mode": "agile",
-      "comm_kind": null,
+      "attitude_angle_deg": 96.15544143777903,
+      "is_key_task": false
+    },
+    {
+      "task_id": "g4_54",
+      "earliest_start": 85,
+      "latest_end": 233,
+      "duration": 7,
+      "value": 17,
+      "cpu": 3,
+      "gpu": 2,
+      "memory": 24,
+      "storage": 59,
+      "bus": 6,
+      "concurrency_cores": 0,
+      "power": 10,
+      "thermal_load": 15,
+      "payload_type_requirements": [],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 335.7335268319224,
       "is_key_task": false
     },
     {
       "task_id": "g4_55",
-      "earliest_start": 202,
-      "latest_end": 240,
-      "duration": 12,
+      "earliest_start": 98,
+      "latest_end": 144,
+      "duration": 8,
       "value": 33,
       "cpu": 1,
       "gpu": 2,
       "memory": 29,
       "storage": 3,
       "bus": 2,
-      "container_slots": 3,
+      "concurrency_cores": 3,
       "power": 20,
       "thermal_load": 4,
-      "payload_type_requirements": [
-        "camera"
+      "payload_type_requirements": [],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "g4_54"
       ],
-      "payload_id_requirements": [
-        "P3"
-      ],
-      "predecessors": [],
-      "attitude_mode": "agile",
-      "comm_kind": null,
+      "attitude_angle_deg": 313.0051427790613,
       "is_key_task": false
     },
     {
@@ -1265,7 +1132,7 @@
       "memory": 15,
       "storage": 127,
       "bus": 9,
-      "container_slots": 1,
+      "concurrency_cores": 1,
       "power": 7,
       "thermal_load": 14,
       "payload_type_requirements": [],
@@ -1273,8 +1140,7 @@
       "predecessors": [
         "g4_57"
       ],
-      "attitude_mode": "earth",
-      "comm_kind": null,
+      "attitude_angle_deg": 61.17711529960824,
       "is_key_task": false
     },
     {
@@ -1288,7 +1154,7 @@
       "memory": 19,
       "storage": 108,
       "bus": 4,
-      "container_slots": 3,
+      "concurrency_cores": 3,
       "power": 9,
       "thermal_load": 6,
       "payload_type_requirements": [],
@@ -1296,8 +1162,7 @@
       "predecessors": [
         "g4_57"
       ],
-      "attitude_mode": "earth",
-      "comm_kind": null,
+      "attitude_angle_deg": 56.85542638363612,
       "is_key_task": false
     },
     {
@@ -1311,7 +1176,7 @@
       "memory": 0,
       "storage": 12,
       "bus": 9,
-      "container_slots": 3,
+      "concurrency_cores": 3,
       "power": 9,
       "thermal_load": 7,
       "payload_type_requirements": [],
@@ -1320,8 +1185,7 @@
         "g4_58",
         "g4_56"
       ],
-      "attitude_mode": "agile",
-      "comm_kind": null,
+      "attitude_angle_deg": 106.25354832258864,
       "is_key_task": false
     },
     {
@@ -1329,13 +1193,13 @@
       "earliest_start": 205,
       "latest_end": 227,
       "duration": 11,
-      "value": 45,
+      "value": 13,
       "cpu": 1,
       "gpu": 2,
       "memory": 2,
       "storage": 79,
       "bus": 7,
-      "container_slots": 0,
+      "concurrency_cores": 0,
       "power": 18,
       "thermal_load": 11,
       "payload_type_requirements": [
@@ -1345,8 +1209,7 @@
       "predecessors": [
         "g4_58"
       ],
-      "attitude_mode": "sun_safe",
-      "comm_kind": null,
+      "attitude_angle_deg": 245.03974839610996,
       "is_key_task": false
     },
     {
@@ -1360,7 +1223,7 @@
       "memory": 16,
       "storage": 123,
       "bus": 4,
-      "container_slots": 2,
+      "concurrency_cores": 2,
       "power": 3,
       "thermal_load": 14,
       "payload_type_requirements": [
@@ -1371,50 +1234,111 @@
         "g4_56",
         "g4_55"
       ],
-      "attitude_mode": "agile",
-      "comm_kind": "downlink",
+      "attitude_angle_deg": 131.67212526838307,
       "is_key_task": false
     },
     {
       "task_id": "g4_64",
-      "earliest_start": 191,
-      "latest_end": 219,
-      "duration": 12,
-      "value": 44,
+      "earliest_start": 172,
+      "latest_end": 226,
+      "duration": 7,
+      "value": 11,
       "cpu": 3,
+      "gpu": 1,
+      "memory": 1,
+      "storage": 83,
+      "bus": 9,
+      "concurrency_cores": 1,
+      "power": 20,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 338.41105185146154,
+      "is_key_task": false
+    },
+    {
+      "task_id": "g4_65",
+      "earliest_start": 210,
+      "latest_end": 236,
+      "duration": 12,
+      "value": 24,
+      "cpu": 7,
+      "gpu": 0,
+      "memory": 6,
+      "storage": 60,
+      "bus": 8,
+      "concurrency_cores": 1,
+      "power": 12,
+      "thermal_load": 14,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [
+        "P1"
+      ],
+      "predecessors": [],
+      "attitude_angle_deg": 340.5595256842124,
+      "is_key_task": false
+    },
+    {
+      "task_id": "g4_66",
+      "earliest_start": 171,
+      "latest_end": 238,
+      "duration": 7,
+      "value": 14,
+      "cpu": 6,
       "gpu": 2,
-      "memory": 4,
-      "storage": 118,
-      "bus": 4,
-      "container_slots": 3,
-      "power": 3,
-      "thermal_load": 4,
+      "memory": 6,
+      "storage": 125,
+      "bus": 9,
+      "concurrency_cores": 3,
+      "power": 8,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 267.14261841403714,
+      "is_key_task": false
+    },
+    {
+      "task_id": "g4_67",
+      "earliest_start": 55,
+      "latest_end": 175,
+      "duration": 7,
+      "value": 46,
+      "cpu": 5,
+      "gpu": 0,
+      "memory": 25,
+      "storage": 70,
+      "bus": 3,
+      "concurrency_cores": 0,
+      "power": 14,
+      "thermal_load": 2,
       "payload_type_requirements": [
         "relay"
       ],
       "payload_id_requirements": [],
       "predecessors": [
-        "g4_55",
-        "g4_57"
+        "g4_59"
       ],
-      "attitude_mode": "sun_safe",
-      "comm_kind": "uplink",
+      "attitude_angle_deg": 324.5204668516332,
       "is_key_task": false
     },
     {
-      "task_id": "g4_67",
-      "earliest_start": 23,
-      "latest_end": 201,
-      "duration": 9,
-      "value": 9,
-      "cpu": 8,
-      "gpu": 0,
+      "task_id": "g4_68",
+      "earliest_start": 54,
+      "latest_end": 230,
+      "duration": 12,
+      "value": 18,
+      "cpu": 1,
+      "gpu": 2,
       "memory": 13,
-      "storage": 59,
-      "bus": 5,
-      "container_slots": 1,
-      "power": 19,
-      "thermal_load": 0,
+      "storage": 55,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 4,
+      "thermal_load": 19,
       "payload_type_requirements": [],
       "payload_id_requirements": [
         "P1"
@@ -1422,33 +1346,51 @@
       "predecessors": [
         "g4_54"
       ],
-      "attitude_mode": "sun_safe",
-      "comm_kind": null,
+      "attitude_angle_deg": 283.23341818147605,
       "is_key_task": false
     },
     {
-      "task_id": "g4_68",
-      "earliest_start": 219,
-      "latest_end": 229,
-      "duration": 6,
+      "task_id": "g4_69",
+      "earliest_start": 70,
+      "latest_end": 109,
+      "duration": 2,
       "value": 6,
       "cpu": 2,
       "gpu": 0,
       "memory": 22,
       "storage": 60,
       "bus": 9,
-      "container_slots": 2,
+      "concurrency_cores": 2,
       "power": 0,
       "thermal_load": 5,
       "payload_type_requirements": [],
       "payload_id_requirements": [],
       "predecessors": [],
-      "attitude_mode": "earth",
-      "comm_kind": "downlink",
+      "attitude_angle_deg": 39.562492605407854,
       "is_key_task": false
     },
     {
       "task_id": "g4_70",
+      "earliest_start": 13,
+      "latest_end": 51,
+      "duration": 6,
+      "value": 28,
+      "cpu": 8,
+      "gpu": 2,
+      "memory": 6,
+      "storage": 115,
+      "bus": 8,
+      "concurrency_cores": 1,
+      "power": 19,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 171.40092295582775,
+      "is_key_task": false
+    },
+    {
+      "task_id": "g4_71",
       "earliest_start": 133,
       "latest_end": 183,
       "duration": 12,
@@ -1458,7 +1400,7 @@
       "memory": 28,
       "storage": 18,
       "bus": 1,
-      "container_slots": 2,
+      "concurrency_cores": 2,
       "power": 19,
       "thermal_load": 4,
       "payload_type_requirements": [],
@@ -1466,22 +1408,68 @@
       "predecessors": [
         "g4_55"
       ],
-      "attitude_mode": "agile",
-      "comm_kind": "downlink",
+      "attitude_angle_deg": 153.41587557886902,
+      "is_key_task": false
+    },
+    {
+      "task_id": "g5_73",
+      "earliest_start": 184,
+      "latest_end": 207,
+      "duration": 10,
+      "value": 25,
+      "cpu": 6,
+      "gpu": 1,
+      "memory": 16,
+      "storage": 95,
+      "bus": 2,
+      "concurrency_cores": 3,
+      "power": 2,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "g5_72"
+      ],
+      "attitude_angle_deg": 262.5875414976581,
       "is_key_task": false
     },
     {
       "task_id": "g5_74",
+      "earliest_start": 23,
+      "latest_end": 136,
+      "duration": 3,
+      "value": 12,
+      "cpu": 6,
+      "gpu": 1,
+      "memory": 27,
+      "storage": 13,
+      "bus": 4,
+      "concurrency_cores": 4,
+      "power": 9,
+      "thermal_load": 11,
+      "payload_type_requirements": [],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "g5_72",
+        "g5_73"
+      ],
+      "attitude_angle_deg": 118.63958871169218,
+      "is_key_task": false
+    },
+    {
+      "task_id": "g5_75",
       "earliest_start": 147,
       "latest_end": 214,
       "duration": 3,
-      "value": 19,
-      "cpu": 6,
-      "gpu": 2,
+      "value": 41,
+      "cpu": 3,
+      "gpu": 1,
       "memory": 1,
       "storage": 68,
       "bus": 0,
-      "container_slots": 1,
+      "concurrency_cores": 1,
       "power": 8,
       "thermal_load": 9,
       "payload_type_requirements": [
@@ -1490,264 +1478,295 @@
       "payload_id_requirements": [],
       "predecessors": [
         "g5_72",
-        "g5_73"
-      ],
-      "attitude_mode": "agile",
-      "comm_kind": "downlink",
-      "is_key_task": false
-    },
-    {
-      "task_id": "g5_75",
-      "earliest_start": 89,
-      "latest_end": 97,
-      "duration": 7,
-      "value": 10,
-      "cpu": 8,
-      "gpu": 0,
-      "memory": 24,
-      "storage": 107,
-      "bus": 7,
-      "container_slots": 2,
-      "power": 5,
-      "thermal_load": 11,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [
-        "P3"
-      ],
-      "predecessors": [
         "g5_74"
       ],
-      "attitude_mode": "sun_safe",
-      "comm_kind": null,
+      "attitude_angle_deg": 274.4617669340722,
       "is_key_task": false
     },
     {
       "task_id": "g5_76",
-      "earliest_start": 184,
-      "latest_end": 210,
-      "duration": 6,
-      "value": 44,
-      "cpu": 0,
-      "gpu": 2,
-      "memory": 5,
-      "storage": 69,
-      "bus": 7,
-      "container_slots": 3,
-      "power": 15,
-      "thermal_load": 19,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [
-        "P1"
+      "earliest_start": 89,
+      "latest_end": 97,
+      "duration": 7,
+      "value": 38,
+      "cpu": 3,
+      "gpu": 1,
+      "memory": 26,
+      "storage": 116,
+      "bus": 5,
+      "concurrency_cores": 1,
+      "power": 11,
+      "thermal_load": 9,
+      "payload_type_requirements": [
+        "relay"
       ],
-      "predecessors": [],
-      "attitude_mode": "earth",
-      "comm_kind": null,
+      "payload_id_requirements": [],
+      "predecessors": [
+        "g5_75"
+      ],
+      "attitude_angle_deg": 11.033489707288037,
       "is_key_task": false
     },
     {
       "task_id": "g5_77",
-      "earliest_start": 106,
-      "latest_end": 149,
-      "duration": 9,
-      "value": 38,
+      "earliest_start": 198,
+      "latest_end": 210,
+      "duration": 7,
+      "value": 47,
+      "cpu": 6,
+      "gpu": 1,
+      "memory": 28,
+      "storage": 106,
+      "bus": 4,
+      "concurrency_cores": 1,
+      "power": 16,
+      "thermal_load": 3,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [
+        "P1"
+      ],
+      "predecessors": [],
+      "attitude_angle_deg": 97.92981339228419,
+      "is_key_task": false
+    },
+    {
+      "task_id": "g5_78",
+      "earliest_start": 110,
+      "latest_end": 131,
+      "duration": 7,
+      "value": 18,
       "cpu": 4,
       "gpu": 0,
-      "memory": 14,
-      "storage": 101,
-      "bus": 9,
-      "container_slots": 0,
-      "power": 0,
-      "thermal_load": 6,
+      "memory": 8,
+      "storage": 65,
+      "bus": 4,
+      "concurrency_cores": 2,
+      "power": 3,
+      "thermal_load": 0,
       "payload_type_requirements": [
         "radar"
       ],
       "payload_id_requirements": [],
       "predecessors": [
+        "g5_76",
         "g5_74"
       ],
-      "attitude_mode": "sun_safe",
-      "comm_kind": "uplink",
+      "attitude_angle_deg": 19.716026870657345,
+      "is_key_task": false
+    },
+    {
+      "task_id": "g5_79",
+      "earliest_start": 191,
+      "latest_end": 227,
+      "duration": 9,
+      "value": 9,
+      "cpu": 6,
+      "gpu": 2,
+      "memory": 2,
+      "storage": 111,
+      "bus": 0,
+      "concurrency_cores": 3,
+      "power": 2,
+      "thermal_load": 10,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "g5_76",
+        "g5_77"
+      ],
+      "attitude_angle_deg": 290.1514471453783,
       "is_key_task": false
     },
     {
       "task_id": "g5_80",
-      "earliest_start": 22,
-      "latest_end": 140,
-      "duration": 7,
-      "value": 24,
+      "earliest_start": 109,
+      "latest_end": 193,
+      "duration": 11,
+      "value": 49,
       "cpu": 5,
       "gpu": 0,
-      "memory": 21,
-      "storage": 43,
-      "bus": 1,
-      "container_slots": 4,
-      "power": 20,
-      "thermal_load": 3,
+      "memory": 27,
+      "storage": 27,
+      "bus": 3,
+      "concurrency_cores": 3,
+      "power": 18,
+      "thermal_load": 12,
       "payload_type_requirements": [
-        "relay"
+        "radar"
       ],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_mode": "earth",
-      "comm_kind": "uplink",
-      "is_key_task": false
-    },
-    {
-      "task_id": "g5_81",
-      "earliest_start": 130,
-      "latest_end": 164,
-      "duration": 10,
-      "value": 20,
-      "cpu": 1,
-      "gpu": 0,
-      "memory": 16,
-      "storage": 50,
-      "bus": 2,
-      "container_slots": 4,
-      "power": 4,
-      "thermal_load": 20,
-      "payload_type_requirements": [
-        "relay"
+      "payload_id_requirements": [
+        "P3"
       ],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_mode": "sun_safe",
-      "comm_kind": null,
+      "predecessors": [
+        "g5_76",
+        "g5_72"
+      ],
+      "attitude_angle_deg": 165.58887499158175,
       "is_key_task": false
     },
     {
       "task_id": "g5_82",
-      "earliest_start": 45,
-      "latest_end": 208,
-      "duration": 3,
-      "value": 9,
+      "earliest_start": 26,
+      "latest_end": 68,
+      "duration": 5,
+      "value": 41,
       "cpu": 7,
-      "gpu": 1,
-      "memory": 19,
-      "storage": 70,
-      "bus": 9,
-      "container_slots": 0,
-      "power": 11,
-      "thermal_load": 16,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "g5_81",
-        "g5_77"
-      ],
-      "attitude_mode": "earth",
-      "comm_kind": "uplink",
-      "is_key_task": false
-    },
-    {
-      "task_id": "g5_83",
-      "earliest_start": 79,
-      "latest_end": 200,
-      "duration": 3,
-      "value": 37,
-      "cpu": 6,
-      "gpu": 1,
-      "memory": 2,
-      "storage": 115,
-      "bus": 9,
-      "container_slots": 1,
-      "power": 10,
-      "thermal_load": 19,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [
-        "P1"
-      ],
-      "predecessors": [
-        "g5_77"
-      ],
-      "attitude_mode": "sun_safe",
-      "comm_kind": "downlink",
-      "is_key_task": false
-    },
-    {
-      "task_id": "g5_86",
-      "earliest_start": 154,
-      "latest_end": 185,
-      "duration": 12,
-      "value": 43,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 24,
-      "storage": 84,
+      "gpu": 2,
+      "memory": 20,
+      "storage": 80,
       "bus": 2,
-      "container_slots": 4,
+      "concurrency_cores": 3,
       "power": 2,
-      "thermal_load": 20,
+      "thermal_load": 15,
       "payload_type_requirements": [
         "relay"
       ],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "g5_77"
+      "payload_id_requirements": [
+        "P3"
       ],
-      "attitude_mode": "agile",
-      "comm_kind": null,
+      "predecessors": [
+        "g5_81"
+      ],
+      "attitude_angle_deg": 177.83271730375816,
       "is_key_task": false
     },
     {
-      "task_id": "g5_87",
-      "earliest_start": 108,
-      "latest_end": 185,
-      "duration": 12,
-      "value": 13,
-      "cpu": 2,
-      "gpu": 0,
-      "memory": 18,
-      "storage": 25,
-      "bus": 8,
-      "container_slots": 4,
-      "power": 16,
-      "thermal_load": 1,
+      "task_id": "g5_84",
+      "earliest_start": 152,
+      "latest_end": 227,
+      "duration": 11,
+      "value": 43,
+      "cpu": 7,
+      "gpu": 2,
+      "memory": 9,
+      "storage": 15,
+      "bus": 7,
+      "concurrency_cores": 0,
+      "power": 10,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "g5_79"
+      ],
+      "attitude_angle_deg": 67.7473834784141,
+      "is_key_task": false
+    },
+    {
+      "task_id": "g5_85",
+      "earliest_start": 165,
+      "latest_end": 197,
+      "duration": 10,
+      "value": 29,
+      "cpu": 6,
+      "gpu": 1,
+      "memory": 3,
+      "storage": 85,
+      "bus": 1,
+      "concurrency_cores": 2,
+      "power": 3,
+      "thermal_load": 17,
       "payload_type_requirements": [],
       "payload_id_requirements": [
         "P2"
       ],
       "predecessors": [
-        "g5_76",
-        "g5_74"
+        "g5_79",
+        "g5_80"
       ],
-      "attitude_mode": "earth",
-      "comm_kind": null,
+      "attitude_angle_deg": 330.3654504031941,
+      "is_key_task": false
+    },
+    {
+      "task_id": "g5_86",
+      "earliest_start": 98,
+      "latest_end": 182,
+      "duration": 12,
+      "value": 46,
+      "cpu": 6,
+      "gpu": 0,
+      "memory": 5,
+      "storage": 79,
+      "bus": 8,
+      "concurrency_cores": 3,
+      "power": 20,
+      "thermal_load": 10,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [
+        "P2"
+      ],
+      "predecessors": [
+        "g5_77"
+      ],
+      "attitude_angle_deg": 111.65240234489717,
+      "is_key_task": false
+    },
+    {
+      "task_id": "g5_87",
+      "earliest_start": 171,
+      "latest_end": 186,
+      "duration": 4,
+      "value": 36,
+      "cpu": 3,
+      "gpu": 0,
+      "memory": 8,
+      "storage": 39,
+      "bus": 1,
+      "concurrency_cores": 2,
+      "power": 3,
+      "thermal_load": 16,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [
+        "P1"
+      ],
+      "predecessors": [
+        "g5_80",
+        "g5_77"
+      ],
+      "attitude_angle_deg": 122.98947101284418,
       "is_key_task": false
     },
     {
       "task_id": "g5_88",
-      "earliest_start": 86,
-      "latest_end": 131,
-      "duration": 12,
-      "value": 33,
-      "cpu": 0,
-      "gpu": 1,
-      "memory": 23,
-      "storage": 60,
-      "bus": 7,
-      "container_slots": 4,
-      "power": 9,
-      "thermal_load": 14,
+      "earliest_start": 213,
+      "latest_end": 239,
+      "duration": 10,
+      "value": 15,
+      "cpu": 7,
+      "gpu": 0,
+      "memory": 26,
+      "storage": 93,
+      "bus": 10,
+      "concurrency_cores": 1,
+      "power": 14,
+      "thermal_load": 19,
       "payload_type_requirements": [
-        "relay"
+        "camera"
       ],
-      "payload_id_requirements": [],
+      "payload_id_requirements": [
+        "P3"
+      ],
       "predecessors": [
-        "g5_77"
+        "g5_76",
+        "g5_81"
       ],
-      "attitude_mode": "earth",
-      "comm_kind": "downlink",
+      "attitude_angle_deg": 277.51810316178273,
       "is_key_task": false
     }
   ],
-  "objective_value": 103251.0,
+  "objective_value": 84892.0,
   "constraint_stats": {
-    "scheduled_count": 28,
-    "unscheduled_count": 62,
+    "scheduled_count": 22,
+    "unscheduled_count": 68,
     "solver_status": "feasible",
-    "resource_overflow_count": 0,
-    "danger_rule_block_count": 1,
-    "link_window_violation_count": 39
+    "resource_overflow_count": 0
   }
 }

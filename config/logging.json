@@ -1,0 +1,5 @@
+{
+  "output_dir": "output",
+  "schedule_file": "latest_schedule.json",
+  "cycle_log_file": "cycle_log.jsonl"
+}
