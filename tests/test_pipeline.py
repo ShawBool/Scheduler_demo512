@@ -6,7 +6,7 @@ from scheduler.pipeline import run_pipeline
 
 def test_pipeline_outputs_schedule_and_cycle_log(tmp_path):
     output_dir = tmp_path / "output"
-    result = run_pipeline(config_path="config/planner_config.json", seed=7, output_dir=output_dir)
+    result = run_pipeline(config_path="config", seed=7, output_dir=output_dir)
 
     schedule_path = output_dir / "latest_schedule.json"
     cycle_log_path = output_dir / "cycle_log.jsonl"

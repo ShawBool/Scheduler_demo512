@@ -27,7 +27,7 @@ def _has_cycle(tasks):
 
 
 def test_generate_task_pool_meets_ranges_and_constraints():
-    cfg = load_config("config/planner_config.json")
+    cfg = load_config("config")
     tasks = generate_task_pool(cfg, seed=7)
 
     assert cfg["simulation"]["task_count_min"] <= len(tasks) <= cfg["simulation"]["task_count_max"]
@@ -59,7 +59,7 @@ def test_generate_task_pool_meets_ranges_and_constraints():
 
 
 def test_generate_task_pool_has_no_dangling_predecessor_after_key_task_injection():
-    cfg = load_config("config/planner_config.json")
+    cfg = load_config("config")
     tasks = generate_task_pool(cfg, seed=11)
     ids = {t.task_id for t in tasks}
     for t in tasks:

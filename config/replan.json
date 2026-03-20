@@ -1,0 +1,27 @@
+{
+  "gain_threshold": 80,
+  "severity_priority_order": [
+    "L3",
+    "L2",
+    "L1"
+  ],
+  "window_levels": {
+    "L1": 1,
+    "L2": 2,
+    "L3": 3
+  },
+  "disturbance_rules": {
+    "L1": {
+      "temp_high": 75,
+      "power_high": 85
+    },
+    "L2": {
+      "temp_high": 82,
+      "power_high": 92
+    },
+    "L3": {
+      "temp_high": 88,
+      "power_high": 97
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "python_path": "D:/software/anaconda3/python.exe",
+  "seed": 42,
+  "time_horizon": 240,
+  "time_step": 5,
+  "solver_timeout_sec": 10
+}

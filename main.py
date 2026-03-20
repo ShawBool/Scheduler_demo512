@@ -17,7 +17,7 @@ from scheduler.pipeline import run_pipeline
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Satellite baseline scheduler demo / 卫星基线规划演示")
-    parser.add_argument("--config", default="config/planner_config.json", help="Path to planner config JSON / 配置文件路径")
+    parser.add_argument("--config", default="config", help="Path to config directory / 配置目录路径")
     parser.add_argument("--seed", type=int, default=None, help="Random seed override / 随机种子")
     parser.add_argument("--output-dir", default=None, help="Output directory override / 输出目录")
     args = parser.parse_args()

@@ -2,16 +2,37 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Protocol, cast
 
 from ortools.sat.python import cp_model
 
 from .models import ScheduleItem, ScheduleResult, Task
 
 
+class _ModelBuilder(Protocol):
+    def NewBoolVar(self, name: str): ...
+    def NewIntVar(self, lb: int, ub: int, name: str): ...
+    def NewOptionalIntervalVar(self, start, size, end, is_present, name: str): ...
+
+
 def _angle_delta(a: float, b: float) -> float:
     diff = abs(a - b)
     return min(diff, 360.0 - diff)
+
+
+def _new_bool_var(model: cp_model.CpModel, name: str):
+    builder = cast(_ModelBuilder, model)
+    return builder.NewBoolVar(name)
+
+
+def _new_int_var(model: cp_model.CpModel, lb: int, ub: int, name: str):
+    builder = cast(_ModelBuilder, model)
+    return builder.NewIntVar(lb, ub, name)
+
+
+def _new_optional_interval_var(model: cp_model.CpModel, start, size: int, end, is_present, name: str):
+    builder = cast(_ModelBuilder, model)
+    return builder.NewOptionalIntervalVar(start, size, end, is_present, name)
 
 
 def plan_baseline(tasks: list[Task], config: dict[str, Any]) -> ScheduleResult:
@@ -41,16 +62,16 @@ def plan_baseline(tasks: list[Task], config: dict[str, Any]) -> ScheduleResult:
         latest_end_slot = min(horizon // time_step, task.latest_end // time_step)
         latest_start_slot = max(earliest_slot, latest_end_slot - dur_slot)
 
-        x = model.NewBoolVar(f"sel_{idx}")
+        x = _new_bool_var(model, f"sel_{idx}")
         if earliest_slot + dur_slot > latest_end_slot:
-            s = model.NewIntVar(0, 0, f"start_{idx}")
-            e = model.NewIntVar(0, 0, f"end_{idx}")
+            s = _new_int_var(model, 0, 0, f"start_{idx}")
+            e = _new_int_var(model, 0, 0, f"end_{idx}")
             model.Add(x == 0)
-            interval = model.NewOptionalIntervalVar(s, 1, e, x, f"iv_{idx}")
+            interval = _new_optional_interval_var(model, s, 1, e, x, f"iv_{idx}")
         else:
-            s = model.NewIntVar(earliest_slot, latest_start_slot, f"start_{idx}")
-            e = model.NewIntVar(earliest_slot + dur_slot, latest_end_slot, f"end_{idx}")
-            interval = model.NewOptionalIntervalVar(s, dur_slot, e, x, f"iv_{idx}")
+            s = _new_int_var(model, earliest_slot, latest_start_slot, f"start_{idx}")
+            e = _new_int_var(model, earliest_slot + dur_slot, latest_end_slot, f"end_{idx}")
+            interval = _new_optional_interval_var(model, s, dur_slot, e, x, f"iv_{idx}")
             model.Add(e == s + dur_slot)
 
         if task.is_key_task:
@@ -79,11 +100,11 @@ def plan_baseline(tasks: list[Task], config: dict[str, Any]) -> ScheduleResult:
             switch_slot = max(0, (switch_gap + time_step - 1) // time_step)
             if switch_slot == 0:
                 continue
-            both = model.NewBoolVar(f"both_{i}_{j}")
+            both = _new_bool_var(model, f"both_{i}_{j}")
             model.AddBoolAnd([selected[i], selected[j]]).OnlyEnforceIf(both)
             model.AddBoolOr([selected[i].Not(), selected[j].Not(), both])
-            i_before_j = model.NewBoolVar(f"i_before_j_{i}_{j}")
-            j_before_i = model.NewBoolVar(f"j_before_i_{i}_{j}")
+            i_before_j = _new_bool_var(model, f"i_before_j_{i}_{j}")
+            j_before_i = _new_bool_var(model, f"j_before_i_{i}_{j}")
             model.AddBoolOr([i_before_j, j_before_i]).OnlyEnforceIf(both)
             model.Add(starts[j] >= ends[i] + switch_slot).OnlyEnforceIf([both, i_before_j])
             model.Add(starts[i] >= ends[j] + switch_slot).OnlyEnforceIf([both, j_before_i])
@@ -124,7 +145,7 @@ def plan_baseline(tasks: list[Task], config: dict[str, Any]) -> ScheduleResult:
         earliest_slot = max(0, task.earliest_start // time_step)
         objective_terms.append(selected[idx] * int(task.value) * task_value_weight)
         if late_penalty_weight > 0:
-            lateness = model.NewIntVar(0, horizon // time_step, f"late_{idx}")
+            lateness = _new_int_var(model, 0, horizon // time_step, f"late_{idx}")
             model.Add(lateness == starts[idx] - earliest_slot).OnlyEnforceIf(selected[idx])
             model.Add(lateness == 0).OnlyEnforceIf(selected[idx].Not())
             objective_terms.append(-lateness * late_penalty_weight)
