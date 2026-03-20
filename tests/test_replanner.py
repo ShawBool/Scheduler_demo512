@@ -17,3 +17,10 @@ def test_replanner_respects_gain_threshold_for_non_l3():
     assert decision["level"] == "L2"
     assert decision["reason"] == "below-gain-threshold"
 
+
+def test_replanner_no_disturbance_returns_none_level():
+    cfg = load_config("config/planner_config.json")
+    decision = evaluate_replan_trigger({"temp": 50, "power": 40}, cfg, predicted_gain=100)
+    assert decision["trigger"] is False
+    assert decision["level"] == "NONE"
+

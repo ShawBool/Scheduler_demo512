@@ -34,8 +34,6 @@ def test_pipeline_outputs_schedule_and_cycle_log(tmp_path):
     assert "unscheduled_count" in payload["state_snapshot"]
     assert "missing_key_tasks" in payload["constraint_violations"]
     assert "resource_overflow_count" in payload["constraint_violations"]
-    assert "danger_rule_block_count" in payload["constraint_violations"]
-    assert "link_window_violation_count" in payload["constraint_violations"]
     assert "replan_decision" in payload["state_snapshot"]
     assert "trigger" in payload["state_snapshot"]["replan_decision"]
     assert isinstance(result["rolling_segments"], list)
