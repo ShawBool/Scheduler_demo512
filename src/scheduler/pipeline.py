@@ -12,7 +12,7 @@ from .replanner import evaluate_replan_trigger
 from .simulation import generate_task_pool
 
 
-def run_pipeline(config_path: str, seed: int | None = None, output_dir: str | Path | None = None) -> dict[str, Any]:
+def run_pipeline(config_path: str = "config", seed: int | None = None, output_dir: str | Path | None = None) -> dict[str, Any]:
     cfg = load_config(config_path)
     validate_config(cfg)
 
