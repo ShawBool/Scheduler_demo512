@@ -12,15 +12,8 @@
     "dag_group_min": 5,
     "dag_group_max": 10,
     "key_task_name": "position_service",
-    "comm_kinds": [
-      "uplink",
-      "downlink"
-    ],
-    "attitude_modes": [
-      "earth",
-      "agile",
-      "sun_safe"
-    ],
+    "attitude_angle_min": 0.0,
+    "attitude_angle_max": 359.9,
     "predecessor_probability": 0.65,
     "max_predecessors": 2,
     "duration_min": 2,
@@ -35,10 +28,10 @@
     "key_task_memory": 2,
     "key_task_storage": 2,
     "key_task_bus": 1,
-    "key_task_container_slots": 1,
+    "key_task_concurrency_cores": 1,
     "key_task_power": 2,
     "key_task_thermal_load": 2,
-    "key_task_attitude_mode": "earth"
+    "key_task_attitude_angle_deg": 0.0
   },
   "constraints": {
     "cpu_capacity": 8,
@@ -46,10 +39,10 @@
     "memory_capacity": 32,
     "storage_capacity": 128,
     "bus_capacity": 10,
-    "container_capacity": 4,
+    "max_concurrency_cores": 4,
     "power_capacity": 20,
     "thermal_capacity": 20,
-    "attitude_switch_time": 2,
+    "attitude_time_per_degree": 0.05,
     "critical_payload_ids": [
       "P1",
       "P2",
@@ -60,39 +53,6 @@
       "radar": 1,
       "relay": 2
     },
-    "link_windows": [
-      {
-        "kind": "uplink",
-        "start": 0,
-        "end": 100
-      },
-      {
-        "kind": "uplink",
-        "start": 120,
-        "end": 220
-      },
-      {
-        "kind": "downlink",
-        "start": 30,
-        "end": 140
-      },
-      {
-        "kind": "downlink",
-        "start": 150,
-        "end": 240
-      }
-    ],
-    "danger_rules": [
-      {
-        "rule_id": "danger-high-power-thermal-agile",
-        "min_power": 18,
-        "min_thermal": 18,
-        "forbidden_attitudes": [
-          "agile"
-        ],
-        "description": "禁止高功率高热负载任务在敏捷姿态下执行"
-      }
-    ],
     "rolling_window_size": 60
   },
   "objective_weights": {
