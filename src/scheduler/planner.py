@@ -30,10 +30,12 @@ def plan_baseline(tasks: list[Task], config: dict[str, Any]) -> ScheduleResult:
     n = len(tasks)
     task_index = {t.task_id: i for i, t in enumerate(tasks)}
 
-    starts: list[cp_model.IntVar] = []
-    ends: list[cp_model.IntVar] = []
-    selected: list[cp_model.BoolVar] = []
-    intervals: list[cp_model.IntervalVar] = []
+    # 某些类型检查器无法解析 cp_model.BoolVar 等导出，运行时不受影响。
+    # 这里用 Any 避免误报，同时保持求解逻辑不变。
+    starts: list[Any] = []
+    ends: list[Any] = []
+    selected: list[Any] = []
+    intervals: list[Any] = []
     for idx, task in enumerate(tasks):
         dur_slot = max(1, (task.duration + time_step - 1) // time_step)
         earliest_slot = max(0, task.earliest_start // time_step)
@@ -118,7 +120,7 @@ def plan_baseline(tasks: list[Task], config: dict[str, Any]) -> ScheduleResult:
 
     task_value_weight = int(weights.get("task_value", 1))
     late_penalty_weight = int(weights.get("lateness_penalty", 0))
-    objective_terms: list[cp_model.LinearExpr] = []
+    objective_terms: list[Any] = []
     for idx, task in enumerate(tasks):
         earliest_slot = max(0, task.earliest_start // time_step)
         objective_terms.append(selected[idx] * int(task.value) * task_value_weight)
