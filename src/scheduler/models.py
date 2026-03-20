@@ -12,7 +12,7 @@ class Task:
     task_id: str  # 任务唯一标识
     earliest_start: int  # 最早开始时刻
     latest_end: int  # 最晚结束时刻
-    duration: int  # 执行时长
+    duration: int  # 预计执行时长
     value: int  # 任务收益
     cpu: int  # CPU占用
     gpu: int  # GPU占用
