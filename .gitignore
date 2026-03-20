@@ -69,3 +69,6 @@ Thumbs.db
 
 # Optional generated docs
 site/
+
+# Git worktrees
+.worktrees/

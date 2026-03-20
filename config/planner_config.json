@@ -1,0 +1,134 @@
+{
+  "runtime": {
+    "python_path": "D:/software/anaconda3/python.exe",
+    "seed": 42,
+    "time_horizon": 240,
+    "time_step": 5,
+    "solver_timeout_sec": 10
+  },
+  "simulation": {
+    "task_count_min": 50,
+    "task_count_max": 100,
+    "dag_group_min": 5,
+    "dag_group_max": 10,
+    "key_task_name": "position_service",
+    "comm_kinds": [
+      "uplink",
+      "downlink"
+    ],
+    "attitude_modes": [
+      "earth",
+      "agile",
+      "sun_safe"
+    ],
+    "predecessor_probability": 0.65,
+    "max_predecessors": 2,
+    "duration_min": 2,
+    "duration_max": 12,
+    "value_min": 5,
+    "value_max": 50,
+    "key_task_earliest_start": 0,
+    "key_task_latest_end": 30,
+    "key_task_duration": 5,
+    "key_task_value": 100,
+    "key_task_cpu": 1,
+    "key_task_memory": 2,
+    "key_task_storage": 2,
+    "key_task_bus": 1,
+    "key_task_container_slots": 1,
+    "key_task_power": 2,
+    "key_task_thermal_load": 2,
+    "key_task_attitude_mode": "earth"
+  },
+  "constraints": {
+    "cpu_capacity": 8,
+    "gpu_capacity": 2,
+    "memory_capacity": 32,
+    "storage_capacity": 128,
+    "bus_capacity": 10,
+    "container_capacity": 4,
+    "power_capacity": 20,
+    "thermal_capacity": 20,
+    "attitude_switch_time": 2,
+    "critical_payload_ids": [
+      "P1",
+      "P2",
+      "P3"
+    ],
+    "payload_type_capacity": {
+      "camera": 2,
+      "radar": 1,
+      "relay": 2
+    },
+    "link_windows": [
+      {
+        "kind": "uplink",
+        "start": 0,
+        "end": 100
+      },
+      {
+        "kind": "uplink",
+        "start": 120,
+        "end": 220
+      },
+      {
+        "kind": "downlink",
+        "start": 30,
+        "end": 140
+      },
+      {
+        "kind": "downlink",
+        "start": 150,
+        "end": 240
+      }
+    ],
+    "danger_rules": [
+      {
+        "rule_id": "danger-high-power-thermal-agile",
+        "min_power": 18,
+        "min_thermal": 18,
+        "forbidden_attitudes": [
+          "agile"
+        ],
+        "description": "禁止高功率高热负载任务在敏捷姿态下执行"
+      }
+    ],
+    "rolling_window_size": 60
+  },
+  "objective_weights": {
+    "task_value": 100,
+    "lateness_penalty": 1
+  },
+  "replan": {
+    "gain_threshold": 80,
+    "severity_priority_order": [
+      "L3",
+      "L2",
+      "L1"
+    ],
+    "window_levels": {
+      "L1": 1,
+      "L2": 2,
+      "L3": 3
+    },
+    "disturbance_rules": {
+      "L1": {
+        "temp_high": 75,
+        "power_high": 85
+      },
+      "L2": {
+        "temp_high": 82,
+        "power_high": 92
+      },
+      "L3": {
+        "temp_high": 88,
+        "power_high": 97
+      }
+    }
+  },
+  "logging": {
+    "output_dir": "output",
+    "schedule_file": "latest_schedule.json",
+    "cycle_log_file": "cycle_log.jsonl"
+  }
+}
