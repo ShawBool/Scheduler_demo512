@@ -45,7 +45,7 @@ def test_generate_task_pool_meets_ranges_and_constraints():
         assert 1 <= t.memory <= c["memory_capacity"]
         assert 1 <= t.storage <= c["storage_capacity"]
         assert 1 <= t.bus <= c["bus_capacity"]
-        assert 1 <= t.concurrency_cores <= c["max_concurrency_cores"]
+        assert 1 <= t.concurrency_cores <= c["cpu_capacity"]
         assert 1 <= t.power <= c["power_capacity"]
         assert 1 <= t.thermal_load <= c["thermal_capacity"]
         assert 0.0 <= t.attitude_angle_deg < 360.0

@@ -11,13 +11,11 @@ def _base_config():
             "memory_capacity": 10,
             "storage_capacity": 10,
             "bus_capacity": 5,
-            "max_concurrency_cores": 4,
             "power_capacity": 4,
             "thermal_capacity": 4,
             "attitude_time_per_degree": 0.1,
             "critical_payload_ids": ["P1"],
             "payload_type_capacity": {"camera": 1},
-            "rolling_window_size": 20,
         },
         "objective_weights": {"task_value": 100, "lateness_penalty": 1},
     }
@@ -65,7 +63,7 @@ def test_planner_enforces_hard_constraints_and_reports_unscheduled():
 
 def test_planner_concurrency_core_limit():
     cfg = _base_config()
-    cfg["constraints"]["max_concurrency_cores"] = 2
+    cfg["constraints"]["cpu_capacity"] = 2
     tasks = [
         Task("key", 0, 40, 2, 1, 1, 0, 1, 1, 1, 1, 1, 1, [], [], [], 0.0, True),
         Task("c1", 0, 40, 10, 20, 1, 0, 1, 1, 1, 2, 1, 1, [], [], [], 20.0, False),
@@ -80,5 +78,21 @@ def test_planner_concurrency_core_limit():
             for item in items
             if item.start <= t < item.end
         ]
-        assert sum(x.concurrency_cores for x in active) <= cfg["constraints"]["max_concurrency_cores"]
+        assert sum(x.cpu for x in active) <= cfg["constraints"]["cpu_capacity"]
+
+
+def test_planner_derives_rolling_segments_from_position_service_and_dag_sources():
+    cfg = _base_config()
+    tasks = [
+        Task("position_service_0", 0, 20, 5, 100, 1, 0, 1, 1, 1, 1, 1, 1, ["camera"], ["P1"], [], 0.0, True),
+        Task("src_A", 20, 40, 5, 20, 1, 0, 1, 1, 1, 1, 1, 1, [], [], [], 10.0, False),
+        Task("src_B", 45, 55, 5, 20, 1, 0, 1, 1, 1, 1, 1, 1, [], [], [], 20.0, False),
+        Task("dep_B", 50, 60, 5, 10, 1, 0, 1, 1, 1, 1, 1, 1, [], [], ["src_B"], 40.0, False),
+    ]
+    result = plan_baseline(tasks, cfg)
+    assert result.rolling_segments
+    starts = [segment["start"] for segment in result.rolling_segments]
+    assert 0 in starts
+    assert 20 in starts
+    assert 45 in starts
 

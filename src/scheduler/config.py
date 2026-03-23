@@ -70,7 +70,6 @@ def validate_config(cfg: dict[str, Any]) -> None:
         "memory_capacity",
         "storage_capacity",
         "bus_capacity",
-        "max_concurrency_cores",
         "power_capacity",
         "thermal_capacity",
         "attitude_time_per_degree",

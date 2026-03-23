@@ -4,7 +4,6 @@
   "memory_capacity": 32,
   "storage_capacity": 128,
   "bus_capacity": 10,
-  "max_concurrency_cores": 4,
   "power_capacity": 20,
   "thermal_capacity": 20,
   "attitude_time_per_degree": 0.05,
@@ -17,6 +16,5 @@
     "camera": 2,
     "radar": 1,
     "relay": 2
-  },
-  "rolling_window_size": 60
+  }
 }
