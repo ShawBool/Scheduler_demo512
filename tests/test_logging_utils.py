@@ -1,6 +1,6 @@
 import json
 
-from scheduler.logging_utils import append_cycle_log, write_schedule_result, write_task_pool
+from scheduler.logging_utils import append_cycle_log, write_schedule_result, write_task_pool # pyright: ignore[reportAttributeAccessIssue]
 from scheduler.models import ScheduleItem, ScheduleResult, Task
 
 
