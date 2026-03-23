@@ -1,161 +1,125 @@
 {
-  "scheduled_items": [
-    {
-      "task_id": "position_service_0",
-      "start": 0,
-      "end": 5,
-      "attitude_angle_deg": 0.0,
-      "value": 100
-    },
-    {
-      "task_id": "flex_13",
-      "start": 10,
-      "end": 20,
-      "attitude_angle_deg": 266.53781507312084,
-      "value": 59
-    },
-    {
-      "task_id": "flex_19",
-      "start": 25,
-      "end": 35,
-      "attitude_angle_deg": 235.7160355686461,
-      "value": 54
-    },
-    {
-      "task_id": "flex_21",
-      "start": 40,
-      "end": 45,
-      "attitude_angle_deg": 149.24213983986385,
-      "value": 24
-    },
-    {
-      "task_id": "flex_11",
-      "start": 50,
-      "end": 60,
-      "attitude_angle_deg": 50.90389256570427,
-      "value": 34
-    },
-    {
-      "task_id": "flex_29",
-      "start": 60,
-      "end": 70,
-      "attitude_angle_deg": 52.08417076772095,
-      "value": 20
-    },
+  "task_count": 70,
+  "tasks": [
     {
       "task_id": "seq1_0",
-      "start": 70,
-      "end": 80,
+      "earliest_start": 72,
+      "latest_end": 86,
+      "duration": 10,
+      "value": 38,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 7,
+      "storage": 2,
+      "bus": 1,
+      "concurrency_cores": 2,
+      "power": 4,
+      "thermal_load": 8,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
       "attitude_angle_deg": 44.09679834994514,
-      "value": 38
+      "is_key_task": false
     },
     {
       "task_id": "seq1_1",
-      "start": 80,
-      "end": 85,
+      "earliest_start": 76,
+      "latest_end": 88,
+      "duration": 2,
+      "value": 30,
+      "cpu": 1,
+      "gpu": 1,
+      "memory": 2,
+      "storage": 1,
+      "bus": 2,
+      "concurrency_cores": 1,
+      "power": 3,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
       "attitude_angle_deg": 49.84433864214157,
-      "value": 30
+      "is_key_task": false
     },
     {
       "task_id": "seq1_2",
-      "start": 85,
-      "end": 95,
+      "earliest_start": 82,
+      "latest_end": 98,
+      "duration": 7,
+      "value": 20,
+      "cpu": 1,
+      "gpu": 1,
+      "memory": 5,
+      "storage": 6,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 5,
+      "thermal_load": 5,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq1_0",
+        "seq1_1"
+      ],
       "attitude_angle_deg": 44.22983052207375,
-      "value": 20
+      "is_key_task": false
     },
     {
       "task_id": "seq1_3",
-      "start": 95,
-      "end": 105,
+      "earliest_start": 85,
+      "latest_end": 106,
+      "duration": 9,
+      "value": 46,
+      "cpu": 2,
+      "gpu": 2,
+      "memory": 8,
+      "storage": 1,
+      "bus": 1,
+      "concurrency_cores": 2,
+      "power": 5,
+      "thermal_load": 6,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq1_1",
+        "seq1_0"
+      ],
       "attitude_angle_deg": 45.33847668977761,
-      "value": 46
+      "is_key_task": false
     },
     {
       "task_id": "seq1_4",
-      "start": 105,
-      "end": 110,
+      "earliest_start": 94,
+      "latest_end": 113,
+      "duration": 5,
+      "value": 30,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 2,
+      "storage": 2,
+      "bus": 5,
+      "concurrency_cores": 1,
+      "power": 1,
+      "thermal_load": 3,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq1_2",
+        "seq1_3"
+      ],
       "attitude_angle_deg": 49.49075128239842,
-      "value": 30
+      "is_key_task": false
     },
-    {
-      "task_id": "seq1_6",
-      "start": 115,
-      "end": 130,
-      "attitude_angle_deg": 85.7481765782531,
-      "value": 52
-    },
-    {
-      "task_id": "flex_5",
-      "start": 135,
-      "end": 140,
-      "attitude_angle_deg": 115.77326458943377,
-      "value": 32
-    },
-    {
-      "task_id": "flex_26",
-      "start": 145,
-      "end": 150,
-      "attitude_angle_deg": 174.96639485810778,
-      "value": 17
-    },
-    {
-      "task_id": "flex_3",
-      "start": 150,
-      "end": 160,
-      "attitude_angle_deg": 172.73014500975265,
-      "value": 29
-    },
-    {
-      "task_id": "flex_17",
-      "start": 160,
-      "end": 170,
-      "attitude_angle_deg": 167.16900180539133,
-      "value": 19
-    },
-    {
-      "task_id": "flex_15",
-      "start": 175,
-      "end": 180,
-      "attitude_angle_deg": 255.48687188507228,
-      "value": 25
-    },
-    {
-      "task_id": "flex_9",
-      "start": 185,
-      "end": 190,
-      "attitude_angle_deg": 318.59895648367495,
-      "value": 38
-    },
-    {
-      "task_id": "flex_31",
-      "start": 190,
-      "end": 200,
-      "attitude_angle_deg": 309.8873243740572,
-      "value": 41
-    },
-    {
-      "task_id": "flex_7",
-      "start": 205,
-      "end": 215,
-      "attitude_angle_deg": 26.958539883674902,
-      "value": 30
-    },
-    {
-      "task_id": "flex_23",
-      "start": 215,
-      "end": 225,
-      "attitude_angle_deg": 24.558208232035895,
-      "value": 34
-    },
-    {
-      "task_id": "flex_25",
-      "start": 230,
-      "end": 240,
-      "attitude_angle_deg": 97.99241511806028,
-      "value": 54
-    }
-  ],
-  "unscheduled_tasks": [
     {
       "task_id": "seq1_5",
       "earliest_start": 100,
@@ -178,6 +142,31 @@
         "seq1_3"
       ],
       "attitude_angle_deg": 68.87928821482654,
+      "is_key_task": false
+    },
+    {
+      "task_id": "seq1_6",
+      "earliest_start": 108,
+      "latest_end": 131,
+      "duration": 12,
+      "value": 52,
+      "cpu": 2,
+      "gpu": 2,
+      "memory": 6,
+      "storage": 3,
+      "bus": 2,
+      "concurrency_cores": 2,
+      "power": 5,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq1_4",
+        "seq1_3"
+      ],
+      "attitude_angle_deg": 85.7481765782531,
       "is_key_task": false
     },
     {
@@ -965,6 +954,28 @@
       "is_key_task": false
     },
     {
+      "task_id": "flex_3",
+      "earliest_start": 0,
+      "latest_end": 240,
+      "duration": 6,
+      "value": 29,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "storage": 6,
+      "bus": 4,
+      "concurrency_cores": 1,
+      "power": 2,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 172.73014500975265,
+      "is_key_task": false
+    },
+    {
       "task_id": "flex_4",
       "earliest_start": 0,
       "latest_end": 240,
@@ -986,6 +997,28 @@
         "seq2_10"
       ],
       "attitude_angle_deg": 171.36071455624835,
+      "is_key_task": false
+    },
+    {
+      "task_id": "flex_5",
+      "earliest_start": 0,
+      "latest_end": 240,
+      "duration": 4,
+      "value": 32,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "storage": 1,
+      "bus": 4,
+      "concurrency_cores": 2,
+      "power": 4,
+      "thermal_load": 1,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 115.77326458943377,
       "is_key_task": false
     },
     {
@@ -1013,6 +1046,28 @@
       "is_key_task": false
     },
     {
+      "task_id": "flex_7",
+      "earliest_start": 0,
+      "latest_end": 240,
+      "duration": 6,
+      "value": 30,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 6,
+      "storage": 2,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 4,
+      "thermal_load": 7,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 26.958539883674902,
+      "is_key_task": false
+    },
+    {
       "task_id": "flex_8",
       "earliest_start": 0,
       "latest_end": 240,
@@ -1034,6 +1089,28 @@
         "seq2_10"
       ],
       "attitude_angle_deg": 257.98819017347154,
+      "is_key_task": false
+    },
+    {
+      "task_id": "flex_9",
+      "earliest_start": 0,
+      "latest_end": 240,
+      "duration": 5,
+      "value": 38,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "storage": 2,
+      "bus": 2,
+      "concurrency_cores": 1,
+      "power": 5,
+      "thermal_load": 5,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 318.59895648367495,
       "is_key_task": false
     },
     {
@@ -1061,6 +1138,28 @@
       "is_key_task": false
     },
     {
+      "task_id": "flex_11",
+      "earliest_start": 0,
+      "latest_end": 240,
+      "duration": 7,
+      "value": 34,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "storage": 1,
+      "bus": 2,
+      "concurrency_cores": 1,
+      "power": 2,
+      "thermal_load": 1,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 50.90389256570427,
+      "is_key_task": false
+    },
+    {
       "task_id": "flex_12",
       "earliest_start": 0,
       "latest_end": 240,
@@ -1082,6 +1181,28 @@
         "seq2_3"
       ],
       "attitude_angle_deg": 350.9333376632619,
+      "is_key_task": false
+    },
+    {
+      "task_id": "flex_13",
+      "earliest_start": 0,
+      "latest_end": 240,
+      "duration": 6,
+      "value": 59,
+      "cpu": 2,
+      "gpu": 2,
+      "memory": 6,
+      "storage": 2,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 7,
+      "thermal_load": 8,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 266.53781507312084,
       "is_key_task": false
     },
     {
@@ -1109,6 +1230,28 @@
       "is_key_task": false
     },
     {
+      "task_id": "flex_15",
+      "earliest_start": 0,
+      "latest_end": 240,
+      "duration": 4,
+      "value": 25,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "storage": 5,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 255.48687188507228,
+      "is_key_task": false
+    },
+    {
       "task_id": "flex_16",
       "earliest_start": 0,
       "latest_end": 240,
@@ -1130,6 +1273,28 @@
         "seq2_16"
       ],
       "attitude_angle_deg": 24.113983434983208,
+      "is_key_task": false
+    },
+    {
+      "task_id": "flex_17",
+      "earliest_start": 0,
+      "latest_end": 240,
+      "duration": 6,
+      "value": 19,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "storage": 1,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 1,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 167.16900180539133,
       "is_key_task": false
     },
     {
@@ -1157,6 +1322,28 @@
       "is_key_task": false
     },
     {
+      "task_id": "flex_19",
+      "earliest_start": 0,
+      "latest_end": 240,
+      "duration": 6,
+      "value": 54,
+      "cpu": 2,
+      "gpu": 2,
+      "memory": 7,
+      "storage": 2,
+      "bus": 2,
+      "concurrency_cores": 2,
+      "power": 5,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 235.7160355686461,
+      "is_key_task": false
+    },
+    {
       "task_id": "flex_20",
       "earliest_start": 0,
       "latest_end": 240,
@@ -1178,6 +1365,28 @@
         "seq1_5"
       ],
       "attitude_angle_deg": 95.35514049152422,
+      "is_key_task": false
+    },
+    {
+      "task_id": "flex_21",
+      "earliest_start": 0,
+      "latest_end": 240,
+      "duration": 4,
+      "value": 24,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "storage": 2,
+      "bus": 4,
+      "concurrency_cores": 2,
+      "power": 3,
+      "thermal_load": 5,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 149.24213983986385,
       "is_key_task": false
     },
     {
@@ -1205,6 +1414,28 @@
       "is_key_task": false
     },
     {
+      "task_id": "flex_23",
+      "earliest_start": 0,
+      "latest_end": 240,
+      "duration": 6,
+      "value": 34,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 3,
+      "storage": 1,
+      "bus": 2,
+      "concurrency_cores": 1,
+      "power": 2,
+      "thermal_load": 1,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 24.558208232035895,
+      "is_key_task": false
+    },
+    {
       "task_id": "flex_24",
       "earliest_start": 0,
       "latest_end": 240,
@@ -1226,6 +1457,52 @@
         "seq2_13"
       ],
       "attitude_angle_deg": 339.22695017489434,
+      "is_key_task": false
+    },
+    {
+      "task_id": "flex_25",
+      "earliest_start": 0,
+      "latest_end": 240,
+      "duration": 9,
+      "value": 54,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 8,
+      "storage": 1,
+      "bus": 2,
+      "concurrency_cores": 2,
+      "power": 5,
+      "thermal_load": 7,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 97.99241511806028,
+      "is_key_task": false
+    },
+    {
+      "task_id": "flex_26",
+      "earliest_start": 0,
+      "latest_end": 240,
+      "duration": 2,
+      "value": 17,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 2,
+      "storage": 2,
+      "bus": 2,
+      "concurrency_cores": 1,
+      "power": 1,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq1_2"
+      ],
+      "attitude_angle_deg": 174.96639485810778,
       "is_key_task": false
     },
     {
@@ -1275,6 +1552,28 @@
       "is_key_task": false
     },
     {
+      "task_id": "flex_29",
+      "earliest_start": 0,
+      "latest_end": 240,
+      "duration": 6,
+      "value": 20,
+      "cpu": 1,
+      "gpu": 1,
+      "memory": 4,
+      "storage": 1,
+      "bus": 5,
+      "concurrency_cores": 1,
+      "power": 1,
+      "thermal_load": 1,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 52.08417076772095,
+      "is_key_task": false
+    },
+    {
       "task_id": "flex_30",
       "earliest_start": 0,
       "latest_end": 240,
@@ -1296,6 +1595,28 @@
         "seq1_14"
       ],
       "attitude_angle_deg": 317.43375538514323,
+      "is_key_task": false
+    },
+    {
+      "task_id": "flex_31",
+      "earliest_start": 0,
+      "latest_end": 240,
+      "duration": 9,
+      "value": 41,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 8,
+      "storage": 3,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 5,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 309.8873243740572,
       "is_key_task": false
     },
     {
@@ -1321,13 +1642,30 @@
       ],
       "attitude_angle_deg": 40.22202928953607,
       "is_key_task": false
+    },
+    {
+      "task_id": "position_service_0",
+      "earliest_start": 0,
+      "latest_end": 30,
+      "duration": 5,
+      "value": 100,
+      "cpu": 1,
+      "gpu": 1,
+      "memory": 2,
+      "storage": 5,
+      "bus": 4,
+      "concurrency_cores": 2,
+      "power": 2,
+      "thermal_load": 5,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [
+        "P1"
+      ],
+      "predecessors": [],
+      "attitude_angle_deg": 0.0,
+      "is_key_task": true
     }
-  ],
-  "objective_value": 82196.0,
-  "constraint_stats": {
-    "scheduled_count": 22,
-    "unscheduled_count": 48,
-    "solver_status": "feasible",
-    "resource_overflow_count": 0
-  }
+  ]
 }
