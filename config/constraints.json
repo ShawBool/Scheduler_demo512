@@ -1,5 +1,5 @@
 {
-  "cpu_capacity": 8,
+  "cpu_capacity": 2,
   "gpu_capacity": 2,
   "memory_capacity": 32,
   "storage_capacity": 128,
