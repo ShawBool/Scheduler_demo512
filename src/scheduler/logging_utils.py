@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from .models import ScheduleResult
+from .models import ScheduleResult, Task
 
 
 def write_schedule_result(result: ScheduleResult, path: str | Path) -> None:
@@ -19,6 +19,16 @@ def write_schedule_result(result: ScheduleResult, path: str | Path) -> None:
         "unscheduled_tasks": [asdict(task) for task in result.unscheduled_tasks],
         "objective_value": result.objective_value,
         "constraint_stats": result.constraint_stats,
+    }
+    out_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def write_task_pool(tasks: list[Task], path: str | Path) -> None:
+    out_path = Path(path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "task_count": len(tasks),
+        "tasks": [asdict(task) for task in tasks],
     }
     out_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 

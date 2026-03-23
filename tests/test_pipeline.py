@@ -10,15 +10,24 @@ def test_pipeline_outputs_schedule_and_cycle_log(tmp_path):
 
     schedule_path = output_dir / "latest_schedule.json"
     cycle_log_path = output_dir / "cycle_log.jsonl"
+    task_pool_path = output_dir / "latest_task_pool.json"
 
     assert schedule_path.exists()
     assert cycle_log_path.exists()
+    assert task_pool_path.exists()
 
     schedule = json.loads(schedule_path.read_text(encoding="utf-8"))
     assert "scheduled_items" in schedule
     assert "unscheduled_tasks" in schedule
     assert "objective_value" in schedule
     assert "constraint_stats" in schedule
+
+    task_pool = json.loads(task_pool_path.read_text(encoding="utf-8"))
+    assert "task_count" in task_pool
+    assert "tasks" in task_pool
+    assert task_pool["task_count"] == len(task_pool["tasks"])
+    assert "task_pool_file" in result
+    assert result["task_pool_file"].endswith("latest_task_pool.json")
 
     lines = cycle_log_path.read_text(encoding="utf-8").strip().splitlines()
     assert lines
