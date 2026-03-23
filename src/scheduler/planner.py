@@ -13,6 +13,26 @@ def _angle_delta(a: float, b: float) -> float:
     return min(diff, 360.0 - diff)
 
 
+def _derive_rolling_segments(tasks: list[Task], horizon: int) -> list[dict[str, int]]:
+    if horizon <= 0:
+        return []
+    ids = {t.task_id for t in tasks}
+    boundary_starts = {0}
+    for task in tasks:
+        is_position_service = task.task_id.startswith("position_service")
+        is_dag_source = not any(pred in ids for pred in task.predecessors)
+        if is_position_service or is_dag_source:
+            boundary_starts.add(max(0, min(horizon - 1, int(task.earliest_start))))
+
+    starts = sorted(boundary_starts)
+    segments: list[dict[str, int]] = []
+    for idx, start in enumerate(starts):
+        end = starts[idx + 1] if idx + 1 < len(starts) else horizon
+        if end > start:
+            segments.append({"start": start, "end": end})
+    return segments or [{"start": 0, "end": horizon}]
+
+
 def plan_baseline(tasks: list[Task], config: dict[str, Any]) -> ScheduleResult:
     model = cp_model.CpModel()
     runtime = config["runtime"]
@@ -95,7 +115,7 @@ def plan_baseline(tasks: list[Task], config: dict[str, Any]) -> ScheduleResult:
         ("memory", "memory_capacity"),
         ("storage", "storage_capacity"),
         ("bus", "bus_capacity"),
-        ("concurrency_cores", "max_concurrency_cores"),
+        ("concurrency_cores", "cpu_capacity"),
         ("power", "power_capacity"),
         ("thermal_load", "thermal_capacity"),
     ]
@@ -164,13 +184,7 @@ def plan_baseline(tasks: list[Task], config: dict[str, Any]) -> ScheduleResult:
         "resource_overflow_count": 0,
     }
 
-    rolling_size = int(constraints.get("rolling_window_size", max(1, horizon // 4)))
-    rolling_segments: list[dict[str, int]] = []
-    seg_start = 0
-    while seg_start < horizon:
-        seg_end = min(horizon, seg_start + rolling_size)
-        rolling_segments.append({"start": seg_start, "end": seg_end})
-        seg_start = seg_end
+    rolling_segments = _derive_rolling_segments(tasks, horizon)
 
     return ScheduleResult(
         scheduled_items=scheduled_items,

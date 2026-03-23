@@ -30,7 +30,6 @@ def test_validate_config_rejects_nonpositive_dag_groups():
             "memory_capacity": 1,
             "storage_capacity": 1,
             "bus_capacity": 1,
-            "max_concurrency_cores": 1,
             "power_capacity": 1,
             "thermal_capacity": 1,
             "attitude_time_per_degree": 0.1,

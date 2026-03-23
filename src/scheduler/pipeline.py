@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from .config import load_config, validate_config
-from .logging_utils import append_cycle_log, write_schedule_result
+from .logging_utils import append_cycle_log, write_schedule_result, write_task_pool
 from .planner import plan_baseline
 from .replanner import evaluate_replan_trigger
 from .simulation import generate_task_pool
@@ -24,8 +24,11 @@ def run_pipeline(config_path: str = "config", seed: int | None = None, output_di
     out_dir = Path(output_dir) if output_dir is not None else Path(log_cfg.get("output_dir", "output"))
     schedule_file = out_dir / log_cfg.get("schedule_file", "latest_schedule.json")
     cycle_log_file = out_dir / log_cfg.get("cycle_log_file", "cycle_log.jsonl")
+    task_pool_file = out_dir / log_cfg.get("task_pool_file", "latest_task_pool.json")
 
     write_schedule_result(result, schedule_file)
+    write_task_pool(tasks, task_pool_file)
+    print(f"[simulation] task pool persisted: {task_pool_file}")
     violations = {
         "missing_key_tasks": _collect_missing_key_tasks(tasks, result),
         "resource_overflow_count": int(result.constraint_stats.get("resource_overflow_count", 0)),
@@ -70,6 +73,7 @@ def run_pipeline(config_path: str = "config", seed: int | None = None, output_di
         "rolling_segments": result.rolling_segments,
         "replan_decision": replan_decision,
         "output_dir": str(out_dir),
+        "task_pool_file": str(task_pool_file),
     }
 
 

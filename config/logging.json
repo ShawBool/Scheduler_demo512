@@ -1,5 +1,6 @@
 {
   "output_dir": "output",
   "schedule_file": "latest_schedule.json",
-  "cycle_log_file": "cycle_log.jsonl"
+  "cycle_log_file": "cycle_log.jsonl",
+  "task_pool_file": "latest_task_pool.json"
 }
