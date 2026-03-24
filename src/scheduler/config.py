@@ -239,11 +239,17 @@ def validate_config(cfg: dict[str, Any]) -> None:
         "cpu_capacity",
         "gpu_capacity",
         "memory_capacity",
-        "storage_capacity",
-        "bus_capacity",
         "power_capacity",
-        "thermal_capacity",
         "attitude_time_per_degree",
     )
     for key in numeric_positive_keys:
         _ensure_positive(constraints.get(key), key)
+
+    optional_legacy_positive_keys = (
+        "storage_capacity",
+        "bus_capacity",
+        "thermal_capacity",
+    )
+    for key in optional_legacy_positive_keys:
+        if key in constraints:
+            _ensure_positive(constraints.get(key), key)

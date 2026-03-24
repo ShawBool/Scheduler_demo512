@@ -69,6 +69,16 @@ def test_validate_config_allows_nonpositive_dag_groups_for_compatibility():
     validate_config(cfg)
 
 
+def test_validate_config_allows_missing_legacy_capacity_keys():
+    cfg = _base_cfg()
+    constraints = cfg["constraints"]
+    constraints.pop("storage_capacity")
+    constraints.pop("bus_capacity")
+    constraints.pop("thermal_capacity")
+
+    validate_config(cfg)
+
+
 def test_validate_config_rejects_invalid_visibility_window_ranges():
     cfg = _base_cfg()
     cfg["simulation"]["visibility_window_count_min"] = 5
