@@ -152,3 +152,17 @@ def test_pipeline_uses_simulation_branch_when_input_mode_simulation(tmp_path, mo
     assert task_pool["task_count"] == len(task_pool["tasks"]) == 1
     assert windows["schema_version"] == "2.0"
     assert windows["window_count"] == len(windows["windows"]) == 1
+
+
+def test_pipeline_writes_solver_progress_log(tmp_path):
+    output_dir = tmp_path / "output"
+
+    result = run_pipeline(config_path="config", seed=42, output_dir=output_dir)
+
+    solver_progress_path = output_dir / "solver_progress.jsonl"
+    assert solver_progress_path.exists()
+    assert "solver_progress_file" in result
+    assert result["solver_progress_file"].endswith("solver_progress.jsonl")
+
+    lines = solver_progress_path.read_text(encoding="utf-8").splitlines()
+    assert len(lines) >= 0

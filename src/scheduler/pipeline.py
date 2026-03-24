@@ -8,7 +8,14 @@ from typing import Any
 
 from .config import load_config, validate_config
 from .data_loader import load_static_task_bundle
-from .logging_utils import append_cycle_log, write_schedule_result, write_task_pool, write_visibility_windows
+from .logging_utils import (
+    append_cycle_log,
+    append_solver_progress_log,
+    ensure_jsonl_file,
+    write_schedule_result,
+    write_task_pool,
+    write_visibility_windows,
+)
 from .planner import plan_baseline
 from .replanner import evaluate_replan_trigger
 
@@ -81,14 +88,28 @@ def run_pipeline(config_path: str = "config", seed: int | None = None, output_di
         visibility_windows = simulation_snapshot["visibility_windows"]
         horizon = simulation_snapshot["horizon"]
     planner_tasks = _build_planner_tasks(tasks)
-    result = plan_baseline(planner_tasks, cfg)
 
     log_cfg = cfg["logging"]
     out_dir = Path(output_dir) if output_dir is not None else Path(log_cfg.get("output_dir", "output"))
     schedule_file = out_dir / log_cfg.get("schedule_file", "latest_schedule.json")
     cycle_log_file = out_dir / log_cfg.get("cycle_log_file", "cycle_log.jsonl")
+    solver_progress_file = out_dir / log_cfg.get("solver_progress_file", "solver_progress.jsonl")
     task_pool_file = out_dir / log_cfg.get("task_pool_file", "latest_task_pool.json")
     visibility_windows_file = out_dir / log_cfg.get("visibility_windows_file", "latest_visibility_windows.json")
+
+    # 文件契约：无论是否有进展记录，都生成 solver_progress.jsonl。
+    ensure_jsonl_file(solver_progress_file)
+
+    def _on_solution_progress(entry: dict[str, int | float]) -> None:
+        append_solver_progress_log(
+            solver_progress_file,
+            solution_index=int(entry["solution_index"]),
+            objective=float(entry["objective"]),
+            wall_time=float(entry["wall_time"]),
+            best_bound=float(entry["best_bound"]),
+        )
+
+    result = plan_baseline(planner_tasks, cfg, on_solution_progress=_on_solution_progress)
 
     write_schedule_result(result, schedule_file)
     write_task_pool(tasks, task_pool_file)
@@ -142,6 +163,7 @@ def run_pipeline(config_path: str = "config", seed: int | None = None, output_di
         "rolling_segments": effective_segments,
         "replan_decision": replan_decision,
         "output_dir": str(out_dir),
+        "solver_progress_file": str(solver_progress_file),
         "task_pool_file": str(task_pool_file),
         "visibility_windows_file": str(visibility_windows_file),
     }

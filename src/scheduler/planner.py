@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from typing import Any
 
 from ortools.sat.python import cp_model
@@ -47,7 +48,11 @@ def _derive_rolling_segments(tasks: list[Task], horizon: int) -> list[dict[str, 
     return segments or [{"start": 0, "end": horizon}]
 
 
-def plan_baseline(tasks: list[Task], config: dict[str, Any]) -> ScheduleResult:
+def plan_baseline(
+    tasks: list[Task],
+    config: dict[str, Any],
+    on_solution_progress: Callable[[dict[str, int | float]], None] | None = None,
+) -> ScheduleResult:
     model = cp_model.CpModel()
     runtime = config["runtime"]
     constraints = config["constraints"]
@@ -176,7 +181,33 @@ def plan_baseline(tasks: list[Task], config: dict[str, Any]) -> ScheduleResult:
         solver.parameters.random_seed = int(runtime["solver_random_seed"])
     if "solver_num_workers" in runtime:
         solver.parameters.num_search_workers = int(runtime["solver_num_workers"])
-    status = solver.solve(model)
+
+    progress_every_n = max(1, int(runtime.get("solver_progress_every_n_solutions", 10)))
+    progress_enable = bool(runtime.get("solver_progress_enable", True))
+
+    class _SolutionProgressCallback(cp_model.CpSolverSolutionCallback):
+        def __init__(self) -> None:
+            super().__init__()
+            self.solution_index = 0
+
+        def on_solution_callback(self) -> None:
+            self.solution_index += 1
+            if not progress_enable:
+                return
+            if on_solution_progress is None:
+                return
+            if self.solution_index % progress_every_n != 0:
+                return
+            on_solution_progress(
+                {
+                    "solution_index": self.solution_index,
+                    "objective": float(self.ObjectiveValue()),
+                    "wall_time": float(self.WallTime()),
+                    "best_bound": float(self.BestObjectiveBound()),
+                }
+            )
+
+    status = solver.solve(model, _SolutionProgressCallback())
 
     if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
         status_text = "infeasible" if status == cp_model.INFEASIBLE else str(int(status))
