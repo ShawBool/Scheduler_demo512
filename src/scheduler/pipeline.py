@@ -43,7 +43,8 @@ def run_pipeline(config_path: str = "config", seed: int | None = None, output_di
         predicted_gain=float(max(0, len(result.unscheduled_tasks))),
     )
 
-    for cycle_id, segment in enumerate(result.rolling_segments or [{"start": 0, "end": int(cfg["runtime"]["time_horizon"])}], start=1):
+    effective_segments = result.rolling_segments or [{"start": 0, "end": int(cfg["runtime"]["time_horizon"])}]
+    for cycle_id, segment in enumerate(effective_segments, start=1):
         selected_in_seg = [
             x.task_id for x in result.scheduled_items if segment["start"] <= x.start < segment["end"]
         ]
@@ -70,7 +71,7 @@ def run_pipeline(config_path: str = "config", seed: int | None = None, output_di
         "unscheduled_tasks": [x.task_id for x in result.unscheduled_tasks],
         "objective_value": result.objective_value,
         "constraint_stats": result.constraint_stats,
-        "rolling_segments": result.rolling_segments,
+        "rolling_segments": effective_segments,
         "replan_decision": replan_decision,
         "output_dir": str(out_dir),
         "task_pool_file": str(task_pool_file),

@@ -8,7 +8,7 @@ def test_logging_utils_write_and_append(tmp_path):
     result = ScheduleResult(
         scheduled_items=[ScheduleItem("t1", 0, 5, 30.0, 10)],
         unscheduled_tasks=[
-            Task("t2", 0, 10, 3, 5, 1, 0, 1, 1, 1, 1, 1, 1, [], [], [], 45.0, False)
+            Task("t2", 3, 5, 1, 0, 1, 1, 1, 1, 1, 1, [], [], [], 45.0, False)
         ],
         objective_value=10,
         constraint_stats={"scheduled_count": 1, "unscheduled_count": 1},

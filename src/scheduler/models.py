@@ -6,12 +6,20 @@ from dataclasses import dataclass, field
 
 
 @dataclass(slots=True)
+class VisibilityWindow:
+    """可见窗口模型：描述可见窗口的时间范围与类型。"""
+
+    window_id: str
+    start: int
+    end: int
+    window_type: str = "generic"
+
+
+@dataclass(slots=True)
 class Task:
     """任务模型：描述待规划任务的时间窗、收益、资源与约束。"""
 
     task_id: str  # 任务唯一标识
-    earliest_start: int  # 最早开始时刻
-    latest_end: int  # 最晚结束时刻
     duration: int  # 预计执行时长
     value: int  # 任务收益
     cpu: int  # CPU占用
@@ -27,6 +35,7 @@ class Task:
     predecessors: list[str] = field(default_factory=list)  # 前置依赖任务ID列表
     attitude_angle_deg: float = 0.0  # 姿态角（度，0-360）
     is_key_task: bool = False  # 是否关键任务（必须规划）
+    visibility_window: VisibilityWindow | None = None  # 绑定的可见窗口（可选）
 
 
 @dataclass(slots=True)

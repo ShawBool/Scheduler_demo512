@@ -5,7 +5,7 @@ from __future__ import annotations
 import random
 from collections import defaultdict
 
-from .models import Task
+from .models import Task, VisibilityWindow
 
 
 def _rint(rng: random.Random, low: int, high: int) -> int:
@@ -65,6 +65,18 @@ def _resource_profile(task_type: str) -> dict[str, tuple[int, int]]:
             "duration": (2, 7),
             "value": (12, 35),
         },
+        "compute": {
+            "cpu": (1, 2),
+            "gpu": (0, 1),
+            "memory": (1, 3),
+            "storage": (1, 2),
+            "bus": (1, 2),
+            "concurrency_cores": (1, 2),
+            "power": (1, 3),
+            "thermal_load": (1, 3),
+            "duration": (2, 8),
+            "value": (10, 28),
+        },
     }
     return profiles.get(task_type, profiles["camera"])
 
@@ -78,6 +90,72 @@ def _clamp_range(low: int, high: int, cap: int) -> tuple[int, int]:
 def _bounded_sample(rng: random.Random, low: int, high: int, cap: int) -> int:
     lo, hi = _clamp_range(low, high, cap)
     return _rint(rng, lo, hi)
+
+
+def _build_visibility_window(window_id: str, task_type: str, start: int, end: int, horizon: int) -> VisibilityWindow | None:
+    if task_type not in {"camera", "radar", "relay"}:
+        return None
+    start_bound = max(0, min(start, horizon - 1))
+    end_bound = max(start_bound + 1, min(end, horizon))
+    if end_bound <= start_bound:
+        return None
+    return VisibilityWindow(window_id=window_id, start=start_bound, end=end_bound, window_type=task_type)
+
+
+def _task_domain(task: Task, horizon: int) -> tuple[int, int]:
+    if task.visibility_window is None:
+        return 0, horizon
+    return max(0, task.visibility_window.start), min(horizon, task.visibility_window.end)
+
+
+def _can_precede(pred: Task, succ_window: VisibilityWindow | None, succ_duration: int, horizon: int) -> bool:
+    pred_start, _ = _task_domain(pred, horizon)
+    succ_end = horizon if succ_window is None else succ_window.end
+    latest_succ_start = succ_end - succ_duration
+    return pred_start + pred.duration <= latest_succ_start
+
+
+def _generate_visibility_windows(
+    sim: dict,
+    payload_types: list[str],
+    horizon: int,
+    rng: random.Random,
+) -> list[VisibilityWindow]:
+    count_min = int(sim.get("visibility_window_count_min", 8))
+    count_max = int(sim.get("visibility_window_count_max", 20))
+    win_count = _rint(rng, max(1, count_min), max(max(1, count_min), count_max))
+
+    dur_min = int(sim.get("visibility_window_duration_min", 12))
+    dur_max = int(sim.get("visibility_window_duration_max", 48))
+    dur_min = max(2, dur_min)
+    dur_max = max(dur_min, dur_max)
+
+    supported_types = [p for p in payload_types if p in {"camera", "radar", "relay"}] or ["camera", "radar", "relay"]
+    windows: list[VisibilityWindow] = []
+    for idx in range(win_count):
+        w_type = supported_types[idx % len(supported_types)] if idx < len(supported_types) else rng.choice(supported_types)
+        w_dur = _rint(rng, dur_min, min(dur_max, max(dur_min, horizon)))
+        w_dur = min(w_dur, horizon)
+        w_start = _rint(rng, 0, max(0, horizon - w_dur))
+        w_end = min(horizon, w_start + w_dur)
+        window = _build_visibility_window(f"vw_{idx}", w_type, w_start, w_end, horizon)
+        if window is not None:
+            windows.append(window)
+
+    # 保证每种载荷类型至少有一个窗口。
+    existing_types = {w.window_type for w in windows}
+    for missing_type in supported_types:
+        if missing_type in existing_types:
+            continue
+        w_dur = _rint(rng, dur_min, min(dur_max, max(dur_min, horizon)))
+        w_dur = min(w_dur, horizon)
+        w_start = _rint(rng, 0, max(0, horizon - w_dur))
+        w_end = min(horizon, w_start + w_dur)
+        window = _build_visibility_window(f"vw_extra_{missing_type}", missing_type, w_start, w_end, horizon)
+        if window is not None:
+            windows.append(window)
+
+    return windows
 
 
 def generate_task_pool(config: dict, seed: int) -> list[Task]:
@@ -97,18 +175,27 @@ def generate_task_pool(config: dict, seed: int) -> list[Task]:
     seq_task_max = max(seq_task_min, int(sim.get("sequence_task_max", 20)))
     chains_min = max(2, int(sim.get("dag_chains_per_sequence_min", 2)))
     chains_max = max(chains_min, int(sim.get("dag_chains_per_sequence_max", 4)))
+    key_task_probability = min(1.0, max(0.0, float(sim.get("key_task_probability", 0.06))))
+    key_task_value_bonus = max(0, int(sim.get("key_task_value_bonus", 35)))
+    free_task_ratio = min(1.0, max(0.0, float(sim.get("free_task_ratio", 0.35))))
+    window_share_task_min = max(2, int(sim.get("window_share_task_min", 2)))
+    window_share_task_max = max(window_share_task_min, int(sim.get("window_share_task_max", 5)))
 
     tasks: list[Task] = []
+    visibility_windows = _generate_visibility_windows(sim, payload_types, time_horizon, rng)
+    windows_by_type: dict[str, list[VisibilityWindow]] = defaultdict(list)
+    for w in visibility_windows:
+        windows_by_type[w.window_type].append(w)
 
     planned_seq_sizes = [_rint(rng, seq_task_min, seq_task_max) for _ in range(seq_count)]
     seq_total = sum(planned_seq_sizes)
-    reserved_key = 1
-    remaining = max(0, task_count - seq_total - reserved_key)
-    # 允许插入无刚性时间约束任务，覆盖“有依赖”和“独立”两类。
-    flex_count = max(4, remaining) if remaining > 0 else 4
+    target_free_count = max(4, int(task_count * free_task_ratio))
+    remaining = max(0, task_count - seq_total)
+    flex_count = max(target_free_count, remaining) if remaining > 0 else target_free_count
 
     task_by_id: dict[str, Task] = {}
     seq_task_ids: list[str] = []
+    window_use_counter: dict[str, int] = defaultdict(int)
     global_time_anchor = 0
     for seq_idx, seq_size in enumerate(planned_seq_sizes, start=1):
         seq_name = f"seq{seq_idx}"
@@ -123,45 +210,50 @@ def generate_task_pool(config: dict, seed: int) -> list[Task]:
             chain = idx % chain_count
             task_type = _pick_payload_type(rng, payload_types, idx + seq_idx)
             profile = _resource_profile(task_type)
-            duration = _bounded_sample(rng, *profile["duration"], cap=max(1, min(12, time_horizon)))
+            candidate_windows = windows_by_type.get(task_type) or visibility_windows
+            underused = [w for w in candidate_windows if window_use_counter[w.window_id] < window_share_task_min]
+            reusable = [w for w in candidate_windows if window_use_counter[w.window_id] < window_share_task_max]
+            if underused:
+                window = rng.choice(underused)
+            elif reusable:
+                window = rng.choice(reusable)
+            else:
+                window = rng.choice(candidate_windows)
+
+            window_span = max(1, window.end - window.start)
+            duration = _bounded_sample(rng, *profile["duration"], cap=max(1, min(12, window_span)))
+            duration = min(duration, window_span)
 
             predecessors: list[str] = []
             chain_pred = chain_ids[chain][-1] if chain_ids[chain] else None
             if chain_pred:
-                predecessors.append(chain_pred)
+                pred_task = task_by_id[chain_pred]
+                # 共享窗口依赖时，确保窗口内总时长可行。
+                if pred_task.visibility_window is not None and pred_task.visibility_window.window_id == window.window_id:
+                    if pred_task.duration + duration <= (window.end - window.start):
+                        predecessors.append(chain_pred)
+                elif _can_precede(pred_task, window, duration, time_horizon):
+                    predecessors.append(chain_pred)
             if idx > 0 and rng.random() < predecessor_prob:
                 other_candidates = [tid for c, tids in chain_ids.items() if c != chain for tid in tids]
                 if other_candidates:
-                    extra_pred_num = _rint(rng, 1, min(max_predecessors - len(predecessors), len(other_candidates)))
-                    predecessors.extend(rng.sample(other_candidates, k=max(0, extra_pred_num)))
+                    max_extra = min(max_predecessors - len(predecessors), len(other_candidates))
+                    if max_extra > 0:
+                        extra_pred_num = _rint(rng, 1, max_extra)
+                        for pred_id in rng.sample(other_candidates, k=max(0, extra_pred_num)):
+                            pred_task = task_by_id[pred_id]
+                            if pred_task.visibility_window is not None and pred_task.visibility_window.window_id == window.window_id:
+                                if pred_task.duration + duration <= (window.end - window.start):
+                                    predecessors.append(pred_id)
+                            elif _can_precede(pred_task, window, duration, time_horizon):
+                                predecessors.append(pred_id)
             predecessors = list(dict.fromkeys(predecessors))
-
-            pred_end_floor = 0
-            pred_latest_end = 0
-            if predecessors:
-                pred_end_floor = max(task_by_id[p].earliest_start + task_by_id[p].duration for p in predecessors)
-                pred_latest_end = max(task_by_id[p].latest_end for p in predecessors)
-
-            max_start = max(0, time_horizon - duration)
-            if pred_end_floor > max_start:
-                # 依赖窗口过紧时收缩时长，优先保持依赖可执行而非生成冲突数据。
-                duration = max(1, time_horizon - pred_end_floor)
-                max_start = max(0, time_horizon - duration)
-
-            earliest = min(max_start, max(0, cursor + _rint(rng, 0, 4), pred_end_floor))
-            slack = _rint(rng, 3, 18)
-            latest_start = min(max_start, earliest + slack)
-            latest_start = max(latest_start, pred_end_floor)
-            latest_start = max(latest_start, max(0, pred_latest_end - duration))
-            latest = min(time_horizon, latest_start + duration)
 
             seq_angle = _angle_step(rng, seq_angle, step_limit=22.0)
             tid = f"{seq_name}_{idx}"
             payload_id_req = [rng.choice(critical_payload_ids)] if critical_payload_ids and task_type == "camera" and rng.random() < 0.25 else []
             task = Task(
                 task_id=tid,
-                earliest_start=earliest,
-                latest_end=latest,
                 duration=duration,
                 value=_rint(rng, *profile["value"]),
                 cpu=_bounded_sample(rng, *profile["cpu"], cap=cst["cpu_capacity"]),
@@ -177,32 +269,44 @@ def generate_task_pool(config: dict, seed: int) -> list[Task]:
                 predecessors=predecessors,
                 attitude_angle_deg=seq_angle,
                 is_key_task=False,
+                visibility_window=window,
             )
+            if rng.random() < key_task_probability:
+                task.is_key_task = True
+                task.value += key_task_value_bonus
             tasks.append(task)
             task_by_id[tid] = task
             chain_ids[chain].append(tid)
             seq_task_ids.append(tid)
-            cursor = min(time_horizon - 1, earliest + _rint(rng, 1, 4))
+            window_use_counter[window.window_id] += 1
+            cursor = min(time_horizon - 1, window.start + _rint(rng, 1, 4))
+
+    # 兜底：保证至少存在一个被复用的可见窗口。
+    if seq_task_ids and all(c < 2 for c in window_use_counter.values()):
+        by_type: dict[str, list[Task]] = defaultdict(list)
+        for tid in seq_task_ids:
+            task = task_by_id[tid]
+            if task.visibility_window is not None and task.payload_type_requirements:
+                by_type[task.payload_type_requirements[0]].append(task)
+        for same_type_tasks in by_type.values():
+            if len(same_type_tasks) >= 2:
+                same_type_tasks[1].visibility_window = same_type_tasks[0].visibility_window
+                break
 
     for flex_idx in range(flex_count):
-        task_type = _pick_payload_type(rng, payload_types, flex_idx)
-        profile = _resource_profile(task_type)
+        profile = _resource_profile("compute")
         duration = _bounded_sample(rng, *profile["duration"], cap=max(1, min(10, time_horizon)))
         is_dep_flex = flex_idx % 2 == 0 and bool(seq_task_ids)
-        predecessors = []
+        predecessors: list[str] = []
         if is_dep_flex:
             pred = rng.choice(seq_task_ids)
-            predecessors = [pred]
             pred_task = task_by_id[pred]
-            # 无固定开始时刻，但确保依赖可执行。
-            if pred_task.earliest_start + pred_task.duration > time_horizon - duration:
-                predecessors = []
+            if _can_precede(pred_task, None, duration, time_horizon):
+                predecessors = [pred]
         tid = f"flex_{flex_idx}"
         angle = _angle_step(rng, rng.uniform(0.0, 359.9), step_limit=18.0)
         task = Task(
             task_id=tid,
-            earliest_start=0,
-            latest_end=time_horizon,
             duration=duration,
             value=max(8, _rint(rng, profile["value"][0], profile["value"][1])),
             cpu=_bounded_sample(rng, *profile["cpu"], cap=cst["cpu_capacity"]),
@@ -213,45 +317,19 @@ def generate_task_pool(config: dict, seed: int) -> list[Task]:
             concurrency_cores=_bounded_sample(rng, *profile["concurrency_cores"], cap=cst["cpu_capacity"]),
             power=_bounded_sample(rng, *profile["power"], cap=cst["power_capacity"]),
             thermal_load=_bounded_sample(rng, *profile["thermal_load"], cap=cst["thermal_capacity"]),
-            payload_type_requirements=[task_type],
+            payload_type_requirements=[],
             payload_id_requirements=[],
             predecessors=predecessors,
             attitude_angle_deg=angle,
             is_key_task=False,
+            visibility_window=None,
         )
+        if rng.random() < key_task_probability * 0.5:
+            task.is_key_task = True
+            task.value += key_task_value_bonus
         tasks.append(task)
         task_by_id[tid] = task
 
-    key_id = f"{sim['key_task_name']}_0"
-    key_type = payload_types[0]
-    key_profile = _resource_profile(key_type)
-    key_duration = min(int(sim.get("key_task_duration", 5)), max(1, time_horizon // 3))
-    key_start = min(int(sim.get("key_task_earliest_start", 0)), max(0, time_horizon - key_duration))
-    key_end = min(time_horizon, max(key_start + key_duration + 2, int(sim.get("key_task_latest_end", 30))))
-    key_task = Task(
-        task_id=key_id,
-        earliest_start=key_start,
-        latest_end=key_end,
-        duration=key_duration,
-        value=max(80, int(sim.get("key_task_value", 120))),
-        cpu=_bounded_sample(rng, key_profile["cpu"][0], key_profile["cpu"][1], cst["cpu_capacity"]),
-        gpu=_bounded_sample(rng, key_profile["gpu"][0], key_profile["gpu"][1], max(1, cst["gpu_capacity"])),
-        memory=_bounded_sample(rng, key_profile["memory"][0], key_profile["memory"][1], cst["memory_capacity"]),
-        storage=_bounded_sample(rng, key_profile["storage"][0], key_profile["storage"][1], cst["storage_capacity"]),
-        bus=_bounded_sample(rng, key_profile["bus"][0], key_profile["bus"][1], cst["bus_capacity"]),
-        concurrency_cores=_bounded_sample(
-            rng,
-            key_profile["concurrency_cores"][0],
-            key_profile["concurrency_cores"][1],
-            cst["cpu_capacity"],
-        ),
-        power=_bounded_sample(rng, key_profile["power"][0], key_profile["power"][1], cst["power_capacity"]),
-        thermal_load=_bounded_sample(rng, key_profile["thermal_load"][0], key_profile["thermal_load"][1], cst["thermal_capacity"]),
-        payload_type_requirements=[key_type],
-        payload_id_requirements=critical_payload_ids[:1],
-        predecessors=[],
-        attitude_angle_deg=float(sim.get("key_task_attitude_angle_deg", 15.0)),
-        is_key_task=True,
-    )
-    tasks.append(key_task)
+    if tasks and not any(t.is_key_task for t in tasks):
+        max(tasks, key=lambda x: x.value).is_key_task = True
     return tasks[: sim["task_count_max"]]

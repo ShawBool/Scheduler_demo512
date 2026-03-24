@@ -4,6 +4,12 @@ from scheduler.config import load_config
 from scheduler.simulation import generate_task_pool
 
 
+def _task_domain(task, horizon: int) -> tuple[int, int]:
+    if task.visibility_window is None:
+        return 0, horizon
+    return task.visibility_window.start, task.visibility_window.end
+
+
 def _has_cycle(tasks):
     graph = defaultdict(list)
     indeg = defaultdict(int)
@@ -33,10 +39,8 @@ def test_generate_task_pool_meets_ranges_and_constraints():
     assert cfg["simulation"]["task_count_min"] <= len(tasks) <= cfg["simulation"]["task_count_max"]
     assert not _has_cycle(tasks)
 
-    key_name = cfg["simulation"]["key_task_name"]
-    key_tasks = [t for t in tasks if t.task_id.startswith(key_name)]
+    key_tasks = [t for t in tasks if t.is_key_task]
     assert key_tasks
-    assert all(t.is_key_task for t in key_tasks)
 
     c = cfg["constraints"]
     for t in tasks:
@@ -49,6 +53,9 @@ def test_generate_task_pool_meets_ranges_and_constraints():
         assert 1 <= t.power <= c["power_capacity"]
         assert 1 <= t.thermal_load <= c["thermal_capacity"]
         assert 0.0 <= t.attitude_angle_deg < 360.0
+        if t.visibility_window is not None:
+            assert t.visibility_window.start < t.visibility_window.end
+            assert t.duration <= (t.visibility_window.end - t.visibility_window.start)
 
 
 def test_generate_task_pool_has_parallel_sequences_and_dag_chains():
@@ -70,7 +77,9 @@ def test_generate_task_pool_has_parallel_sequences_and_dag_chains():
         for j in range(i + 1, len(seq_ids)):
             for a in seq_index[seq_ids[i]]:
                 for b in seq_index[seq_ids[j]]:
-                    if a.earliest_start < b.latest_end - b.duration and b.earliest_start < a.latest_end - a.duration:
+                    a_start, a_end = _task_domain(a, cfg["runtime"]["time_horizon"])
+                    b_start, b_end = _task_domain(b, cfg["runtime"]["time_horizon"])
+                    if a_start < b_end - b.duration and b_start < a_end - a.duration:
                         found_parallel_feasible_windows = True
                         break
                 if found_parallel_feasible_windows:
@@ -89,6 +98,33 @@ def test_generate_task_pool_has_no_dangling_predecessor_after_key_task_injection
             assert p in ids
 
 
+def test_generate_task_pool_only_payload_tasks_require_visibility_window():
+    cfg = load_config("config")
+    tasks = generate_task_pool(cfg, seed=17)
+    for t in tasks:
+        if t.payload_type_requirements:
+            assert t.visibility_window is not None
+            assert t.visibility_window.window_type == t.payload_type_requirements[0]
+        else:
+            assert t.visibility_window is None
+
+
+def test_simulation_generates_window_pool_before_tasks_and_reuses_windows():
+    cfg = load_config("config")
+    tasks = generate_task_pool(cfg, seed=42)
+
+    payload_tasks = [t for t in tasks if t.payload_type_requirements]
+    assert payload_tasks
+
+    shared: dict[str, int] = {}
+    for t in payload_tasks:
+        assert t.visibility_window is not None
+        shared.setdefault(t.visibility_window.window_id, 0)
+        shared[t.visibility_window.window_id] += 1
+
+    assert any(cnt >= 2 for cnt in shared.values())
+
+
 def test_generate_task_pool_dependency_windows_are_schedulable():
     cfg = load_config("config")
     tasks = generate_task_pool(cfg, seed=13)
@@ -96,10 +132,27 @@ def test_generate_task_pool_dependency_windows_are_schedulable():
     for task in tasks:
         for pred_id in task.predecessors:
             pred = task_by_id[pred_id]
-            latest_pred_finish = pred.latest_end
-            latest_succ_start = task.latest_end - task.duration
-            assert latest_pred_finish <= task.latest_end
-            assert pred.earliest_start + pred.duration <= latest_succ_start
+            pred_start, _ = _task_domain(pred, cfg["runtime"]["time_horizon"])
+            _, succ_end = _task_domain(task, cfg["runtime"]["time_horizon"])
+            latest_succ_start = succ_end - task.duration
+            assert pred_start + pred.duration <= latest_succ_start
+
+
+def test_shared_window_dependency_duration_is_feasible():
+    cfg = load_config("config")
+    tasks = generate_task_pool(cfg, seed=23)
+    task_by_id = {t.task_id: t for t in tasks}
+
+    for t in tasks:
+        if t.visibility_window is None:
+            continue
+        for pred_id in t.predecessors:
+            pred = task_by_id[pred_id]
+            if pred.visibility_window is None:
+                continue
+            if pred.visibility_window.window_id == t.visibility_window.window_id:
+                window_span = t.visibility_window.end - t.visibility_window.start
+                assert pred.duration + t.duration <= window_span
 
 
 def test_generate_task_pool_attitude_and_task_type_are_meaningful():
@@ -110,7 +163,13 @@ def test_generate_task_pool_attitude_and_task_type_are_meaningful():
         if t.task_id.startswith("seq"):
             seq_index[t.task_id.split("_")[0]].append(t)
     for seq_tasks in seq_index.values():
-        ordered = sorted(seq_tasks, key=lambda x: (x.earliest_start, x.task_id))
+        ordered = sorted(
+            seq_tasks,
+            key=lambda x: (
+                x.visibility_window.start if x.visibility_window is not None else 0,
+                x.task_id,
+            ),
+        )
         for prev, nxt in zip(ordered, ordered[1:]):
             angle_jump = abs(prev.attitude_angle_deg - nxt.attitude_angle_deg)
             angle_jump = min(angle_jump, 360.0 - angle_jump)
@@ -130,10 +189,16 @@ def test_generate_task_pool_attitude_and_task_type_are_meaningful():
 def test_generate_task_pool_has_flexible_tasks_with_and_without_dependencies():
     cfg = load_config("config")
     tasks = generate_task_pool(cfg, seed=31)
-    horizon = cfg["runtime"]["time_horizon"]
     flex_tasks = [t for t in tasks if t.task_id.startswith("flex_")]
     assert flex_tasks
-    assert all(t.earliest_start == 0 for t in flex_tasks)
-    assert all(t.latest_end == horizon for t in flex_tasks)
+    assert all(t.visibility_window is None for t in flex_tasks)
     assert any(t.predecessors for t in flex_tasks)
     assert any(not t.predecessors for t in flex_tasks)
+
+
+def test_free_tasks_have_no_window_and_no_explicit_time_bounds():
+    cfg = load_config("config")
+    tasks = generate_task_pool(cfg, seed=99)
+    free_tasks = [t for t in tasks if t.task_id.startswith("flex_")]
+    assert free_tasks
+    assert all(t.visibility_window is None for t in free_tasks)

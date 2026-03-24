@@ -28,6 +28,11 @@ def test_pipeline_outputs_schedule_and_cycle_log(tmp_path):
     assert task_pool["task_count"] == len(task_pool["tasks"])
     assert "task_pool_file" in result
     assert result["task_pool_file"].endswith("latest_task_pool.json")
+    for task in task_pool["tasks"]:
+        if task["payload_type_requirements"]:
+            assert task["visibility_window"] is not None
+        else:
+            assert task["visibility_window"] is None
 
     lines = cycle_log_path.read_text(encoding="utf-8").strip().splitlines()
     assert lines

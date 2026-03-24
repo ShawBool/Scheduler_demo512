@@ -1,4 +1,4 @@
-from scheduler.models import Task
+from scheduler.models import Task, VisibilityWindow
 from scheduler.planner import plan_baseline
 
 
@@ -23,12 +23,30 @@ def _base_config():
 
 def _sample_tasks():
     return [
-        Task("key", 0, 12, 4, 50, 1, 0, 2, 1, 1, 1, 1, 1, ["camera"], ["P1"], [], 10.0, True),
-        Task("pre", 0, 20, 4, 10, 1, 0, 2, 1, 1, 1, 1, 1, [], [], [], 20.0, False),
-        Task("succ", 2, 30, 5, 20, 1, 0, 2, 1, 1, 1, 1, 1, [], [], ["pre"], 50.0, False),
-        Task("switch1", 5, 35, 5, 15, 1, 0, 2, 1, 1, 1, 1, 1, [], [], [], 60.0, False),
-        Task("switch2", 5, 45, 5, 30, 1, 0, 2, 1, 1, 1, 1, 1, [], [], [], 180.0, False),
-        Task("too_heavy", 0, 25, 4, 80, 10, 0, 2, 1, 1, 1, 1, 1, [], [], [], 5.0, False),
+        Task(
+            task_id="key",
+            duration=4,
+            value=50,
+            cpu=1,
+            gpu=0,
+            memory=2,
+            storage=1,
+            bus=1,
+            concurrency_cores=1,
+            power=1,
+            thermal_load=1,
+            payload_type_requirements=["camera"],
+            payload_id_requirements=["P1"],
+            predecessors=[],
+            attitude_angle_deg=10.0,
+            is_key_task=True,
+            visibility_window=VisibilityWindow("vw_key", 0, 12, "camera"),
+        ),
+        Task("pre", 4, 10, 1, 0, 2, 1, 1, 1, 1, 1, [], [], [], 20.0, False, VisibilityWindow("vw_pre", 0, 20, "camera")),
+        Task("succ", 5, 20, 1, 0, 2, 1, 1, 1, 1, 1, [], [], ["pre"], 50.0, False, VisibilityWindow("vw_succ", 2, 30, "camera")),
+        Task("switch1", 5, 15, 1, 0, 2, 1, 1, 1, 1, 1, [], [], [], 60.0, False, VisibilityWindow("vw_sw1", 5, 35, "camera")),
+        Task("switch2", 5, 30, 1, 0, 2, 1, 1, 1, 1, 1, [], [], [], 180.0, False, VisibilityWindow("vw_sw2", 5, 45, "camera")),
+        Task("too_heavy", 4, 80, 10, 0, 2, 1, 1, 1, 1, 1, [], [], [], 5.0, False, VisibilityWindow("vw_heavy", 0, 25, "camera")),
     ]
 
 
@@ -43,8 +61,9 @@ def test_planner_enforces_hard_constraints_and_reports_unscheduled():
 
     for item in result.scheduled_items:
         task = next(t for t in _sample_tasks() if t.task_id == item.task_id)
-        assert task.earliest_start <= item.start
-        assert item.end <= task.latest_end
+        if task.visibility_window is not None:
+            assert task.visibility_window.start <= item.start
+            assert item.end <= task.visibility_window.end
 
     assert scheduled["succ"].start >= scheduled["pre"].end
 
@@ -65,9 +84,9 @@ def test_planner_concurrency_core_limit():
     cfg = _base_config()
     cfg["constraints"]["cpu_capacity"] = 2
     tasks = [
-        Task("key", 0, 40, 2, 1, 1, 0, 1, 1, 1, 1, 1, 1, [], [], [], 0.0, True),
-        Task("c1", 0, 40, 10, 20, 1, 0, 1, 1, 1, 2, 1, 1, [], [], [], 20.0, False),
-        Task("c2", 0, 40, 10, 20, 1, 0, 1, 1, 1, 2, 1, 1, [], [], [], 40.0, False),
+        Task("key", 2, 1, 1, 0, 1, 1, 1, 1, 1, 1, [], [], [], 0.0, True, VisibilityWindow("vw_key", 0, 40, "camera")),
+        Task("c1", 10, 20, 1, 0, 1, 1, 1, 2, 1, 1, [], [], [], 20.0, False, VisibilityWindow("vw_c1", 0, 40, "camera")),
+        Task("c2", 10, 20, 1, 0, 1, 1, 1, 2, 1, 1, [], [], [], 40.0, False, VisibilityWindow("vw_c2", 0, 40, "camera")),
     ]
 
     result = plan_baseline(tasks, cfg)
@@ -81,13 +100,31 @@ def test_planner_concurrency_core_limit():
         assert sum(x.cpu for x in active) <= cfg["constraints"]["cpu_capacity"]
 
 
-def test_planner_derives_rolling_segments_from_position_service_and_dag_sources():
+def test_planner_derives_rolling_segments_from_key_tasks_and_dag_sources():
     cfg = _base_config()
     tasks = [
-        Task("position_service_0", 0, 20, 5, 100, 1, 0, 1, 1, 1, 1, 1, 1, ["camera"], ["P1"], [], 0.0, True),
-        Task("src_A", 20, 40, 5, 20, 1, 0, 1, 1, 1, 1, 1, 1, [], [], [], 10.0, False),
-        Task("src_B", 45, 55, 5, 20, 1, 0, 1, 1, 1, 1, 1, 1, [], [], [], 20.0, False),
-        Task("dep_B", 50, 60, 5, 10, 1, 0, 1, 1, 1, 1, 1, 1, [], [], ["src_B"], 40.0, False),
+        Task(
+            "key_0",
+            5,
+            100,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            ["camera"],
+            ["P1"],
+            [],
+            0.0,
+            True,
+            VisibilityWindow("vw_key_0", 0, 20, "camera"),
+        ),
+        Task("src_A", 5, 20, 1, 0, 1, 1, 1, 1, 1, 1, [], [], [], 10.0, False, VisibilityWindow("vw_src_A", 20, 40, "camera")),
+        Task("src_B", 5, 20, 1, 0, 1, 1, 1, 1, 1, 1, [], [], [], 20.0, False, VisibilityWindow("vw_src_B", 45, 55, "camera")),
+        Task("dep_B", 5, 10, 1, 0, 1, 1, 1, 1, 1, 1, [], [], ["src_B"], 40.0, False, VisibilityWindow("vw_dep_B", 50, 60, "camera")),
     ]
     result = plan_baseline(tasks, cfg)
     assert result.rolling_segments
@@ -95,4 +132,38 @@ def test_planner_derives_rolling_segments_from_position_service_and_dag_sources(
     assert 0 in starts
     assert 20 in starts
     assert 45 in starts
+
+
+def test_planner_respects_visibility_window_if_present():
+    cfg = _base_config()
+    task = Task(
+        "w1",
+        4,
+        10,
+        1,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        ["camera"],
+        ["P1"],
+        [],
+        0.0,
+        False,
+        VisibilityWindow("vw1", 10, 20, "camera"),
+    )
+    result = plan_baseline([task], cfg)
+    item = next(i for i in result.scheduled_items if i.task_id == "w1")
+    assert 10 <= item.start
+    assert item.end <= 20
+
+
+def test_planner_treats_none_window_as_full_horizon():
+    cfg = _base_config()
+    task = Task("free", 4, 10, 1, 0, 1, 1, 1, 1, 1, 1, [], [], [], 0.0, False, None)
+    result = plan_baseline([task], cfg)
+    assert any(i.task_id == "free" for i in result.scheduled_items)
 

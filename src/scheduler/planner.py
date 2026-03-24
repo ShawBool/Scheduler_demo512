@@ -8,9 +8,16 @@ from ortools.sat.python import cp_model
 
 from .models import ScheduleItem, ScheduleResult, Task
 
+
 def _angle_delta(a: float, b: float) -> float:
     diff = abs(a - b)
     return min(diff, 360.0 - diff)
+
+
+def _task_time_domain(task: Task, horizon: int) -> tuple[int, int]:
+    if task.visibility_window is None:
+        return 0, horizon
+    return max(0, int(task.visibility_window.start)), min(horizon, int(task.visibility_window.end))
 
 
 def _derive_rolling_segments(tasks: list[Task], horizon: int) -> list[dict[str, int]]:
@@ -19,10 +26,10 @@ def _derive_rolling_segments(tasks: list[Task], horizon: int) -> list[dict[str, 
     ids = {t.task_id for t in tasks}
     boundary_starts = {0}
     for task in tasks:
-        is_position_service = task.task_id.startswith("position_service")
         is_dag_source = not any(pred in ids for pred in task.predecessors)
-        if is_position_service or is_dag_source:
-            boundary_starts.add(max(0, min(horizon - 1, int(task.earliest_start))))
+        if task.is_key_task or is_dag_source:
+            start_bound, _ = _task_time_domain(task, horizon)
+            boundary_starts.add(max(0, min(horizon - 1, start_bound)))
 
     starts = sorted(boundary_starts)
     segments: list[dict[str, int]] = []
@@ -58,8 +65,9 @@ def plan_baseline(tasks: list[Task], config: dict[str, Any]) -> ScheduleResult:
     intervals: list[Any] = []
     for idx, task in enumerate(tasks):
         dur_slot = max(1, (task.duration + time_step - 1) // time_step)
-        earliest_slot = max(0, task.earliest_start // time_step)
-        latest_end_slot = min(horizon // time_step, task.latest_end // time_step)
+        start_bound, end_bound = _task_time_domain(task, horizon)
+        earliest_slot = max(0, start_bound // time_step)
+        latest_end_slot = min(horizon // time_step, end_bound // time_step)
         latest_start_slot = max(earliest_slot, latest_end_slot - dur_slot)
 
         x = model.new_bool_var(f"sel_{idx}")
@@ -142,7 +150,8 @@ def plan_baseline(tasks: list[Task], config: dict[str, Any]) -> ScheduleResult:
     late_penalty_weight = int(weights.get("lateness_penalty", 0))
     objective_terms: list[Any] = []
     for idx, task in enumerate(tasks):
-        earliest_slot = max(0, task.earliest_start // time_step)
+        start_bound, _ = _task_time_domain(task, horizon)
+        earliest_slot = max(0, start_bound // time_step)
         objective_terms.append(selected[idx] * int(task.value) * task_value_weight)
         if late_penalty_weight > 0:
             lateness = model.new_int_var(0, horizon // time_step, f"late_{idx}")

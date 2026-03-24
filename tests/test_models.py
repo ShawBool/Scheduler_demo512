@@ -1,11 +1,9 @@
-from scheduler.models import ResourceSnapshot, ScheduleItem, ScheduleResult, Task
+from scheduler.models import ResourceSnapshot, ScheduleItem, ScheduleResult, Task, VisibilityWindow
 
 
 def test_models_can_be_instantiated_and_contain_chinese_docs():
     task = Task(
         task_id="t1",
-        earliest_start=0,
-        latest_end=20,
         duration=5,
         value=10,
         cpu=1,
@@ -21,6 +19,7 @@ def test_models_can_be_instantiated_and_contain_chinese_docs():
         predecessors=[],
         attitude_angle_deg=30.0,
         is_key_task=True,
+        visibility_window=VisibilityWindow("vw_t1", 0, 20, "camera"),
     )
     snapshot = ResourceSnapshot(
         timestamp=5,
@@ -43,9 +42,29 @@ def test_models_can_be_instantiated_and_contain_chinese_docs():
     )
 
     assert task.task_id == "t1"
+    assert task.visibility_window is not None
+    assert task.visibility_window.window_id == "vw_t1"
     assert snapshot.concurrency_cores == 1
     assert snapshot.attitude_angle_deg == 15.0
     assert result.objective_value == 10
     assert "任务" in (Task.__doc__ or "")
     assert "计划" in (ScheduleItem.__doc__ or "")
     assert "资源" in (ResourceSnapshot.__doc__ or "")
+
+
+def test_task_without_visibility_window_is_free_task():
+    task = Task(
+        task_id="free_t1",
+        duration=3,
+        value=6,
+        cpu=1,
+        gpu=0,
+        memory=1,
+        storage=1,
+        bus=1,
+        concurrency_cores=1,
+        power=1,
+        thermal_load=1,
+    )
+
+    assert task.visibility_window is None

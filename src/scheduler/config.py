@@ -63,6 +63,23 @@ def validate_config(cfg: dict[str, Any]) -> None:
     if sim["dag_group_min"] > sim["dag_group_max"]:
         raise ValueError("dag_group_min must be <= dag_group_max")
 
+    _ensure_positive(sim.get("visibility_window_count_min", 1), "visibility_window_count_min")
+    _ensure_positive(sim.get("visibility_window_count_max", 1), "visibility_window_count_max")
+    _ensure_positive(sim.get("visibility_window_duration_min", 1), "visibility_window_duration_min")
+    _ensure_positive(sim.get("visibility_window_duration_max", 1), "visibility_window_duration_max")
+    _ensure_positive(sim.get("window_share_task_min", 1), "window_share_task_min")
+    _ensure_positive(sim.get("window_share_task_max", 1), "window_share_task_max")
+    if sim.get("visibility_window_count_min", 1) > sim.get("visibility_window_count_max", 1):
+        raise ValueError("visibility_window_count_min must be <= visibility_window_count_max")
+    if sim.get("visibility_window_duration_min", 1) > sim.get("visibility_window_duration_max", 1):
+        raise ValueError("visibility_window_duration_min must be <= visibility_window_duration_max")
+    if sim.get("window_share_task_min", 1) > sim.get("window_share_task_max", 1):
+        raise ValueError("window_share_task_min must be <= window_share_task_max")
+
+    free_task_ratio = sim.get("free_task_ratio", 0.35)
+    if not isinstance(free_task_ratio, (int, float)) or not (0 <= float(free_task_ratio) <= 1):
+        raise ValueError("free_task_ratio must be in [0, 1]")
+
     constraints = cfg["constraints"]
     numeric_positive_keys = (
         "cpu_capacity",
