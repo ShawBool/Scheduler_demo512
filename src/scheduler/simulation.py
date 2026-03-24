@@ -76,7 +76,7 @@ def _resource_profile(task_type: str) -> dict[str, tuple[int, int]]:
         },
         "compute": {
             "cpu": (1, 2),
-            "gpu": (0, 1),
+            "gpu": (1, 2),
             "memory": (1, 3),
             "storage": (1, 2),
             "bus": (1, 2),
