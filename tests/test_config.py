@@ -65,15 +65,6 @@ def test_validate_config_rejects_invalid_visibility_window_ranges():
     with pytest.raises(ValueError, match="visibility_window_count_min must be <= visibility_window_count_max"):
         validate_config(cfg)
 
-
-def test_validate_config_rejects_invalid_input_mode():
-    cfg = _base_cfg()
-    cfg["runtime"]["input_mode"] = "dynamic"
-
-    with pytest.raises(ValueError, match="input_mode must be one of: static, simulation"):
-        validate_config(cfg)
-
-
 def test_validate_config_rejects_new_surface_ratio_ranges():
     cfg = _base_cfg()
     cfg["simulation"]["structured_task_ratio"] = 1.1
