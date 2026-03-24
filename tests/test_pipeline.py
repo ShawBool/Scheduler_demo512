@@ -154,8 +154,42 @@ def test_pipeline_uses_simulation_branch_when_input_mode_simulation(tmp_path, mo
     assert windows["window_count"] == len(windows["windows"]) == 1
 
 
-def test_pipeline_writes_solver_progress_log(tmp_path):
+def test_pipeline_writes_solver_progress_log(tmp_path, monkeypatch):
     output_dir = tmp_path / "output"
+
+    cfg = deepcopy(load_config("config"))
+    cfg["runtime"]["input_mode"] = "simulation"
+    cfg["runtime"]["solver_progress_every_n_solutions"] = 10**9
+
+    window = VisibilityWindow(window_id="vw_progress_1", start=0, end=20)
+    task = Task(
+        task_id="progress_task_1",
+        duration=2,
+        value=100,
+        cpu=1,
+        gpu=0,
+        memory=1,
+        power=1,
+        payload_type_requirements=["camera"],
+        predecessors=[],
+        attitude_angle_deg=0.0,
+        is_key_task=False,
+        visibility_window=window,
+    )
+
+    def _fake_load_config(*_args, **_kwargs):
+        return cfg
+
+    def _fake_generate_snapshot(*_args, **_kwargs):
+        return {
+            "seed": 42,
+            "horizon": cfg["runtime"]["time_horizon"],
+            "tasks": [task],
+            "visibility_windows": [window],
+        }
+
+    monkeypatch.setattr(pipeline_module, "load_config", _fake_load_config)
+    monkeypatch.setattr(simulation_module, "generate_simulation_snapshot", _fake_generate_snapshot, raising=False)
 
     result = run_pipeline(config_path="config", seed=42, output_dir=output_dir)
 
@@ -165,4 +199,13 @@ def test_pipeline_writes_solver_progress_log(tmp_path):
     assert result["solver_progress_file"].endswith("solver_progress.jsonl")
 
     lines = solver_progress_path.read_text(encoding="utf-8").splitlines()
-    assert len(lines) >= 0
+    required_fields = {"solution_index", "objective", "wall_time", "best_bound"}
+    for line in lines:
+        payload = json.loads(line)
+        assert required_fields.issubset(payload.keys())
+
+    solver_status = str(result.get("constraint_stats", {}).get("solver_status", "")).lower()
+    if solver_status in {"feasible", "optimal"}:
+        assert lines
+    else:
+        assert solver_status in {"infeasible", "unknown", "model_invalid"}

@@ -189,6 +189,7 @@ def plan_baseline(
         def __init__(self) -> None:
             super().__init__()
             self.solution_index = 0
+            self.emitted_count = 0
 
         def on_solution_callback(self) -> None:
             self.solution_index += 1
@@ -206,8 +207,26 @@ def plan_baseline(
                     "best_bound": float(self.BestObjectiveBound()),
                 }
             )
+            self.emitted_count += 1
 
-    status = solver.solve(model, _SolutionProgressCallback())
+    progress_callback = _SolutionProgressCallback()
+    status = solver.solve(model, progress_callback)
+
+    if (
+        status in (cp_model.OPTIMAL, cp_model.FEASIBLE)
+        and progress_enable
+        and on_solution_progress is not None
+        and progress_callback.emitted_count == 0
+    ):
+        final_solution_index = max(1, progress_callback.solution_index)
+        on_solution_progress(
+            {
+                "solution_index": int(final_solution_index),
+                "objective": float(solver.ObjectiveValue()),
+                "wall_time": float(solver.WallTime()),
+                "best_bound": float(solver.BestObjectiveBound()),
+            }
+        )
 
     if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
         status_text = "infeasible" if status == cp_model.INFEASIBLE else str(int(status))
