@@ -55,7 +55,11 @@ def test_load_config_runtime_defaults_for_static_mode_and_solver_progress_flag()
     runtime = cfg["runtime"]
 
     assert runtime.get("input_mode") == "static"
-    assert runtime.get("solver_progress_enable", True) is True
+    assert "solver_progress_enable" in runtime
+    assert runtime["solver_progress_enable"] is True
+    assert "data_dir" in runtime
+    assert "tasks_file" in runtime
+    assert "windows_file" in runtime
 
 
 def test_validate_config_allows_nonpositive_dag_groups_for_compatibility():
