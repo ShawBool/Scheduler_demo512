@@ -1,0 +1,146 @@
+{
+    "schema_version": "2.0",
+    "task_count": 11,
+    "tasks": [
+        {
+            "task_id": "group01_att",
+            "duration": 5,
+            "value": 100,
+            "cpu": 1,
+            "gpu": 0,
+            "memory": 2,
+            "power": 1,
+            "thermal_load": 1,
+            "payload_type_requirements": [],
+            "predecessors": [],
+            "visibility_window": "target_1",
+            "attitude_angle_deg": null,
+            "is_key_task": false,
+            "desc": "姿态调整"
+        },
+        {
+            "task_id": "group01_radar",
+            "duration": 8,
+            "value": 80,
+            "cpu": 2,
+            "gpu": 2,
+            "memory": 6,
+            "power": 5,
+            "thermal_load": 4,
+            "payload_type_requirements": [
+                "radar"
+            ],
+            "predecessors": [
+                "group01_att"
+            ],
+            "visibility_window": "target_1",
+            "attitude_angle_deg": 150.0,
+            "is_key_task": true,
+            "desc": "雷达成像"
+        },
+        {
+            "task_id": "group01_storage",
+            "duration": 4,
+            "value": 20,
+            "cpu": 1,
+            "gpu": 0,
+            "memory": 3,
+            "power": 2,
+            "thermal_load": 1,
+            "payload_type_requirements": [],
+            "predecessors": [
+                "group01_radar"
+            ],
+            "visibility_window": null,
+            "attitude_angle_deg": null,
+            "is_key_task": false,
+            "desc": "原始数据存储"
+        },
+        {
+            "task_id": "group01_compute01",
+            "duration": 6,
+            "value": 60,
+            "cpu": 2,
+            "gpu": 1,
+            "memory": 5,
+            "power": 4,
+            "thermal_load": 3,
+            "payload_type_requirements": [],
+            "predecessors": [
+                "group01_storage"
+            ],
+            "visibility_window": null,
+            "attitude_angle_deg": null,
+            "is_key_task": false,
+            "desc": "雷达数据处理"
+        },
+        {
+            "task_id": "group01_relay",
+            "duration": 7,
+            "value": 20,
+            "cpu": 1,
+            "gpu": 0,
+            "memory": 3,
+            "power": 3,
+            "thermal_load": 2,
+            "payload_type_requirements": [
+                "relay"
+            ],
+            "predecessors": [
+                "group01_compute01"
+            ],
+            "visibility_window": "gs_downlink_1",
+            "attitude_angle_deg": 223.5,
+            "is_key_task": false,
+            "desc": "数据下传(地面站窗口1)"
+        },
+        {
+        "task_id": "group02_att",
+        "duration": 5, "value": 50,
+        "cpu": 1, "gpu": 0, "memory": 2, "power": 1, "thermal_load": 1,
+        "payload_type_requirements": [], "predecessors": [],
+        "visibility_window": "target_2", "attitude_angle_deg": null,
+        "is_key_task": false, "desc": "姿态调整"
+        },
+        {
+        "task_id": "group02_camera",
+        "duration": 6, "value": 80,
+        "cpu": 2, "gpu": 1, "memory": 4, "power": 3, "thermal_load": 2,
+        "payload_type_requirements": ["camera"], "predecessors": ["group02_att"],
+        "visibility_window": "target_2", "attitude_angle_deg": null,
+        "is_key_task": true, "desc": "光学成像"
+        },
+        {
+        "task_id": "group02_storage",
+        "duration": 4, "value": 20,
+        "cpu": 1, "gpu": 0, "memory": 8, "power": 2, "thermal_load": 1,
+        "payload_type_requirements": [], "predecessors": ["group02_camera"],
+        "visibility_window": null, "attitude_angle_deg": null,
+        "is_key_task": false, "desc": "原始数据存储"
+        },
+        {
+        "task_id": "group02_compute01",
+        "duration": 5, "value": 50,
+        "cpu": 2, "gpu": 2, "memory": 6, "power": 5, "thermal_load": 3,
+        "payload_type_requirements": [], "predecessors": ["group02_storage"],
+        "visibility_window": null, "attitude_angle_deg": null,
+        "is_key_task": false, "desc": "图像去噪处理"
+        },
+        {
+        "task_id": "group02_compute02",
+        "duration": 4, "value": 35,
+        "cpu": 2, "gpu": 1, "memory": 4, "power": 3, "thermal_load": 2,
+        "payload_type_requirements": [], "predecessors": ["group02_compute01"],
+        "visibility_window": null, "attitude_angle_deg": null,
+        "is_key_task": false, "desc": "图像压缩处理"
+        },
+        {
+        "task_id": "group02_relay",
+        "duration": 7, "value": 40,
+        "cpu": 1, "gpu": 0, "memory": 3, "power": 3, "thermal_load": 2,
+        "payload_type_requirements": ["relay"], "predecessors": ["group02_compute02"],
+        "visibility_window": "gs_downlink_2", "attitude_angle_deg": null,
+        "is_key_task": false, "desc": "数据下传（地面站窗口2）"
+        }
+    ]
+}
