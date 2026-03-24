@@ -1,0 +1,15 @@
+{
+  "template_name": "classic_orbit_small_v1",
+  "orbit_horizon": 240,
+  "notes": "小规模经典卫星场景模板；现阶段用于替代仿真生成",
+ "visibility_windows": [
+    {"window_id": "target_1", "start": 5, "end": 24, "comment": "目标窗口1"},
+    {"window_id": "target_2", "start": 36, "end": 60, "comment": "目标窗口2"},
+    {"window_id": "target_3", "start": 66, "end": 80, "comment": "目标窗口3"},
+    {"window_id": "gs_downlink_1", "start": 85, "end": 105, "comment": "地面站数传窗口1"},
+    {"window_id": "target_4", "start": 106, "end": 122, "comment": "目标窗口4"},
+    {"window_id": "target_5", "start": 126, "end": 144, "comment": "目标窗口5"},
+    {"window_id": "target_6", "start": 155, "end": 170, "comment": "目标窗口6"},
+    {"window_id": "gs_downlink_2", "start": 200, "end": 230, "comment": "地面站数传窗口2"}
+  ]
+}
