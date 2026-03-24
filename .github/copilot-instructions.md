@@ -31,3 +31,15 @@ When generating Markdown files intended for AI reading, if the primary content i
 - 在 autopilot 模式下，仅允许在 `.worktrees/ai-develop` 的 `feature/ai-develop` 分支修改代码，禁止直接改 main 工作目录。
 - 按里程碑提交，提交信息必须为中文且包含“变更原因”。
 - 交付时仅输出合并方案与命令，不自动执行合并。
+
+## Constraint Placement Rule
+
+- For task-related hard constraints, prefer enforcing them in simulation/data generation rather than duplicating them in the solver.
+- The solver should remain as generic as possible for search and optimization, while task feasibility shaping happens upstream in generated task data.
+- Example: avoid adding solver-side task-window ∩ visibility-window intersection logic when simulation can already generate tasks constrained within visibility windows.
+
+中文说明：
+
+- 与任务相关的硬约束，优先在仿真/数据生成阶段落实，避免在求解器中重复实现。
+- 求解器尽量保持通用优化职责；任务可行性塑形应尽量前置到任务生成阶段。
+- 例如：若仿真已将任务约束在可见窗口内，求解器无需再做“任务窗 ∩ 可见窗”的重复约束。
