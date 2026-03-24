@@ -15,9 +15,16 @@ def _angle_delta(a: float, b: float) -> float:
 
 
 def _task_time_domain(task: Task, horizon: int) -> tuple[int, int]:
+    # 时间域约束：有可见窗口时限制在窗口内，否则降级为全时域 [0, horizon]。
     if task.visibility_window is None:
         return 0, horizon
     return max(0, int(task.visibility_window.start)), min(horizon, int(task.visibility_window.end))
+
+
+def _task_numeric_attr(task: Task, attr: str, default: int = 0) -> int:
+    """读取任务数值字段，缺失 legacy 字段时降级为默认值。"""
+    value = getattr(task, attr, default)
+    return int(value)
 
 
 def _derive_rolling_segments(tasks: list[Task], horizon: int) -> list[dict[str, int]]:
@@ -52,7 +59,6 @@ def plan_baseline(tasks: list[Task], config: dict[str, Any]) -> ScheduleResult:
     payload_type_capacity: dict[str, int] = {
         str(k): int(v) for k, v in constraints.get("payload_type_capacity", {}).items()
     }
-    critical_payload_ids = set(constraints.get("critical_payload_ids", []))
 
     n = len(tasks)
     task_index = {t.task_id: i for i, t in enumerate(tasks)}
@@ -64,6 +70,7 @@ def plan_baseline(tasks: list[Task], config: dict[str, Any]) -> ScheduleResult:
     selected: list[Any] = []
     intervals: list[Any] = []
     for idx, task in enumerate(tasks):
+        # 时间域 + 执行时长：把连续时间映射到 slot，并在窗口不足时强制不选。
         dur_slot = max(1, (task.duration + time_step - 1) // time_step)
         start_bound, end_bound = _task_time_domain(task, horizon)
         earliest_slot = max(0, start_bound // time_step)
@@ -90,6 +97,7 @@ def plan_baseline(tasks: list[Task], config: dict[str, Any]) -> ScheduleResult:
         selected.append(x)
         intervals.append(interval)
 
+    # 前后依赖：后继任务仅在前驱被选且前驱结束后才能开始。
     for succ_idx, succ_task in enumerate(tasks):
         for pred_id in succ_task.predecessors:
             if pred_id not in task_index:
@@ -101,6 +109,7 @@ def plan_baseline(tasks: list[Task], config: dict[str, Any]) -> ScheduleResult:
                 [selected[succ_idx], selected[pred_idx]]
             )
 
+    # 姿态切换：两个被选任务之间至少满足角度换向所需时间间隔。
     for i in range(n):
         for j in range(i + 1, n):
             angle = _angle_delta(tasks[i].attitude_angle_deg, tasks[j].attitude_angle_deg)
@@ -117,29 +126,29 @@ def plan_baseline(tasks: list[Task], config: dict[str, Any]) -> ScheduleResult:
             model.add(starts[j] >= ends[i] + switch_slot).only_enforce_if([both, i_before_j])
             model.add(starts[i] >= ends[j] + switch_slot).only_enforce_if([both, j_before_i])
 
+    # 资源约束：仅使用当前 Task 模型中的资源字段。
     resource_specs = [
         ("cpu", "cpu_capacity"),
         ("gpu", "gpu_capacity"),
         ("memory", "memory_capacity"),
-        ("storage", "storage_capacity"),
-        ("bus", "bus_capacity"),
-        ("concurrency_cores", "cpu_capacity"),
         ("power", "power_capacity"),
-        ("thermal_load", "thermal_capacity"),
     ]
     for task_attr, cap_key in resource_specs:
+        if cap_key not in constraints:
+            continue
         cap = int(constraints.get(cap_key, 0))
-        demands = [int(getattr(t, task_attr)) for t in tasks]
+        demands = [_task_numeric_attr(t, task_attr, 0) for t in tasks]
+        if not any(d > 0 for d in demands):
+            continue
         model.add_cumulative(intervals, demands, cap)
 
+    # 载荷容量约束：任务声明了未知载荷类型时，任务不可选。
     for idx, task in enumerate(tasks):
         if payload_type_capacity:
             for payload_type in task.payload_type_requirements:
                 if payload_type not in payload_type_capacity or payload_type_capacity[payload_type] <= 0:
                     model.add(selected[idx] == 0)
                     break
-        if critical_payload_ids and any(payload_id not in critical_payload_ids for payload_id in task.payload_id_requirements):
-            model.add(selected[idx] == 0)
 
     for payload_type, cap in payload_type_capacity.items():
         demands = [1 if payload_type in t.payload_type_requirements else 0 for t in tasks]
