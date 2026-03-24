@@ -1,5 +1,10 @@
 import json
+from copy import deepcopy
 
+import scheduler.pipeline as pipeline_module
+import scheduler.simulation as simulation_module
+from scheduler.config import load_config
+from scheduler.models import Task, VisibilityWindow
 from scheduler.pipeline import run_pipeline
 
 
@@ -93,3 +98,57 @@ def test_pipeline_uses_static_data_by_default(tmp_path):
     result = run_pipeline(config_path="config", seed=42, output_dir=output_dir)
 
     assert result["input_mode"] == "static"
+
+
+def test_pipeline_uses_simulation_branch_when_input_mode_simulation(tmp_path, monkeypatch):
+    output_dir = tmp_path / "output"
+    cfg = deepcopy(load_config("config"))
+    cfg["runtime"]["input_mode"] = "simulation"
+
+    called = {"count": 0}
+
+    window = VisibilityWindow(window_id="vw_sim_1", start=0, end=12)
+    task = Task(
+        task_id="sim_task_1",
+        duration=3,
+        value=10,
+        cpu=1,
+        gpu=0,
+        memory=1,
+        power=1,
+        payload_type_requirements=["camera"],
+        predecessors=[],
+        attitude_angle_deg=0.0,
+        is_key_task=False,
+        visibility_window=window,
+    )
+
+    def _fake_load_config(*_args, **_kwargs):
+        return cfg
+
+    def _fake_generate_snapshot(*_args, **_kwargs):
+        called["count"] += 1
+        return {
+            "seed": 123,
+            "horizon": cfg["runtime"]["time_horizon"],
+            "tasks": [task],
+            "visibility_windows": [window],
+        }
+
+    monkeypatch.setattr(pipeline_module, "load_config", _fake_load_config)
+    monkeypatch.setattr(simulation_module, "generate_simulation_snapshot", _fake_generate_snapshot, raising=False)
+
+    result = run_pipeline(config_path="config", seed=123, output_dir=output_dir)
+
+    assert called["count"] == 1
+    assert result["input_mode"] == "simulation"
+    assert isinstance(result["scheduled_items"], list)
+    assert isinstance(result["unscheduled_tasks"], list)
+
+    task_pool = json.loads((output_dir / "latest_task_pool.json").read_text(encoding="utf-8"))
+    windows = json.loads((output_dir / "latest_visibility_windows.json").read_text(encoding="utf-8"))
+
+    assert task_pool["schema_version"] == "2.0"
+    assert task_pool["task_count"] == len(task_pool["tasks"]) == 1
+    assert windows["schema_version"] == "2.0"
+    assert windows["window_count"] == len(windows["windows"]) == 1
