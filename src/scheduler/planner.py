@@ -129,7 +129,7 @@ def plan_baseline(tasks: list[Task], config: dict[str, Any]) -> ScheduleResult:
     ]
     for task_attr, cap_key in resource_specs:
         cap = int(constraints.get(cap_key, 0))
-        demands = [int(getattr(t, task_attr, 0) or 0) for t in tasks]
+        demands = [int(getattr(t, task_attr)) for t in tasks]
         model.add_cumulative(intervals, demands, cap)
 
     for idx, task in enumerate(tasks):
@@ -138,8 +138,7 @@ def plan_baseline(tasks: list[Task], config: dict[str, Any]) -> ScheduleResult:
                 if payload_type not in payload_type_capacity or payload_type_capacity[payload_type] <= 0:
                     model.add(selected[idx] == 0)
                     break
-        payload_id_requirements = list(getattr(task, "payload_id_requirements", []))
-        if critical_payload_ids and any(payload_id not in critical_payload_ids for payload_id in payload_id_requirements):
+        if critical_payload_ids and any(payload_id not in critical_payload_ids for payload_id in task.payload_id_requirements):
             model.add(selected[idx] == 0)
 
     for payload_type, cap in payload_type_capacity.items():

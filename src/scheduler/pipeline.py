@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -10,6 +11,56 @@ from .data_loader import load_static_task_bundle
 from .logging_utils import append_cycle_log, write_schedule_result, write_task_pool, write_visibility_windows
 from .planner import plan_baseline
 from .replanner import evaluate_replan_trigger
+
+
+@dataclass
+class _PlannerTaskCompat:
+    task_id: str
+    duration: int
+    value: int
+    cpu: int
+    gpu: int
+    memory: int
+    power: int
+    payload_type_requirements: list[str] = field(default_factory=list)
+    payload_id_requirements: list[str] = field(default_factory=list)
+    predecessors: list[str] = field(default_factory=list)
+    attitude_angle_deg: float = 0.0
+    is_key_task: bool = False
+    visibility_window: Any = None
+    storage: int = 0
+    bus: int = 0
+    concurrency_cores: int = 0
+    thermal_load: int = 0
+
+
+def _build_planner_tasks(tasks: list[Any]) -> list[_PlannerTaskCompat]:
+    compat_tasks: list[_PlannerTaskCompat] = []
+    for task in tasks:
+        cpu_val = int(getattr(task, "cpu", 0) or 0)
+        power_val = int(getattr(task, "power", 0) or 0)
+        compat_tasks.append(
+            _PlannerTaskCompat(
+                task_id=str(task.task_id),
+                duration=int(task.duration),
+                value=int(task.value),
+                cpu=cpu_val,
+                gpu=int(getattr(task, "gpu", 0) or 0),
+                memory=int(getattr(task, "memory", 0) or 0),
+                power=power_val,
+                payload_type_requirements=list(getattr(task, "payload_type_requirements", []) or []),
+                payload_id_requirements=list(getattr(task, "payload_id_requirements", []) or []),
+                predecessors=list(getattr(task, "predecessors", []) or []),
+                attitude_angle_deg=float(getattr(task, "attitude_angle_deg", 0.0) or 0.0),
+                is_key_task=bool(getattr(task, "is_key_task", False)),
+                visibility_window=getattr(task, "visibility_window", None),
+                storage=int(getattr(task, "storage", 0) or 0),
+                bus=int(getattr(task, "bus", 0) or 0),
+                concurrency_cores=int(getattr(task, "concurrency_cores", cpu_val) or 0),
+                thermal_load=int(getattr(task, "thermal_load", power_val) or 0),
+            )
+        )
+    return compat_tasks
 
 
 def run_pipeline(config_path: str = "config", seed: int | None = None, output_dir: str | Path | None = None) -> dict[str, Any]:
@@ -29,7 +80,8 @@ def run_pipeline(config_path: str = "config", seed: int | None = None, output_di
         tasks = simulation_snapshot["tasks"]
         visibility_windows = simulation_snapshot["visibility_windows"]
         horizon = simulation_snapshot["horizon"]
-    result = plan_baseline(tasks, cfg)
+    planner_tasks = _build_planner_tasks(tasks)
+    result = plan_baseline(planner_tasks, cfg)
 
     log_cfg = cfg["logging"]
     out_dir = Path(output_dir) if output_dir is not None else Path(log_cfg.get("output_dir", "output"))
