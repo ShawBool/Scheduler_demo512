@@ -7,12 +7,11 @@ from dataclasses import dataclass, field
 
 @dataclass(slots=True)
 class VisibilityWindow:
-    """可见窗口模型：描述可见窗口的时间范围与类型。"""
+    """可见窗口模型：描述可见窗口的时间范围。"""
 
     window_id: str
     start: int
     end: int
-    window_type: str = "generic"
 
 
 @dataclass(slots=True)

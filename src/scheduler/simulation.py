@@ -4,8 +4,17 @@ from __future__ import annotations
 
 import random
 from collections import defaultdict
+from typing import TypedDict
 
+from .config import STRUCTURED_TASK_RATIO_MIN
 from .models import Task, VisibilityWindow
+
+
+class SimulationSnapshot(TypedDict):
+    seed: int
+    horizon: int
+    tasks: list[Task]
+    visibility_windows: list[VisibilityWindow]
 
 
 def _rint(rng: random.Random, low: int, high: int) -> int:
@@ -81,25 +90,23 @@ def _resource_profile(task_type: str) -> dict[str, tuple[int, int]]:
     return profiles.get(task_type, profiles["camera"])
 
 
-def _clamp_range(low: int, high: int, cap: int) -> tuple[int, int]:
-    upper = max(1, min(high, cap))
-    lower = max(1, min(low, upper))
+def _clamp_range(low: int, high: int, cap: int, floor: int = 1) -> tuple[int, int]:
+    upper = max(floor, min(high, cap))
+    lower = max(floor, min(low, upper))
     return lower, upper
 
 
-def _bounded_sample(rng: random.Random, low: int, high: int, cap: int) -> int:
-    lo, hi = _clamp_range(low, high, cap)
+def _bounded_sample(rng: random.Random, low: int, high: int, cap: int, floor: int = 1) -> int:
+    lo, hi = _clamp_range(low, high, cap, floor=floor)
     return _rint(rng, lo, hi)
 
 
-def _build_visibility_window(window_id: str, task_type: str, start: int, end: int, horizon: int) -> VisibilityWindow | None:
-    if task_type not in {"camera", "radar", "relay"}:
-        return None
+def _build_visibility_window(window_id: str, start: int, end: int, horizon: int) -> VisibilityWindow | None:
     start_bound = max(0, min(start, horizon - 1))
     end_bound = max(start_bound + 1, min(end, horizon))
     if end_bound <= start_bound:
         return None
-    return VisibilityWindow(window_id=window_id, start=start_bound, end=end_bound, window_type=task_type)
+    return VisibilityWindow(window_id=window_id, start=start_bound, end=end_bound)
 
 
 def _task_domain(task: Task, horizon: int) -> tuple[int, int]:
@@ -117,7 +124,6 @@ def _can_precede(pred: Task, succ_window: VisibilityWindow | None, succ_duration
 
 def _generate_visibility_windows(
     sim: dict,
-    payload_types: list[str],
     horizon: int,
     rng: random.Random,
 ) -> list[VisibilityWindow]:
@@ -127,38 +133,38 @@ def _generate_visibility_windows(
 
     dur_min = int(sim.get("visibility_window_duration_min", 12))
     dur_max = int(sim.get("visibility_window_duration_max", 48))
-    dur_min = max(2, dur_min)
+    dur_min = max(1, dur_min)
     dur_max = max(dur_min, dur_max)
 
-    supported_types = [p for p in payload_types if p in {"camera", "radar", "relay"}] or ["camera", "radar", "relay"]
     windows: list[VisibilityWindow] = []
     for idx in range(win_count):
-        w_type = supported_types[idx % len(supported_types)] if idx < len(supported_types) else rng.choice(supported_types)
         w_dur = _rint(rng, dur_min, min(dur_max, max(dur_min, horizon)))
         w_dur = min(w_dur, horizon)
         w_start = _rint(rng, 0, max(0, horizon - w_dur))
         w_end = min(horizon, w_start + w_dur)
-        window = _build_visibility_window(f"vw_{idx}", w_type, w_start, w_end, horizon)
-        if window is not None:
-            windows.append(window)
-
-    # 保证每种载荷类型至少有一个窗口。
-    existing_types = {w.window_type for w in windows}
-    for missing_type in supported_types:
-        if missing_type in existing_types:
-            continue
-        w_dur = _rint(rng, dur_min, min(dur_max, max(dur_min, horizon)))
-        w_dur = min(w_dur, horizon)
-        w_start = _rint(rng, 0, max(0, horizon - w_dur))
-        w_end = min(horizon, w_start + w_dur)
-        window = _build_visibility_window(f"vw_extra_{missing_type}", missing_type, w_start, w_end, horizon)
+        window = _build_visibility_window(f"vw_{idx}", w_start, w_end, horizon)
         if window is not None:
             windows.append(window)
 
     return windows
 
 
-def generate_task_pool(config: dict, seed: int) -> list[Task]:
+def _apply_hard_key_task_cap(tasks: list[Task], candidate_task_ids: list[str], max_hard_key_tasks: int) -> None:
+    if max_hard_key_tasks <= 0 or not tasks:
+        return
+    task_by_id = {task.task_id: task for task in tasks}
+    hard_slots = 0
+    for task_id in candidate_task_ids:
+        task = task_by_id.get(task_id)
+        if task is None:
+            continue
+        if hard_slots >= max_hard_key_tasks:
+            break
+        task.is_key_task = True
+        hard_slots += 1
+
+
+def generate_simulation_snapshot(config: dict, seed: int) -> SimulationSnapshot:
     rng = random.Random(seed)
     sim = config["simulation"]
     cst = config["constraints"]
@@ -168,49 +174,57 @@ def generate_task_pool(config: dict, seed: int) -> list[Task]:
     time_horizon = runtime["time_horizon"]
     critical_payload_ids = cst.get("critical_payload_ids", [])
     payload_types = list(cst.get("payload_type_capacity", {}).keys()) or ["camera"]
-    predecessor_prob = float(sim.get("predecessor_probability", 0.6))
+    dependency_density = min(1.0, max(0.0, float(sim.get("dependency_density", 0.6))))
     max_predecessors = max(1, int(sim.get("max_predecessors", 2)))
-    seq_count = _rint(rng, int(sim.get("sequence_count_min", 2)), int(sim.get("sequence_count_max", 3)))
-    seq_task_min = max(10, int(sim.get("sequence_task_min", 10)))
-    seq_task_max = max(seq_task_min, int(sim.get("sequence_task_max", 20)))
-    chains_min = max(2, int(sim.get("dag_chains_per_sequence_min", 2)))
-    chains_max = max(chains_min, int(sim.get("dag_chains_per_sequence_max", 4)))
+    structured_ratio = float(sim.get("structured_task_ratio", 1.0 - float(sim.get("free_task_ratio", 0.35))))
+    structured_ratio = min(1.0, max(STRUCTURED_TASK_RATIO_MIN, structured_ratio))
+    structured_target_count = min(task_count, max(0, int(round(task_count * structured_ratio))))
+    seq_count = 0
+    if structured_target_count > 0:
+        seq_count = min(4, max(1, structured_target_count // 12))
+        if structured_target_count >= 24:
+            seq_count = max(seq_count, 2)
+        if structured_target_count >= 42:
+            seq_count = max(seq_count, 3)
     key_task_probability = min(1.0, max(0.0, float(sim.get("key_task_probability", 0.06))))
     key_task_value_bonus = max(0, int(sim.get("key_task_value_bonus", 35)))
-    free_task_ratio = min(1.0, max(0.0, float(sim.get("free_task_ratio", 0.35))))
-    window_share_task_min = max(2, int(sim.get("window_share_task_min", 2)))
-    window_share_task_max = max(window_share_task_min, int(sim.get("window_share_task_max", 5)))
+    max_hard_key_tasks = max(0, int(sim.get("max_hard_key_tasks", 1)))
+    window_reuse_target = max(1.0, float(sim.get("window_reuse_target", 3.0)))
+    window_share_task_min = max(1, int(window_reuse_target))
+    window_share_task_max = max(window_share_task_min, int(round(window_reuse_target + 1)))
 
     tasks: list[Task] = []
-    visibility_windows = _generate_visibility_windows(sim, payload_types, time_horizon, rng)
-    windows_by_type: dict[str, list[VisibilityWindow]] = defaultdict(list)
-    for w in visibility_windows:
-        windows_by_type[w.window_type].append(w)
-
-    planned_seq_sizes = [_rint(rng, seq_task_min, seq_task_max) for _ in range(seq_count)]
+    visibility_windows = _generate_visibility_windows(sim, time_horizon, rng)
+    if not visibility_windows:
+        visibility_windows = [VisibilityWindow(window_id="vw_fallback_0", start=0, end=max(1, time_horizon))]
+    seq_count = min(seq_count, structured_target_count) if structured_target_count > 0 else 0
+    if seq_count > 0:
+        base_seq_size = structured_target_count // seq_count
+        extra_tasks = structured_target_count % seq_count
+        planned_seq_sizes = [base_seq_size + (1 if i < extra_tasks else 0) for i in range(seq_count)]
+    else:
+        planned_seq_sizes = []
     seq_total = sum(planned_seq_sizes)
-    target_free_count = max(4, int(task_count * free_task_ratio))
-    remaining = max(0, task_count - seq_total)
-    flex_count = max(target_free_count, remaining) if remaining > 0 else target_free_count
+    flex_count = max(0, task_count - seq_total)
 
     task_by_id: dict[str, Task] = {}
     seq_task_ids: list[str] = []
+    key_task_candidates: list[str] = []
     window_use_counter: dict[str, int] = defaultdict(int)
     global_time_anchor = 0
     for seq_idx, seq_size in enumerate(planned_seq_sizes, start=1):
         seq_name = f"seq{seq_idx}"
-        chain_count = _rint(rng, chains_min, min(chains_max, max(2, seq_size // 3)))
+        chain_count = max(2, min(4, max(2, seq_size // 3)))
         chain_ids: dict[int, list[str]] = defaultdict(list)
         seq_angle = rng.uniform(0.0, 359.9)
         seq_base = _rint(rng, 0, max(0, time_horizon // 3))
-        cursor = seq_base + global_time_anchor
         global_time_anchor = _rint(rng, 0, max(0, time_horizon // 8))
 
         for idx in range(seq_size):
             chain = idx % chain_count
             task_type = _pick_payload_type(rng, payload_types, idx + seq_idx)
             profile = _resource_profile(task_type)
-            candidate_windows = windows_by_type.get(task_type) or visibility_windows
+            candidate_windows = visibility_windows
             underused = [w for w in candidate_windows if window_use_counter[w.window_id] < window_share_task_min]
             reusable = [w for w in candidate_windows if window_use_counter[w.window_id] < window_share_task_max]
             if underused:
@@ -234,7 +248,7 @@ def generate_task_pool(config: dict, seed: int) -> list[Task]:
                         predecessors.append(chain_pred)
                 elif _can_precede(pred_task, window, duration, time_horizon):
                     predecessors.append(chain_pred)
-            if idx > 0 and rng.random() < predecessor_prob:
+            if idx > 0 and rng.random() < dependency_density:
                 other_candidates = [tid for c, tids in chain_ids.items() if c != chain for tid in tids]
                 if other_candidates:
                     max_extra = min(max_predecessors - len(predecessors), len(other_candidates))
@@ -257,7 +271,7 @@ def generate_task_pool(config: dict, seed: int) -> list[Task]:
                 duration=duration,
                 value=_rint(rng, *profile["value"]),
                 cpu=_bounded_sample(rng, *profile["cpu"], cap=cst["cpu_capacity"]),
-                gpu=_bounded_sample(rng, *profile["gpu"], cap=max(1, cst["gpu_capacity"])),
+                gpu=_bounded_sample(rng, *profile["gpu"], cap=cst["gpu_capacity"], floor=0),
                 memory=_bounded_sample(rng, *profile["memory"], cap=cst["memory_capacity"]),
                 storage=_bounded_sample(rng, *profile["storage"], cap=cst["storage_capacity"]),
                 bus=_bounded_sample(rng, *profile["bus"], cap=cst["bus_capacity"]),
@@ -272,26 +286,18 @@ def generate_task_pool(config: dict, seed: int) -> list[Task]:
                 visibility_window=window,
             )
             if rng.random() < key_task_probability:
-                task.is_key_task = True
                 task.value += key_task_value_bonus
+                key_task_candidates.append(task.task_id)
             tasks.append(task)
             task_by_id[tid] = task
             chain_ids[chain].append(tid)
             seq_task_ids.append(tid)
             window_use_counter[window.window_id] += 1
-            cursor = min(time_horizon - 1, window.start + _rint(rng, 1, 4))
-
     # 兜底：保证至少存在一个被复用的可见窗口。
     if seq_task_ids and all(c < 2 for c in window_use_counter.values()):
-        by_type: dict[str, list[Task]] = defaultdict(list)
-        for tid in seq_task_ids:
-            task = task_by_id[tid]
-            if task.visibility_window is not None and task.payload_type_requirements:
-                by_type[task.payload_type_requirements[0]].append(task)
-        for same_type_tasks in by_type.values():
-            if len(same_type_tasks) >= 2:
-                same_type_tasks[1].visibility_window = same_type_tasks[0].visibility_window
-                break
+        payload_tasks = [task_by_id[tid] for tid in seq_task_ids if task_by_id[tid].visibility_window is not None]
+        if len(payload_tasks) >= 2:
+            payload_tasks[1].visibility_window = payload_tasks[0].visibility_window
 
     for flex_idx in range(flex_count):
         profile = _resource_profile("compute")
@@ -308,9 +314,10 @@ def generate_task_pool(config: dict, seed: int) -> list[Task]:
         task = Task(
             task_id=tid,
             duration=duration,
-            value=max(8, _rint(rng, profile["value"][0], profile["value"][1])),
+            # 自由任务价值做轻微向中值收敛，降低低价值尾部占比。
+            value=max(8, int(round(rng.triangular(profile["value"][0], profile["value"][1], 17.0)))),
             cpu=_bounded_sample(rng, *profile["cpu"], cap=cst["cpu_capacity"]),
-            gpu=_bounded_sample(rng, *profile["gpu"], cap=max(1, cst["gpu_capacity"])),
+            gpu=_bounded_sample(rng, *profile["gpu"], cap=cst["gpu_capacity"], floor=0),
             memory=_bounded_sample(rng, *profile["memory"], cap=cst["memory_capacity"]),
             storage=_bounded_sample(rng, *profile["storage"], cap=cst["storage_capacity"]),
             bus=_bounded_sample(rng, *profile["bus"], cap=cst["bus_capacity"]),
@@ -325,11 +332,20 @@ def generate_task_pool(config: dict, seed: int) -> list[Task]:
             visibility_window=None,
         )
         if rng.random() < key_task_probability * 0.5:
-            task.is_key_task = True
             task.value += key_task_value_bonus
+            key_task_candidates.append(task.task_id)
         tasks.append(task)
         task_by_id[tid] = task
+    trimmed_tasks = tasks[: sim["task_count_max"]]
+    _apply_hard_key_task_cap(trimmed_tasks, key_task_candidates, max_hard_key_tasks)
+    return {
+        "seed": seed,
+        "horizon": time_horizon,
+        "tasks": trimmed_tasks,
+        "visibility_windows": visibility_windows,
+    }
 
-    if tasks and not any(t.is_key_task for t in tasks):
-        max(tasks, key=lambda x: x.value).is_key_task = True
-    return tasks[: sim["task_count_max"]]
+
+def generate_task_pool(config: dict, seed: int) -> list[Task]:
+    snapshot = generate_simulation_snapshot(config, seed)
+    return snapshot["tasks"]

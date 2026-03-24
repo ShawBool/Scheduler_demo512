@@ -1,67 +1,66 @@
 {
+  "schema_version": "2.0",
   "task_count": 90,
   "tasks": [
     {
       "task_id": "seq1_0",
-      "duration": 7,
-      "value": 46,
+      "duration": 11,
+      "value": 42,
       "cpu": 2,
       "gpu": 1,
-      "memory": 5,
+      "memory": 7,
       "storage": 2,
-      "bus": 1,
+      "bus": 2,
       "concurrency_cores": 2,
-      "power": 7,
-      "thermal_load": 4,
+      "power": 5,
+      "thermal_load": 6,
       "payload_type_requirements": [
         "radar"
       ],
       "payload_id_requirements": [],
       "predecessors": [],
-      "attitude_angle_deg": 88.05471325192872,
+      "attitude_angle_deg": 357.24968285901315,
       "is_key_task": false,
       "visibility_window": {
-        "window_id": "vw_1",
-        "start": 35,
-        "end": 61,
-        "window_type": "radar"
+        "window_id": "vw_8",
+        "start": 154,
+        "end": 198
       }
     },
     {
       "task_id": "seq1_1",
-      "duration": 4,
-      "value": 29,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 2,
-      "storage": 2,
+      "duration": 2,
+      "value": 35,
+      "cpu": 2,
+      "gpu": 0,
+      "memory": 3,
+      "storage": 1,
       "bus": 4,
-      "concurrency_cores": 1,
-      "power": 1,
+      "concurrency_cores": 2,
+      "power": 2,
       "thermal_load": 1,
       "payload_type_requirements": [
         "relay"
       ],
       "payload_id_requirements": [],
       "predecessors": [],
-      "attitude_angle_deg": 98.16291186645671,
+      "attitude_angle_deg": 10.763326883085881,
       "is_key_task": false,
       "visibility_window": {
-        "window_id": "vw_4",
-        "start": 8,
-        "end": 47,
-        "window_type": "relay"
+        "window_id": "vw_6",
+        "start": 23,
+        "end": 36
       }
     },
     {
       "task_id": "seq1_2",
       "duration": 9,
-      "value": 29,
-      "cpu": 1,
-      "gpu": 1,
+      "value": 32,
+      "cpu": 2,
+      "gpu": 0,
       "memory": 4,
-      "storage": 3,
-      "bus": 4,
+      "storage": 4,
+      "bus": 2,
       "concurrency_cores": 2,
       "power": 2,
       "thermal_load": 3,
@@ -70,20 +69,19 @@
       ],
       "payload_id_requirements": [],
       "predecessors": [
-        "seq1_1"
+        "seq1_0"
       ],
-      "attitude_angle_deg": 88.39375040330077,
+      "attitude_angle_deg": 26.88860822031775,
       "is_key_task": false,
       "visibility_window": {
-        "window_id": "vw_0",
-        "start": 62,
-        "end": 91,
-        "window_type": "camera"
+        "window_id": "vw_3",
+        "start": 173,
+        "end": 191
       }
     },
     {
       "task_id": "seq1_3",
-      "duration": 12,
+      "duration": 7,
       "value": 28,
       "cpu": 2,
       "gpu": 1,
@@ -98,590 +96,54 @@
       ],
       "payload_id_requirements": [],
       "predecessors": [
+        "seq1_2",
         "seq1_0"
       ],
-      "attitude_angle_deg": 103.4792348916524,
+      "attitude_angle_deg": 35.011635263872236,
       "is_key_task": false,
       "visibility_window": {
-        "window_id": "vw_1",
-        "start": 35,
-        "end": 61,
-        "window_type": "radar"
+        "window_id": "vw_3",
+        "start": 173,
+        "end": 191
       }
     },
     {
       "task_id": "seq1_4",
-      "duration": 7,
-      "value": 19,
+      "duration": 3,
+      "value": 32,
       "cpu": 2,
-      "gpu": 1,
-      "memory": 4,
-      "storage": 2,
-      "bus": 4,
-      "concurrency_cores": 1,
-      "power": 2,
+      "gpu": 0,
+      "memory": 3,
+      "storage": 1,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 4,
       "thermal_load": 4,
       "payload_type_requirements": [
         "relay"
       ],
       "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_1",
-        "seq1_0"
-      ],
-      "attitude_angle_deg": 93.1339622175667,
+      "predecessors": [],
+      "attitude_angle_deg": 30.419438910541462,
       "is_key_task": false,
       "visibility_window": {
-        "window_id": "vw_2",
-        "start": 173,
-        "end": 191,
-        "window_type": "relay"
+        "window_id": "vw_5",
+        "start": 8,
+        "end": 47
       }
     },
     {
       "task_id": "seq1_5",
-      "duration": 4,
-      "value": 32,
-      "cpu": 2,
+      "duration": 7,
+      "value": 31,
+      "cpu": 1,
       "gpu": 1,
-      "memory": 2,
+      "memory": 5,
       "storage": 6,
       "bus": 3,
       "concurrency_cores": 2,
       "power": 2,
-      "thermal_load": 4,
-      "payload_type_requirements": [
-        "camera"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_2",
-        "seq1_0"
-      ],
-      "attitude_angle_deg": 88.06372393124471,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_0",
-        "start": 62,
-        "end": 91,
-        "window_type": "camera"
-      }
-    },
-    {
-      "task_id": "seq1_6",
-      "duration": 9,
-      "value": 57,
-      "cpu": 2,
-      "gpu": 2,
-      "memory": 8,
-      "storage": 3,
-      "bus": 1,
-      "concurrency_cores": 2,
-      "power": 6,
-      "thermal_load": 5,
-      "payload_type_requirements": [
-        "radar"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_3"
-      ],
-      "attitude_angle_deg": 99.59006068953556,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_1",
-        "start": 35,
-        "end": 61,
-        "window_type": "radar"
-      }
-    },
-    {
-      "task_id": "seq1_7",
-      "duration": 4,
-      "value": 21,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 2,
-      "storage": 1,
-      "bus": 2,
-      "concurrency_cores": 2,
-      "power": 1,
       "thermal_load": 2,
-      "payload_type_requirements": [
-        "relay"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 116.25382331375567,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_4",
-        "start": 8,
-        "end": 47,
-        "window_type": "relay"
-      }
-    },
-    {
-      "task_id": "seq1_8",
-      "duration": 4,
-      "value": 40,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 5,
-      "storage": 4,
-      "bus": 3,
-      "concurrency_cores": 2,
-      "power": 2,
-      "thermal_load": 3,
-      "payload_type_requirements": [
-        "camera"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_5",
-        "seq1_3"
-      ],
-      "attitude_angle_deg": 135.12601700585145,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_7",
-        "start": 50,
-        "end": 97,
-        "window_type": "camera"
-      }
-    },
-    {
-      "task_id": "seq1_9",
-      "duration": 8,
-      "value": 28,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 4,
-      "storage": 2,
-      "bus": 1,
-      "concurrency_cores": 2,
-      "power": 6,
-      "thermal_load": 7,
-      "payload_type_requirements": [
-        "radar"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_6",
-        "seq1_1"
-      ],
-      "attitude_angle_deg": 144.27101865398345,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_1",
-        "start": 35,
-        "end": 61,
-        "window_type": "radar"
-      }
-    },
-    {
-      "task_id": "seq1_10",
-      "duration": 3,
-      "value": 18,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 4,
-      "storage": 2,
-      "bus": 4,
-      "concurrency_cores": 2,
-      "power": 4,
-      "thermal_load": 4,
-      "payload_type_requirements": [
-        "relay"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_7"
-      ],
-      "attitude_angle_deg": 157.80088655571575,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_3",
-        "start": 22,
-        "end": 68,
-        "window_type": "relay"
-      }
-    },
-    {
-      "task_id": "seq1_11",
-      "duration": 8,
-      "value": 28,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 3,
-      "storage": 3,
-      "bus": 4,
-      "concurrency_cores": 2,
-      "power": 3,
-      "thermal_load": 5,
-      "payload_type_requirements": [
-        "camera"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_8"
-      ],
-      "attitude_angle_deg": 140.13127288640194,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_7",
-        "start": 50,
-        "end": 97,
-        "window_type": "camera"
-      }
-    },
-    {
-      "task_id": "seq1_12",
-      "duration": 6,
-      "value": 59,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 5,
-      "storage": 1,
-      "bus": 2,
-      "concurrency_cores": 2,
-      "power": 7,
-      "thermal_load": 5,
-      "payload_type_requirements": [
-        "radar"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_9",
-        "seq1_1"
-      ],
-      "attitude_angle_deg": 146.82564822233692,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_1",
-        "start": 35,
-        "end": 61,
-        "window_type": "radar"
-      }
-    },
-    {
-      "task_id": "seq1_13",
-      "duration": 5,
-      "value": 26,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 4,
-      "storage": 2,
-      "bus": 3,
-      "concurrency_cores": 1,
-      "power": 3,
-      "thermal_load": 2,
-      "payload_type_requirements": [
-        "relay"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_10",
-        "seq1_12"
-      ],
-      "attitude_angle_deg": 165.5924434589476,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_2",
-        "start": 173,
-        "end": 191,
-        "window_type": "relay"
-      }
-    },
-    {
-      "task_id": "seq1_14",
-      "duration": 3,
-      "value": 19,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 2,
-      "storage": 6,
-      "bus": 2,
-      "concurrency_cores": 1,
-      "power": 5,
-      "thermal_load": 2,
-      "payload_type_requirements": [
-        "camera"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_11",
-        "seq1_10"
-      ],
-      "attitude_angle_deg": 184.04547721555892,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_6",
-        "start": 154,
-        "end": 198,
-        "window_type": "camera"
-      }
-    },
-    {
-      "task_id": "seq1_15",
-      "duration": 6,
-      "value": 45,
-      "cpu": 2,
-      "gpu": 2,
-      "memory": 7,
-      "storage": 1,
-      "bus": 3,
-      "concurrency_cores": 2,
-      "power": 7,
-      "thermal_load": 6,
-      "payload_type_requirements": [
-        "radar"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_12"
-      ],
-      "attitude_angle_deg": 171.0328819901945,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_1",
-        "start": 35,
-        "end": 61,
-        "window_type": "radar"
-      }
-    },
-    {
-      "task_id": "seq1_16",
-      "duration": 5,
-      "value": 28,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 3,
-      "storage": 1,
-      "bus": 3,
-      "concurrency_cores": 2,
-      "power": 3,
-      "thermal_load": 2,
-      "payload_type_requirements": [
-        "relay"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_3"
-      ],
-      "attitude_angle_deg": 172.6887957706661,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_3",
-        "start": 22,
-        "end": 68,
-        "window_type": "relay"
-      }
-    },
-    {
-      "task_id": "seq1_17",
-      "duration": 8,
-      "value": 22,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 2,
-      "storage": 6,
-      "bus": 2,
-      "concurrency_cores": 2,
-      "power": 4,
-      "thermal_load": 3,
-      "payload_type_requirements": [
-        "camera"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 163.86146086746513,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_5",
-        "start": 55,
-        "end": 72,
-        "window_type": "camera"
-      }
-    },
-    {
-      "task_id": "seq1_18",
-      "duration": 12,
-      "value": 42,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 6,
-      "storage": 1,
-      "bus": 3,
-      "concurrency_cores": 2,
-      "power": 5,
-      "thermal_load": 7,
-      "payload_type_requirements": [
-        "radar"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_15"
-      ],
-      "attitude_angle_deg": 169.76997654906967,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_1",
-        "start": 35,
-        "end": 61,
-        "window_type": "radar"
-      }
-    },
-    {
-      "task_id": "seq1_19",
-      "duration": 2,
-      "value": 23,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 2,
-      "storage": 1,
-      "bus": 4,
-      "concurrency_cores": 2,
-      "power": 1,
-      "thermal_load": 3,
-      "payload_type_requirements": [
-        "relay"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_16"
-      ],
-      "attitude_angle_deg": 149.3552146237462,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_4",
-        "start": 8,
-        "end": 47,
-        "window_type": "relay"
-      }
-    },
-    {
-      "task_id": "seq2_0",
-      "duration": 6,
-      "value": 19,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 3,
-      "storage": 1,
-      "bus": 3,
-      "concurrency_cores": 2,
-      "power": 4,
-      "thermal_load": 2,
-      "payload_type_requirements": [
-        "relay"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 47.972439329991374,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_3",
-        "start": 22,
-        "end": 68,
-        "window_type": "relay"
-      }
-    },
-    {
-      "task_id": "seq2_1",
-      "duration": 9,
-      "value": 29,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 3,
-      "storage": 2,
-      "bus": 4,
-      "concurrency_cores": 1,
-      "power": 5,
-      "thermal_load": 4,
-      "payload_type_requirements": [
-        "camera"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq2_0"
-      ],
-      "attitude_angle_deg": 34.75364385112446,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_6",
-        "start": 154,
-        "end": 198,
-        "window_type": "camera"
-      }
-    },
-    {
-      "task_id": "seq2_2",
-      "duration": 10,
-      "value": 41,
-      "cpu": 2,
-      "gpu": 2,
-      "memory": 4,
-      "storage": 1,
-      "bus": 3,
-      "concurrency_cores": 2,
-      "power": 6,
-      "thermal_load": 6,
-      "payload_type_requirements": [
-        "radar"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq2_0"
-      ],
-      "attitude_angle_deg": 17.82868093258727,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_1",
-        "start": 35,
-        "end": 61,
-        "window_type": "radar"
-      }
-    },
-    {
-      "task_id": "seq2_3",
-      "duration": 6,
-      "value": 28,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 3,
-      "storage": 1,
-      "bus": 4,
-      "concurrency_cores": 2,
-      "power": 1,
-      "thermal_load": 3,
-      "payload_type_requirements": [
-        "relay"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq2_2"
-      ],
-      "attitude_angle_deg": 15.015211612606052,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_3",
-        "start": 22,
-        "end": 68,
-        "window_type": "relay"
-      }
-    },
-    {
-      "task_id": "seq2_4",
-      "duration": 6,
-      "value": 30,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 5,
-      "storage": 6,
-      "bus": 2,
-      "concurrency_cores": 2,
-      "power": 4,
-      "thermal_load": 3,
       "payload_type_requirements": [
         "camera"
       ],
@@ -689,26 +151,423 @@
         "P3"
       ],
       "predecessors": [
-        "seq2_0"
+        "seq1_1"
       ],
-      "attitude_angle_deg": 17.409360629944974,
+      "attitude_angle_deg": 15.144456961864948,
       "is_key_task": false,
       "visibility_window": {
-        "window_id": "vw_5",
-        "start": 55,
-        "end": 72,
-        "window_type": "camera"
+        "window_id": "vw_2",
+        "start": 35,
+        "end": 61
       }
     },
     {
-      "task_id": "seq2_5",
-      "duration": 12,
+      "task_id": "seq1_6",
+      "duration": 9,
+      "value": 43,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 7,
+      "storage": 1,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 8,
+      "thermal_load": 5,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq1_2"
+      ],
+      "attitude_angle_deg": 8.112177775230938,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_8",
+        "start": 154,
+        "end": 198
+      }
+    },
+    {
+      "task_id": "seq1_7",
+      "duration": 7,
+      "value": 17,
+      "cpu": 1,
+      "gpu": 1,
+      "memory": 3,
+      "storage": 1,
+      "bus": 2,
+      "concurrency_cores": 2,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq1_4"
+      ],
+      "attitude_angle_deg": 2.5643872892414468,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_1",
+        "start": 62,
+        "end": 91
+      }
+    },
+    {
+      "task_id": "seq1_8",
+      "duration": 3,
       "value": 35,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 5,
+      "storage": 6,
+      "bus": 2,
+      "concurrency_cores": 2,
+      "power": 5,
+      "thermal_load": 3,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq1_4"
+      ],
+      "attitude_angle_deg": 16.469410439725337,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_1",
+        "start": 62,
+        "end": 91
+      }
+    },
+    {
+      "task_id": "seq1_9",
+      "duration": 9,
+      "value": 53,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "storage": 1,
+      "bus": 2,
+      "concurrency_cores": 2,
+      "power": 8,
+      "thermal_load": 8,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq1_5",
+        "seq1_2"
+      ],
+      "attitude_angle_deg": 34.052430164014936,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_3",
+        "start": 173,
+        "end": 191
+      }
+    },
+    {
+      "task_id": "seq1_10",
+      "duration": 2,
+      "value": 13,
+      "cpu": 2,
+      "gpu": 0,
+      "memory": 4,
+      "storage": 1,
+      "bus": 4,
+      "concurrency_cores": 2,
+      "power": 2,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq1_1"
+      ],
+      "attitude_angle_deg": 15.018044600868464,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_4",
+        "start": 22,
+        "end": 68
+      }
+    },
+    {
+      "task_id": "seq1_11",
+      "duration": 4,
+      "value": 39,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "storage": 5,
+      "bus": 3,
+      "concurrency_cores": 1,
+      "power": 2,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [
+        "P1"
+      ],
+      "predecessors": [
+        "seq1_7"
+      ],
+      "attitude_angle_deg": 28.547912502600774,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_8",
+        "start": 154,
+        "end": 198
+      }
+    },
+    {
+      "task_id": "seq1_12",
+      "duration": 6,
+      "value": 52,
       "cpu": 2,
       "gpu": 2,
+      "memory": 7,
+      "storage": 1,
+      "bus": 1,
+      "concurrency_cores": 2,
+      "power": 8,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 26.286908607258578,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_2",
+        "start": 35,
+        "end": 61
+      }
+    },
+    {
+      "task_id": "seq1_13",
+      "duration": 2,
+      "value": 19,
+      "cpu": 1,
+      "gpu": 1,
+      "memory": 3,
+      "storage": 2,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 1,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 45.047055859616194,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_5",
+        "start": 8,
+        "end": 47
+      }
+    },
+    {
+      "task_id": "seq1_14",
+      "duration": 5,
+      "value": 40,
+      "cpu": 2,
+      "gpu": 0,
+      "memory": 3,
+      "storage": 4,
+      "bus": 2,
+      "concurrency_cores": 1,
+      "power": 2,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq1_10"
+      ],
+      "attitude_angle_deg": 57.59274755855754,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_4",
+        "start": 22,
+        "end": 68
+      }
+    },
+    {
+      "task_id": "seq1_15",
+      "duration": 12,
+      "value": 30,
+      "cpu": 2,
+      "gpu": 1,
       "memory": 8,
+      "storage": 1,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 7,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 77.86701930263337,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_5",
+        "start": 8,
+        "end": 47
+      }
+    },
+    {
+      "task_id": "seq1_16",
+      "duration": 3,
+      "value": 33,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 2,
+      "storage": 2,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 4,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 59.47428914440789,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_6",
+        "start": 23,
+        "end": 36
+      }
+    },
+    {
+      "task_id": "seq1_17",
+      "duration": 6,
+      "value": 21,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 4,
       "storage": 3,
       "bus": 3,
+      "concurrency_cores": 1,
+      "power": 3,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq1_13"
+      ],
+      "attitude_angle_deg": 57.63885213962568,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_2",
+        "start": 35,
+        "end": 61
+      }
+    },
+    {
+      "task_id": "seq1_18",
+      "duration": 9,
+      "value": 44,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 6,
+      "storage": 1,
+      "bus": 1,
+      "concurrency_cores": 2,
+      "power": 6,
+      "thermal_load": 6,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq1_14"
+      ],
+      "attitude_angle_deg": 71.591434084706,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_6",
+        "start": 23,
+        "end": 36
+      }
+    },
+    {
+      "task_id": "seq2_0",
+      "duration": 6,
+      "value": 13,
+      "cpu": 1,
+      "gpu": 1,
+      "memory": 3,
+      "storage": 1,
+      "bus": 2,
+      "concurrency_cores": 2,
+      "power": 2,
+      "thermal_load": 3,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 257.76402764582593,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_4",
+        "start": 22,
+        "end": 68
+      }
+    },
+    {
+      "task_id": "seq2_1",
+      "duration": 7,
+      "value": 22,
+      "cpu": 1,
+      "gpu": 1,
+      "memory": 3,
+      "storage": 5,
+      "bus": 2,
+      "concurrency_cores": 1,
+      "power": 4,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [
+        "P3"
+      ],
+      "predecessors": [],
+      "attitude_angle_deg": 260.4439296959148,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_1",
+        "start": 62,
+        "end": 91
+      }
+    },
+    {
+      "task_id": "seq2_2",
+      "duration": 10,
+      "value": 60,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "storage": 1,
+      "bus": 1,
       "concurrency_cores": 2,
       "power": 4,
       "thermal_load": 5,
@@ -717,85 +576,241 @@
       ],
       "payload_id_requirements": [],
       "predecessors": [
-        "seq2_3"
+        "seq2_0"
       ],
-      "attitude_angle_deg": 30.33371819060906,
+      "attitude_angle_deg": 254.005789618958,
       "is_key_task": false,
       "visibility_window": {
-        "window_id": "vw_1",
-        "start": 35,
-        "end": 61,
-        "window_type": "radar"
+        "window_id": "vw_0",
+        "start": 189,
+        "end": 202
       }
     },
     {
-      "task_id": "seq2_6",
-      "duration": 3,
-      "value": 14,
+      "task_id": "seq2_3",
+      "duration": 5,
+      "value": 19,
       "cpu": 2,
-      "gpu": 1,
+      "gpu": 0,
       "memory": 4,
       "storage": 1,
       "bus": 5,
-      "concurrency_cores": 2,
+      "concurrency_cores": 1,
       "power": 4,
       "thermal_load": 2,
       "payload_type_requirements": [
         "relay"
       ],
       "payload_id_requirements": [],
-      "predecessors": [
-        "seq2_2",
-        "seq2_5"
-      ],
-      "attitude_angle_deg": 35.229773005278986,
+      "predecessors": [],
+      "attitude_angle_deg": 270.0246068674703,
       "is_key_task": false,
       "visibility_window": {
-        "window_id": "vw_2",
-        "start": 173,
-        "end": 191,
-        "window_type": "relay"
+        "window_id": "vw_7",
+        "start": 59,
+        "end": 84
+      }
+    },
+    {
+      "task_id": "seq2_4",
+      "duration": 5,
+      "value": 26,
+      "cpu": 1,
+      "gpu": 1,
+      "memory": 4,
+      "storage": 6,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 2,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [
+        "P2"
+      ],
+      "predecessors": [
+        "seq2_0",
+        "seq2_1"
+      ],
+      "attitude_angle_deg": 249.06584199433416,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_7",
+        "start": 59,
+        "end": 84
+      }
+    },
+    {
+      "task_id": "seq2_5",
+      "duration": 7,
+      "value": 52,
+      "cpu": 2,
+      "gpu": 2,
+      "memory": 7,
+      "storage": 3,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 7,
+      "thermal_load": 8,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq2_1",
+        "seq2_0"
+      ],
+      "attitude_angle_deg": 231.83555407178144,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_7",
+        "start": 59,
+        "end": 84
+      }
+    },
+    {
+      "task_id": "seq2_6",
+      "duration": 7,
+      "value": 33,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "storage": 1,
+      "bus": 4,
+      "concurrency_cores": 2,
+      "power": 4,
+      "thermal_load": 3,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq2_1"
+      ],
+      "attitude_angle_deg": 228.81263965528086,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_0",
+        "start": 189,
+        "end": 202
       }
     },
     {
       "task_id": "seq2_7",
-      "duration": 9,
-      "value": 45,
+      "duration": 7,
+      "value": 23,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 2,
+      "storage": 4,
+      "bus": 3,
+      "concurrency_cores": 1,
+      "power": 5,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq2_3"
+      ],
+      "attitude_angle_deg": 248.18864116740892,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_0",
+        "start": 189,
+        "end": 202
+      }
+    },
+    {
+      "task_id": "seq2_8",
+      "duration": 8,
+      "value": 57,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "storage": 3,
+      "bus": 2,
+      "concurrency_cores": 2,
+      "power": 5,
+      "thermal_load": 5,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq2_4"
+      ],
+      "attitude_angle_deg": 229.91964478331428,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_7",
+        "start": 59,
+        "end": 84
+      }
+    },
+    {
+      "task_id": "seq2_9",
+      "duration": 5,
+      "value": 32,
       "cpu": 1,
       "gpu": 1,
       "memory": 3,
-      "storage": 5,
-      "bus": 4,
+      "storage": 2,
+      "bus": 3,
+      "concurrency_cores": 1,
+      "power": 1,
+      "thermal_load": 1,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq2_5"
+      ],
+      "attitude_angle_deg": 226.15504926721394,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_3",
+        "start": 173,
+        "end": 191
+      }
+    },
+    {
+      "task_id": "seq2_10",
+      "duration": 4,
+      "value": 35,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 5,
+      "storage": 3,
+      "bus": 3,
       "concurrency_cores": 2,
       "power": 5,
       "thermal_load": 5,
       "payload_type_requirements": [
         "camera"
       ],
-      "payload_id_requirements": [
-        "P1"
-      ],
-      "predecessors": [
-        "seq2_3"
-      ],
-      "attitude_angle_deg": 36.01991402480358,
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 234.77516742917643,
       "is_key_task": false,
       "visibility_window": {
-        "window_id": "vw_0",
+        "window_id": "vw_1",
         "start": 62,
-        "end": 91,
-        "window_type": "camera"
+        "end": 91
       }
     },
     {
-      "task_id": "seq2_8",
+      "task_id": "seq2_11",
       "duration": 12,
-      "value": 58,
+      "value": 55,
       "cpu": 2,
-      "gpu": 1,
-      "memory": 6,
-      "storage": 2,
-      "bus": 1,
+      "gpu": 2,
+      "memory": 5,
+      "storage": 3,
+      "bus": 2,
       "concurrency_cores": 2,
       "power": 5,
       "thermal_load": 6,
@@ -804,196 +819,26 @@
       ],
       "payload_id_requirements": [],
       "predecessors": [],
-      "attitude_angle_deg": 26.221613562556165,
+      "attitude_angle_deg": 245.49600688419815,
       "is_key_task": false,
       "visibility_window": {
-        "window_id": "vw_1",
-        "start": 35,
-        "end": 61,
-        "window_type": "radar"
-      }
-    },
-    {
-      "task_id": "seq2_9",
-      "duration": 3,
-      "value": 25,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 4,
-      "storage": 2,
-      "bus": 5,
-      "concurrency_cores": 1,
-      "power": 2,
-      "thermal_load": 4,
-      "payload_type_requirements": [
-        "relay"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq2_5",
-        "seq2_3"
-      ],
-      "attitude_angle_deg": 13.635540155219612,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_2",
-        "start": 173,
-        "end": 191,
-        "window_type": "relay"
-      }
-    },
-    {
-      "task_id": "seq2_10",
-      "duration": 6,
-      "value": 44,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 5,
-      "storage": 3,
-      "bus": 3,
-      "concurrency_cores": 2,
-      "power": 5,
-      "thermal_load": 2,
-      "payload_type_requirements": [
-        "camera"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq2_5",
-        "seq2_3"
-      ],
-      "attitude_angle_deg": 8.794952670023243,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_7",
-        "start": 50,
-        "end": 97,
-        "window_type": "camera"
-      }
-    },
-    {
-      "task_id": "seq2_11",
-      "duration": 12,
-      "value": 59,
-      "cpu": 2,
-      "gpu": 2,
-      "memory": 8,
-      "storage": 3,
-      "bus": 3,
-      "concurrency_cores": 2,
-      "power": 4,
-      "thermal_load": 7,
-      "payload_type_requirements": [
-        "radar"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 29.946719680855864,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_1",
-        "start": 35,
-        "end": 61,
-        "window_type": "radar"
+        "window_id": "vw_6",
+        "start": 23,
+        "end": 36
       }
     },
     {
       "task_id": "seq2_12",
-      "duration": 2,
-      "value": 22,
+      "duration": 3,
+      "value": 19,
       "cpu": 2,
-      "gpu": 1,
-      "memory": 3,
-      "storage": 2,
+      "gpu": 0,
+      "memory": 4,
+      "storage": 1,
       "bus": 2,
       "concurrency_cores": 2,
-      "power": 1,
-      "thermal_load": 1,
-      "payload_type_requirements": [
-        "relay"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq2_8",
-        "seq2_2"
-      ],
-      "attitude_angle_deg": 27.95348998158108,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_2",
-        "start": 173,
-        "end": 191,
-        "window_type": "relay"
-      }
-    },
-    {
-      "task_id": "seq2_13",
-      "duration": 8,
-      "value": 37,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 3,
-      "storage": 5,
-      "bus": 4,
-      "concurrency_cores": 1,
-      "power": 3,
-      "thermal_load": 5,
-      "payload_type_requirements": [
-        "camera"
-      ],
-      "payload_id_requirements": [
-        "P1"
-      ],
-      "predecessors": [
-        "seq2_0"
-      ],
-      "attitude_angle_deg": 47.736406221084586,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_5",
-        "start": 55,
-        "end": 72,
-        "window_type": "camera"
-      }
-    },
-    {
-      "task_id": "seq2_14",
-      "duration": 6,
-      "value": 44,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 6,
-      "storage": 3,
-      "bus": 3,
-      "concurrency_cores": 2,
-      "power": 7,
-      "thermal_load": 5,
-      "payload_type_requirements": [
-        "radar"
-      ],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 32.94210186844135,
-      "is_key_task": false,
-      "visibility_window": {
-        "window_id": "vw_1",
-        "start": 35,
-        "end": 61,
-        "window_type": "radar"
-      }
-    },
-    {
-      "task_id": "seq2_15",
-      "duration": 7,
-      "value": 31,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 3,
-      "storage": 2,
-      "bus": 4,
-      "concurrency_cores": 1,
-      "power": 3,
-      "thermal_load": 1,
+      "power": 4,
+      "thermal_load": 3,
       "payload_type_requirements": [
         "relay"
       ],
@@ -1001,23 +846,186 @@
       "predecessors": [
         "seq2_11"
       ],
-      "attitude_angle_deg": 48.355004388348384,
+      "attitude_angle_deg": 229.58446559090902,
       "is_key_task": false,
       "visibility_window": {
-        "window_id": "vw_3",
+        "window_id": "vw_4",
         "start": 22,
-        "end": 68,
-        "window_type": "relay"
+        "end": 68
+      }
+    },
+    {
+      "task_id": "seq2_13",
+      "duration": 3,
+      "value": 40,
+      "cpu": 1,
+      "gpu": 1,
+      "memory": 5,
+      "storage": 2,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 5,
+      "thermal_load": 5,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq2_9",
+        "seq2_10"
+      ],
+      "attitude_angle_deg": 247.3973586378768,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_8",
+        "start": 154,
+        "end": 198
+      }
+    },
+    {
+      "task_id": "seq2_14",
+      "duration": 8,
+      "value": 46,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 7,
+      "storage": 1,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 7,
+      "thermal_load": 8,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 226.6744507155323,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_5",
+        "start": 8,
+        "end": 47
+      }
+    },
+    {
+      "task_id": "seq2_15",
+      "duration": 2,
+      "value": 20,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 2,
+      "storage": 2,
+      "bus": 4,
+      "concurrency_cores": 2,
+      "power": 4,
+      "thermal_load": 3,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq2_11",
+        "seq2_13"
+      ],
+      "attitude_angle_deg": 212.6705278821233,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_0",
+        "start": 189,
+        "end": 202
       }
     },
     {
       "task_id": "seq2_16",
-      "duration": 6,
-      "value": 40,
+      "duration": 5,
+      "value": 19,
+      "cpu": 2,
+      "gpu": 0,
+      "memory": 2,
+      "storage": 2,
+      "bus": 2,
+      "concurrency_cores": 1,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq2_12"
+      ],
+      "attitude_angle_deg": 211.36402867549737,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_2",
+        "start": 35,
+        "end": 61
+      }
+    },
+    {
+      "task_id": "seq2_17",
+      "duration": 7,
+      "value": 54,
+      "cpu": 2,
+      "gpu": 2,
+      "memory": 5,
+      "storage": 3,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 5,
+      "thermal_load": 6,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq2_13",
+        "seq2_3"
+      ],
+      "attitude_angle_deg": 231.06533765303004,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_3",
+        "start": 173,
+        "end": 191
+      }
+    },
+    {
+      "task_id": "seq2_18",
+      "duration": 4,
+      "value": 18,
       "cpu": 1,
-      "gpu": 1,
-      "memory": 3,
-      "storage": 6,
+      "gpu": 0,
+      "memory": 2,
+      "storage": 2,
+      "bus": 2,
+      "concurrency_cores": 1,
+      "power": 3,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq2_14",
+        "seq2_5"
+      ],
+      "attitude_angle_deg": 250.49004398884767,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_0",
+        "start": 189,
+        "end": 202
+      }
+    },
+    {
+      "task_id": "seq3_0",
+      "duration": 9,
+      "value": 29,
+      "cpu": 2,
+      "gpu": 0,
+      "memory": 5,
+      "storage": 3,
       "bus": 4,
       "concurrency_cores": 2,
       "power": 5,
@@ -1027,23 +1035,22 @@
       ],
       "payload_id_requirements": [],
       "predecessors": [],
-      "attitude_angle_deg": 54.320749056812005,
+      "attitude_angle_deg": 24.386404492996583,
       "is_key_task": false,
       "visibility_window": {
-        "window_id": "vw_0",
-        "start": 62,
-        "end": 91,
-        "window_type": "camera"
+        "window_id": "vw_6",
+        "start": 23,
+        "end": 36
       }
     },
     {
-      "task_id": "seq2_17",
-      "duration": 8,
-      "value": 53,
+      "task_id": "seq3_1",
+      "duration": 10,
+      "value": 30,
       "cpu": 2,
       "gpu": 2,
-      "memory": 8,
-      "storage": 3,
+      "memory": 5,
+      "storage": 2,
       "bus": 3,
       "concurrency_cores": 2,
       "power": 6,
@@ -1053,638 +1060,948 @@
       ],
       "payload_id_requirements": [],
       "predecessors": [],
-      "attitude_angle_deg": 36.13391657126168,
+      "attitude_angle_deg": 38.938569324183135,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_4",
+        "start": 22,
+        "end": 68
+      }
+    },
+    {
+      "task_id": "seq3_2",
+      "duration": 3,
+      "value": 31,
+      "cpu": 2,
+      "gpu": 0,
+      "memory": 4,
+      "storage": 1,
+      "bus": 2,
+      "concurrency_cores": 1,
+      "power": 4,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq3_1",
+        "seq3_0"
+      ],
+      "attitude_angle_deg": 29.243542797836916,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_5",
+        "start": 8,
+        "end": 47
+      }
+    },
+    {
+      "task_id": "seq3_3",
+      "duration": 8,
+      "value": 25,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "storage": 6,
+      "bus": 4,
+      "concurrency_cores": 2,
+      "power": 5,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [
+        "P3"
+      ],
+      "predecessors": [
+        "seq3_1",
+        "seq3_0"
+      ],
+      "attitude_angle_deg": 11.337890222242471,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_3",
+        "start": 173,
+        "end": 191
+      }
+    },
+    {
+      "task_id": "seq3_4",
+      "duration": 9,
+      "value": 45,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "storage": 1,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 6,
+      "thermal_load": 8,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq3_0",
+        "seq3_1"
+      ],
+      "attitude_angle_deg": 21.074400800589533,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_7",
+        "start": 59,
+        "end": 84
+      }
+    },
+    {
+      "task_id": "seq3_5",
+      "duration": 6,
+      "value": 23,
+      "cpu": 1,
+      "gpu": 1,
+      "memory": 2,
+      "storage": 1,
+      "bus": 4,
+      "concurrency_cores": 1,
+      "power": 1,
+      "thermal_load": 3,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq3_1",
+        "seq3_4"
+      ],
+      "attitude_angle_deg": 12.10924518425589,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_8",
+        "start": 154,
+        "end": 198
+      }
+    },
+    {
+      "task_id": "seq3_6",
+      "duration": 8,
+      "value": 36,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "storage": 5,
+      "bus": 3,
+      "concurrency_cores": 1,
+      "power": 2,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq3_2"
+      ],
+      "attitude_angle_deg": 11.707907743302158,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_2",
+        "start": 35,
+        "end": 61
+      }
+    },
+    {
+      "task_id": "seq3_7",
+      "duration": 6,
+      "value": 29,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "storage": 3,
+      "bus": 2,
+      "concurrency_cores": 2,
+      "power": 5,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 7.339035202387507,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_7",
+        "start": 59,
+        "end": 84
+      }
+    },
+    {
+      "task_id": "seq3_8",
+      "duration": 6,
+      "value": 26,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 3,
+      "storage": 1,
+      "bus": 2,
+      "concurrency_cores": 1,
+      "power": 2,
+      "thermal_load": 3,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 2.0756683528356774,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_6",
+        "start": 23,
+        "end": 36
+      }
+    },
+    {
+      "task_id": "seq3_9",
+      "duration": 4,
+      "value": 37,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 2,
+      "storage": 3,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 5,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 340.19340014736264,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_2",
+        "start": 35,
+        "end": 61
+      }
+    },
+    {
+      "task_id": "seq3_10",
+      "duration": 8,
+      "value": 34,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "storage": 2,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 7,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq3_6",
+        "seq3_8"
+      ],
+      "attitude_angle_deg": 358.1635037367173,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_4",
+        "start": 22,
+        "end": 68
+      }
+    },
+    {
+      "task_id": "seq3_11",
+      "duration": 7,
+      "value": 31,
+      "cpu": 1,
+      "gpu": 1,
+      "memory": 4,
+      "storage": 2,
+      "bus": 4,
+      "concurrency_cores": 1,
+      "power": 1,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq3_10",
+        "seq3_6"
+      ],
+      "attitude_angle_deg": 355.42489373386763,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_4",
+        "start": 22,
+        "end": 68
+      }
+    },
+    {
+      "task_id": "seq3_12",
+      "duration": 9,
+      "value": 33,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 3,
+      "storage": 6,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 2,
+      "thermal_load": 5,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [
+        "P1"
+      ],
+      "predecessors": [
+        "seq3_8"
+      ],
+      "attitude_angle_deg": 345.283378876418,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_0",
+        "start": 189,
+        "end": 202
+      }
+    },
+    {
+      "task_id": "seq3_13",
+      "duration": 10,
+      "value": 46,
+      "cpu": 2,
+      "gpu": 2,
+      "memory": 6,
+      "storage": 3,
+      "bus": 2,
+      "concurrency_cores": 2,
+      "power": 7,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 1.0236350300335175,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_5",
+        "start": 8,
+        "end": 47
+      }
+    },
+    {
+      "task_id": "seq3_14",
+      "duration": 2,
+      "value": 28,
+      "cpu": 1,
+      "gpu": 1,
+      "memory": 3,
+      "storage": 1,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 4,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq3_10"
+      ],
+      "attitude_angle_deg": 356.80733753806635,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_5",
+        "start": 8,
+        "end": 47
+      }
+    },
+    {
+      "task_id": "seq3_15",
+      "duration": 5,
+      "value": 18,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 4,
+      "storage": 6,
+      "bus": 2,
+      "concurrency_cores": 2,
+      "power": 2,
+      "thermal_load": 3,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq3_11",
+        "seq3_13"
+      ],
+      "attitude_angle_deg": 13.564588701809782,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_3",
+        "start": 173,
+        "end": 191
+      }
+    },
+    {
+      "task_id": "seq3_16",
+      "duration": 12,
+      "value": 34,
+      "cpu": 2,
+      "gpu": 2,
+      "memory": 8,
+      "storage": 3,
+      "bus": 2,
+      "concurrency_cores": 2,
+      "power": 7,
+      "thermal_load": 7,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 20.063815008295165,
       "is_key_task": false,
       "visibility_window": {
         "window_id": "vw_1",
+        "start": 62,
+        "end": 91
+      }
+    },
+    {
+      "task_id": "seq3_17",
+      "duration": 3,
+      "value": 25,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 2,
+      "storage": 2,
+      "bus": 4,
+      "concurrency_cores": 2,
+      "power": 2,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq3_13",
+        "seq3_4"
+      ],
+      "attitude_angle_deg": 10.218700732464967,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_8",
+        "start": 154,
+        "end": 198
+      }
+    },
+    {
+      "task_id": "seq4_0",
+      "duration": 11,
+      "value": 45,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 8,
+      "storage": 2,
+      "bus": 1,
+      "concurrency_cores": 2,
+      "power": 4,
+      "thermal_load": 6,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 122.24526975743946,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_8",
+        "start": 154,
+        "end": 198
+      }
+    },
+    {
+      "task_id": "seq4_1",
+      "duration": 5,
+      "value": 32,
+      "cpu": 1,
+      "gpu": 1,
+      "memory": 2,
+      "storage": 1,
+      "bus": 4,
+      "concurrency_cores": 1,
+      "power": 4,
+      "thermal_load": 1,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 135.1105908282364,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_6",
+        "start": 23,
+        "end": 36
+      }
+    },
+    {
+      "task_id": "seq4_2",
+      "duration": 3,
+      "value": 22,
+      "cpu": 1,
+      "gpu": 1,
+      "memory": 4,
+      "storage": 4,
+      "bus": 4,
+      "concurrency_cores": 2,
+      "power": 2,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 131.14965009707646,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_7",
+        "start": 59,
+        "end": 84
+      }
+    },
+    {
+      "task_id": "seq4_3",
+      "duration": 11,
+      "value": 56,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "storage": 3,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 5,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 136.72881397342792,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_8",
+        "start": 154,
+        "end": 198
+      }
+    },
+    {
+      "task_id": "seq4_4",
+      "duration": 7,
+      "value": 17,
+      "cpu": 2,
+      "gpu": 0,
+      "memory": 2,
+      "storage": 2,
+      "bus": 2,
+      "concurrency_cores": 2,
+      "power": 3,
+      "thermal_load": 3,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 119.15113254763189,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_1",
+        "start": 62,
+        "end": 91
+      }
+    },
+    {
+      "task_id": "seq4_5",
+      "duration": 7,
+      "value": 30,
+      "cpu": 1,
+      "gpu": 1,
+      "memory": 3,
+      "storage": 3,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 5,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq4_1",
+        "seq4_4"
+      ],
+      "attitude_angle_deg": 104.85418417039969,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_3",
+        "start": 173,
+        "end": 191
+      }
+    },
+    {
+      "task_id": "seq4_6",
+      "duration": 9,
+      "value": 53,
+      "cpu": 2,
+      "gpu": 2,
+      "memory": 7,
+      "storage": 3,
+      "bus": 2,
+      "concurrency_cores": 2,
+      "power": 6,
+      "thermal_load": 5,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq4_2"
+      ],
+      "attitude_angle_deg": 89.80511154155832,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_7",
+        "start": 59,
+        "end": 84
+      }
+    },
+    {
+      "task_id": "seq4_7",
+      "duration": 2,
+      "value": 21,
+      "cpu": 1,
+      "gpu": 1,
+      "memory": 3,
+      "storage": 1,
+      "bus": 2,
+      "concurrency_cores": 2,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq4_2",
+        "seq4_1"
+      ],
+      "attitude_angle_deg": 111.48356146114182,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_7",
+        "start": 59,
+        "end": 84
+      }
+    },
+    {
+      "task_id": "seq4_8",
+      "duration": 4,
+      "value": 38,
+      "cpu": 1,
+      "gpu": 1,
+      "memory": 5,
+      "storage": 2,
+      "bus": 4,
+      "concurrency_cores": 2,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 117.12647802336534,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_5",
+        "start": 8,
+        "end": 47
+      }
+    },
+    {
+      "task_id": "seq4_9",
+      "duration": 11,
+      "value": 48,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 6,
+      "storage": 2,
+      "bus": 2,
+      "concurrency_cores": 2,
+      "power": 4,
+      "thermal_load": 7,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 118.86041941867987,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_5",
+        "start": 8,
+        "end": 47
+      }
+    },
+    {
+      "task_id": "seq4_10",
+      "duration": 3,
+      "value": 24,
+      "cpu": 2,
+      "gpu": 0,
+      "memory": 3,
+      "storage": 1,
+      "bus": 4,
+      "concurrency_cores": 1,
+      "power": 4,
+      "thermal_load": 3,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 128.72595475000267,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_2",
         "start": 35,
-        "end": 61,
-        "window_type": "radar"
+        "end": 61
+      }
+    },
+    {
+      "task_id": "seq4_11",
+      "duration": 7,
+      "value": 37,
+      "cpu": 2,
+      "gpu": 0,
+      "memory": 2,
+      "storage": 5,
+      "bus": 4,
+      "concurrency_cores": 2,
+      "power": 5,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq4_7"
+      ],
+      "attitude_angle_deg": 136.41876318651683,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_4",
+        "start": 22,
+        "end": 68
+      }
+    },
+    {
+      "task_id": "seq4_12",
+      "duration": 9,
+      "value": 40,
+      "cpu": 2,
+      "gpu": 2,
+      "memory": 7,
+      "storage": 2,
+      "bus": 3,
+      "concurrency_cores": 2,
+      "power": 8,
+      "thermal_load": 5,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq4_8"
+      ],
+      "attitude_angle_deg": 119.52806433842164,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_0",
+        "start": 189,
+        "end": 202
+      }
+    },
+    {
+      "task_id": "seq4_13",
+      "duration": 5,
+      "value": 18,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 2,
+      "storage": 2,
+      "bus": 2,
+      "concurrency_cores": 2,
+      "power": 3,
+      "thermal_load": 1,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq4_9"
+      ],
+      "attitude_angle_deg": 127.90041354331444,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_1",
+        "start": 62,
+        "end": 91
+      }
+    },
+    {
+      "task_id": "seq4_14",
+      "duration": 3,
+      "value": 38,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 4,
+      "storage": 3,
+      "bus": 2,
+      "concurrency_cores": 1,
+      "power": 2,
+      "thermal_load": 3,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [
+        "P1"
+      ],
+      "predecessors": [
+        "seq4_10"
+      ],
+      "attitude_angle_deg": 142.1648211483036,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_3",
+        "start": 173,
+        "end": 191
+      }
+    },
+    {
+      "task_id": "seq4_15",
+      "duration": 10,
+      "value": 25,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "storage": 3,
+      "bus": 2,
+      "concurrency_cores": 2,
+      "power": 4,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq4_11"
+      ],
+      "attitude_angle_deg": 154.86514633651842,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_3",
+        "start": 173,
+        "end": 191
+      }
+    },
+    {
+      "task_id": "seq4_16",
+      "duration": 3,
+      "value": 16,
+      "cpu": 2,
+      "gpu": 0,
+      "memory": 4,
+      "storage": 1,
+      "bus": 5,
+      "concurrency_cores": 2,
+      "power": 3,
+      "thermal_load": 1,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq4_9"
+      ],
+      "attitude_angle_deg": 144.54131670281726,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_5",
+        "start": 8,
+        "end": 47
+      }
+    },
+    {
+      "task_id": "seq4_17",
+      "duration": 7,
+      "value": 45,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 2,
+      "storage": 5,
+      "bus": 4,
+      "concurrency_cores": 2,
+      "power": 2,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "payload_id_requirements": [
+        "P2"
+      ],
+      "predecessors": [
+        "seq4_13",
+        "seq4_10"
+      ],
+      "attitude_angle_deg": 150.84830680785876,
+      "is_key_task": false,
+      "visibility_window": {
+        "window_id": "vw_3",
+        "start": 173,
+        "end": 191
       }
     },
     {
       "task_id": "flex_0",
       "duration": 3,
-      "value": 20,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 3,
-      "storage": 1,
-      "bus": 1,
-      "concurrency_cores": 1,
-      "power": 1,
-      "thermal_load": 3,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq2_11"
-      ],
-      "attitude_angle_deg": 87.06389892549953,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_1",
-      "duration": 6,
-      "value": 25,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 1,
-      "storage": 2,
-      "bus": 1,
-      "concurrency_cores": 2,
-      "power": 3,
-      "thermal_load": 1,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 279.72539500841447,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_2",
-      "duration": 6,
-      "value": 23,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 3,
-      "storage": 2,
-      "bus": 2,
-      "concurrency_cores": 2,
-      "power": 2,
-      "thermal_load": 1,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq2_3"
-      ],
-      "attitude_angle_deg": 171.4396394258006,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_3",
-      "duration": 3,
-      "value": 15,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 3,
-      "storage": 2,
-      "bus": 2,
-      "concurrency_cores": 2,
-      "power": 1,
-      "thermal_load": 1,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 122.30942333876229,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_4",
-      "duration": 4,
-      "value": 14,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 1,
-      "storage": 2,
-      "bus": 1,
-      "concurrency_cores": 2,
-      "power": 1,
-      "thermal_load": 1,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_11"
-      ],
-      "attitude_angle_deg": 116.27477068767588,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_5",
-      "duration": 5,
-      "value": 11,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 1,
-      "storage": 1,
-      "bus": 2,
-      "concurrency_cores": 2,
-      "power": 1,
-      "thermal_load": 3,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 166.55465724961317,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_6",
-      "duration": 2,
-      "value": 19,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 1,
-      "storage": 2,
-      "bus": 1,
-      "concurrency_cores": 2,
-      "power": 2,
-      "thermal_load": 2,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_9"
-      ],
-      "attitude_angle_deg": 55.9584361471128,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_7",
-      "duration": 6,
-      "value": 11,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 3,
-      "storage": 1,
-      "bus": 2,
-      "concurrency_cores": 1,
-      "power": 1,
-      "thermal_load": 1,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 349.3059394374975,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_8",
-      "duration": 2,
-      "value": 25,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 1,
-      "storage": 2,
-      "bus": 2,
-      "concurrency_cores": 2,
-      "power": 1,
-      "thermal_load": 3,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_10"
-      ],
-      "attitude_angle_deg": 359.18112593101586,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_9",
-      "duration": 4,
-      "value": 16,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 3,
-      "storage": 1,
-      "bus": 1,
-      "concurrency_cores": 2,
-      "power": 1,
-      "thermal_load": 1,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 288.04139504807057,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_10",
-      "duration": 8,
       "value": 19,
       "cpu": 2,
       "gpu": 1,
-      "memory": 2,
-      "storage": 2,
-      "bus": 2,
-      "concurrency_cores": 2,
-      "power": 3,
-      "thermal_load": 3,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_19"
-      ],
-      "attitude_angle_deg": 225.82899987877408,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_11",
-      "duration": 2,
-      "value": 20,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 1,
-      "storage": 1,
-      "bus": 1,
-      "concurrency_cores": 2,
-      "power": 3,
-      "thermal_load": 1,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 229.2526186831215,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_12",
-      "duration": 3,
-      "value": 18,
-      "cpu": 1,
-      "gpu": 1,
       "memory": 3,
-      "storage": 2,
-      "bus": 1,
-      "concurrency_cores": 2,
-      "power": 2,
-      "thermal_load": 2,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq2_10"
-      ],
-      "attitude_angle_deg": 184.69534493056594,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_13",
-      "duration": 7,
-      "value": 23,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 3,
-      "storage": 2,
-      "bus": 1,
-      "concurrency_cores": 2,
-      "power": 1,
-      "thermal_load": 2,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 25.43519315698049,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_14",
-      "duration": 2,
-      "value": 10,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 1,
-      "storage": 1,
-      "bus": 2,
-      "concurrency_cores": 2,
-      "power": 3,
-      "thermal_load": 2,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq2_5"
-      ],
-      "attitude_angle_deg": 322.97869851794445,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_15",
-      "duration": 3,
-      "value": 54,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 1,
-      "storage": 1,
-      "bus": 1,
-      "concurrency_cores": 1,
-      "power": 2,
-      "thermal_load": 3,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 82.83001639664445,
-      "is_key_task": true,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_16",
-      "duration": 5,
-      "value": 13,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 3,
-      "storage": 1,
-      "bus": 2,
-      "concurrency_cores": 2,
-      "power": 3,
-      "thermal_load": 3,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_5"
-      ],
-      "attitude_angle_deg": 93.16037187635018,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_17",
-      "duration": 8,
-      "value": 24,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 1,
-      "storage": 1,
-      "bus": 1,
-      "concurrency_cores": 2,
-      "power": 2,
-      "thermal_load": 2,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 172.65150989565512,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_18",
-      "duration": 6,
-      "value": 19,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 2,
-      "storage": 2,
-      "bus": 2,
-      "concurrency_cores": 2,
-      "power": 3,
-      "thermal_load": 3,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_17"
-      ],
-      "attitude_angle_deg": 287.4979587976714,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_19",
-      "duration": 4,
-      "value": 17,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 2,
-      "storage": 1,
-      "bus": 2,
-      "concurrency_cores": 2,
-      "power": 3,
-      "thermal_load": 2,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 330.2775325239146,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_20",
-      "duration": 7,
-      "value": 26,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 2,
-      "storage": 1,
-      "bus": 2,
-      "concurrency_cores": 1,
-      "power": 3,
-      "thermal_load": 1,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_9"
-      ],
-      "attitude_angle_deg": 161.60148700539156,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_21",
-      "duration": 7,
-      "value": 18,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 3,
-      "storage": 1,
-      "bus": 2,
-      "concurrency_cores": 2,
-      "power": 2,
-      "thermal_load": 3,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 333.78126711216765,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_22",
-      "duration": 8,
-      "value": 12,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 1,
-      "storage": 1,
-      "bus": 2,
-      "concurrency_cores": 1,
-      "power": 3,
-      "thermal_load": 3,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq2_11"
-      ],
-      "attitude_angle_deg": 297.2630155558899,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_23",
-      "duration": 5,
-      "value": 10,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 1,
-      "storage": 2,
-      "bus": 2,
-      "concurrency_cores": 2,
-      "power": 2,
-      "thermal_load": 1,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 52.65546563263446,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_24",
-      "duration": 5,
-      "value": 15,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 3,
-      "storage": 1,
-      "bus": 2,
-      "concurrency_cores": 1,
-      "power": 1,
-      "thermal_load": 2,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq2_16"
-      ],
-      "attitude_angle_deg": 233.86200155129407,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_25",
-      "duration": 5,
-      "value": 24,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 1,
-      "storage": 2,
-      "bus": 2,
-      "concurrency_cores": 2,
-      "power": 3,
-      "thermal_load": 2,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 74.23038979885489,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_26",
-      "duration": 5,
-      "value": 25,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 2,
       "storage": 2,
       "bus": 2,
       "concurrency_cores": 2,
       "power": 1,
       "thermal_load": 3,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_19"
-      ],
-      "attitude_angle_deg": 67.54715494211479,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_27",
-      "duration": 2,
-      "value": 11,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 1,
-      "storage": 2,
-      "bus": 1,
-      "concurrency_cores": 1,
-      "power": 3,
-      "thermal_load": 2,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 210.36663494078047,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_28",
-      "duration": 7,
-      "value": 11,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 1,
-      "storage": 2,
-      "bus": 1,
-      "concurrency_cores": 1,
-      "power": 2,
-      "thermal_load": 2,
       "payload_type_requirements": [],
       "payload_id_requirements": [],
       "predecessors": [
         "seq1_8"
       ],
-      "attitude_angle_deg": 240.62902586354153,
+      "attitude_angle_deg": 49.89178242511315,
       "is_key_task": false,
       "visibility_window": null
     },
     {
-      "task_id": "flex_29",
-      "duration": 3,
-      "value": 21,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 2,
-      "storage": 2,
-      "bus": 2,
-      "concurrency_cores": 2,
-      "power": 1,
-      "thermal_load": 2,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 82.58050779166061,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_30",
-      "duration": 3,
-      "value": 22,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 2,
-      "storage": 1,
-      "bus": 2,
-      "concurrency_cores": 1,
-      "power": 2,
-      "thermal_load": 2,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_14"
-      ],
-      "attitude_angle_deg": 317.6364024586046,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_31",
+      "task_id": "flex_1",
       "duration": 7,
       "value": 21,
       "cpu": 1,
@@ -1692,263 +2009,63 @@
       "memory": 2,
       "storage": 1,
       "bus": 2,
-      "concurrency_cores": 1,
-      "power": 3,
-      "thermal_load": 1,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 90.06880880288924,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_32",
-      "duration": 5,
-      "value": 11,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 2,
-      "storage": 1,
-      "bus": 1,
-      "concurrency_cores": 1,
-      "power": 3,
-      "thermal_load": 1,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_19"
-      ],
-      "attitude_angle_deg": 219.86161043999826,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_33",
-      "duration": 4,
-      "value": 27,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 2,
-      "storage": 1,
-      "bus": 2,
       "concurrency_cores": 2,
       "power": 2,
-      "thermal_load": 1,
+      "thermal_load": 2,
       "payload_type_requirements": [],
       "payload_id_requirements": [],
       "predecessors": [],
-      "attitude_angle_deg": 250.0610345390108,
+      "attitude_angle_deg": 243.9475659745524,
       "is_key_task": false,
       "visibility_window": null
     },
     {
-      "task_id": "flex_34",
-      "duration": 3,
-      "value": 21,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 3,
-      "storage": 2,
-      "bus": 1,
-      "concurrency_cores": 2,
-      "power": 2,
-      "thermal_load": 1,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq2_8"
-      ],
-      "attitude_angle_deg": 150.54609491080797,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_35",
-      "duration": 8,
-      "value": 16,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 2,
-      "storage": 1,
-      "bus": 1,
-      "concurrency_cores": 1,
-      "power": 1,
-      "thermal_load": 3,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 281.92661364460326,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_36",
-      "duration": 3,
-      "value": 10,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 1,
-      "storage": 2,
-      "bus": 1,
-      "concurrency_cores": 1,
-      "power": 3,
-      "thermal_load": 1,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_14"
-      ],
-      "attitude_angle_deg": 105.56053375815169,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_37",
-      "duration": 4,
-      "value": 20,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 2,
-      "storage": 1,
-      "bus": 1,
-      "concurrency_cores": 2,
-      "power": 3,
-      "thermal_load": 1,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 274.8810184773446,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_38",
-      "duration": 5,
-      "value": 13,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 3,
-      "storage": 1,
-      "bus": 2,
-      "concurrency_cores": 2,
-      "power": 3,
-      "thermal_load": 1,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq2_8"
-      ],
-      "attitude_angle_deg": 280.48489892311244,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_39",
-      "duration": 5,
-      "value": 13,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 1,
-      "storage": 1,
-      "bus": 2,
-      "concurrency_cores": 1,
-      "power": 1,
-      "thermal_load": 1,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 302.28859597997035,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_40",
-      "duration": 7,
-      "value": 26,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 3,
-      "storage": 2,
-      "bus": 1,
-      "concurrency_cores": 1,
-      "power": 3,
-      "thermal_load": 3,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq2_17"
-      ],
-      "attitude_angle_deg": 191.060156573477,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_41",
-      "duration": 6,
-      "value": 24,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 2,
-      "storage": 2,
-      "bus": 2,
-      "concurrency_cores": 2,
-      "power": 3,
-      "thermal_load": 1,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 249.17111639285983,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_42",
-      "duration": 4,
-      "value": 25,
-      "cpu": 1,
-      "gpu": 1,
-      "memory": 1,
-      "storage": 1,
-      "bus": 2,
-      "concurrency_cores": 1,
-      "power": 3,
-      "thermal_load": 3,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [
-        "seq1_16"
-      ],
-      "attitude_angle_deg": 122.20593962612377,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_43",
-      "duration": 3,
-      "value": 27,
-      "cpu": 2,
-      "gpu": 1,
-      "memory": 2,
-      "storage": 2,
-      "bus": 2,
-      "concurrency_cores": 1,
-      "power": 2,
-      "thermal_load": 3,
-      "payload_type_requirements": [],
-      "payload_id_requirements": [],
-      "predecessors": [],
-      "attitude_angle_deg": 203.35057072658566,
-      "is_key_task": false,
-      "visibility_window": null
-    },
-    {
-      "task_id": "flex_44",
+      "task_id": "flex_2",
       "duration": 2,
-      "value": 25,
+      "value": 17,
       "cpu": 1,
       "gpu": 1,
+      "memory": 1,
+      "storage": 1,
+      "bus": 1,
+      "concurrency_cores": 1,
+      "power": 2,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq3_2"
+      ],
+      "attitude_angle_deg": 159.5362489234899,
+      "is_key_task": false,
+      "visibility_window": null
+    },
+    {
+      "task_id": "flex_3",
+      "duration": 4,
+      "value": 19,
+      "cpu": 2,
+      "gpu": 0,
       "memory": 2,
+      "storage": 2,
+      "bus": 2,
+      "concurrency_cores": 1,
+      "power": 2,
+      "thermal_load": 3,
+      "payload_type_requirements": [],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 294.1851122534861,
+      "is_key_task": false,
+      "visibility_window": null
+    },
+    {
+      "task_id": "flex_4",
+      "duration": 2,
+      "value": 18,
+      "cpu": 1,
+      "gpu": 1,
+      "memory": 3,
       "storage": 2,
       "bus": 1,
       "concurrency_cores": 2,
@@ -1957,16 +2074,16 @@
       "payload_type_requirements": [],
       "payload_id_requirements": [],
       "predecessors": [
-        "seq2_16"
+        "seq4_17"
       ],
       "attitude_angle_deg": 170.18806198468207,
       "is_key_task": false,
       "visibility_window": null
     },
     {
-      "task_id": "flex_45",
+      "task_id": "flex_5",
       "duration": 8,
-      "value": 62,
+      "value": 19,
       "cpu": 1,
       "gpu": 1,
       "memory": 1,
@@ -1979,15 +2096,15 @@
       "payload_id_requirements": [],
       "predecessors": [],
       "attitude_angle_deg": 211.51912720577928,
-      "is_key_task": true,
+      "is_key_task": false,
       "visibility_window": null
     },
     {
-      "task_id": "flex_46",
+      "task_id": "flex_6",
       "duration": 8,
       "value": 14,
       "cpu": 1,
-      "gpu": 1,
+      "gpu": 0,
       "memory": 3,
       "storage": 1,
       "bus": 2,
@@ -1997,18 +2114,18 @@
       "payload_type_requirements": [],
       "payload_id_requirements": [],
       "predecessors": [
-        "seq1_9"
+        "seq1_18"
       ],
       "attitude_angle_deg": 200.24719838860184,
       "is_key_task": false,
       "visibility_window": null
     },
     {
-      "task_id": "flex_47",
+      "task_id": "flex_7",
       "duration": 4,
-      "value": 28,
+      "value": 19,
       "cpu": 1,
-      "gpu": 1,
+      "gpu": 0,
       "memory": 1,
       "storage": 1,
       "bus": 1,
@@ -2023,51 +2140,51 @@
       "visibility_window": null
     },
     {
-      "task_id": "flex_48",
+      "task_id": "flex_8",
       "duration": 5,
-      "value": 26,
-      "cpu": 1,
+      "value": 18,
+      "cpu": 2,
       "gpu": 1,
-      "memory": 2,
-      "storage": 1,
+      "memory": 1,
+      "storage": 2,
       "bus": 2,
       "concurrency_cores": 2,
-      "power": 3,
-      "thermal_load": 3,
+      "power": 1,
+      "thermal_load": 1,
       "payload_type_requirements": [],
       "payload_id_requirements": [],
       "predecessors": [
-        "seq2_8"
+        "seq4_0"
       ],
       "attitude_angle_deg": 138.8252100161515,
       "is_key_task": false,
       "visibility_window": null
     },
     {
-      "task_id": "flex_49",
-      "duration": 3,
-      "value": 45,
+      "task_id": "flex_9",
+      "duration": 6,
+      "value": 25,
       "cpu": 1,
       "gpu": 1,
-      "memory": 1,
-      "storage": 1,
-      "bus": 2,
-      "concurrency_cores": 2,
+      "memory": 2,
+      "storage": 2,
+      "bus": 1,
+      "concurrency_cores": 1,
       "power": 2,
-      "thermal_load": 1,
+      "thermal_load": 3,
       "payload_type_requirements": [],
       "payload_id_requirements": [],
       "predecessors": [],
-      "attitude_angle_deg": 145.83099470193784,
-      "is_key_task": true,
+      "attitude_angle_deg": 9.07525934739169,
+      "is_key_task": false,
       "visibility_window": null
     },
     {
-      "task_id": "flex_50",
-      "duration": 7,
-      "value": 17,
+      "task_id": "flex_10",
+      "duration": 3,
+      "value": 19,
       "cpu": 2,
-      "gpu": 1,
+      "gpu": 0,
       "memory": 2,
       "storage": 1,
       "bus": 2,
@@ -2077,18 +2194,18 @@
       "payload_type_requirements": [],
       "payload_id_requirements": [],
       "predecessors": [
-        "seq2_7"
+        "seq3_10"
       ],
-      "attitude_angle_deg": 58.920027240864144,
+      "attitude_angle_deg": 181.96037277624555,
       "is_key_task": false,
       "visibility_window": null
     },
     {
-      "task_id": "flex_51",
+      "task_id": "flex_11",
       "duration": 6,
-      "value": 23,
+      "value": 20,
       "cpu": 2,
-      "gpu": 1,
+      "gpu": 0,
       "memory": 2,
       "storage": 1,
       "bus": 2,
@@ -2099,6 +2216,86 @@
       "payload_id_requirements": [],
       "predecessors": [],
       "attitude_angle_deg": 151.05863848185916,
+      "is_key_task": false,
+      "visibility_window": null
+    },
+    {
+      "task_id": "flex_12",
+      "duration": 4,
+      "value": 17,
+      "cpu": 2,
+      "gpu": 0,
+      "memory": 2,
+      "storage": 2,
+      "bus": 2,
+      "concurrency_cores": 1,
+      "power": 2,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq1_11"
+      ],
+      "attitude_angle_deg": 142.98364226884627,
+      "is_key_task": false,
+      "visibility_window": null
+    },
+    {
+      "task_id": "flex_13",
+      "duration": 7,
+      "value": 24,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 3,
+      "storage": 1,
+      "bus": 1,
+      "concurrency_cores": 1,
+      "power": 1,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 41.39646192152205,
+      "is_key_task": false,
+      "visibility_window": null
+    },
+    {
+      "task_id": "flex_14",
+      "duration": 6,
+      "value": 15,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 3,
+      "storage": 2,
+      "bus": 2,
+      "concurrency_cores": 2,
+      "power": 1,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "payload_id_requirements": [],
+      "predecessors": [
+        "seq2_0"
+      ],
+      "attitude_angle_deg": 279.199809246001,
+      "is_key_task": false,
+      "visibility_window": null
+    },
+    {
+      "task_id": "flex_15",
+      "duration": 5,
+      "value": 19,
+      "cpu": 2,
+      "gpu": 0,
+      "memory": 2,
+      "storage": 2,
+      "bus": 2,
+      "concurrency_cores": 1,
+      "power": 1,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "payload_id_requirements": [],
+      "predecessors": [],
+      "attitude_angle_deg": 237.90337314660343,
       "is_key_task": false,
       "visibility_window": null
     }

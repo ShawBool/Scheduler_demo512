@@ -8,7 +8,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from .models import ScheduleResult, Task
+from .models import ScheduleResult, Task, VisibilityWindow
+
+TASK_POOL_SCHEMA_VERSION = "2.0"
+VISIBILITY_WINDOWS_SCHEMA_VERSION = "2.0"
 
 
 def write_schedule_result(result: ScheduleResult, path: str | Path) -> None:
@@ -27,8 +30,28 @@ def write_task_pool(tasks: list[Task], path: str | Path) -> None:
     out_path = Path(path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     payload = {
+        "schema_version": TASK_POOL_SCHEMA_VERSION,
         "task_count": len(tasks),
         "tasks": [asdict(task) for task in tasks],
+    }
+    out_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def write_visibility_windows(
+    windows: list[VisibilityWindow],
+    path: str | Path,
+    *,
+    seed: int,
+    horizon: int,
+) -> None:
+    out_path = Path(path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "schema_version": VISIBILITY_WINDOWS_SCHEMA_VERSION,
+        "seed": seed,
+        "horizon": horizon,
+        "window_count": len(windows),
+        "windows": [asdict(window) for window in windows],
     }
     out_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 

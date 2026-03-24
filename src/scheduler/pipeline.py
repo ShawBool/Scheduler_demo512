@@ -6,10 +6,10 @@ from pathlib import Path
 from typing import Any
 
 from .config import load_config, validate_config
-from .logging_utils import append_cycle_log, write_schedule_result, write_task_pool
+from .logging_utils import append_cycle_log, write_schedule_result, write_task_pool, write_visibility_windows
 from .planner import plan_baseline
 from .replanner import evaluate_replan_trigger
-from .simulation import generate_task_pool
+from .simulation import generate_simulation_snapshot
 
 
 def run_pipeline(config_path: str = "config", seed: int | None = None, output_dir: str | Path | None = None) -> dict[str, Any]:
@@ -17,7 +17,10 @@ def run_pipeline(config_path: str = "config", seed: int | None = None, output_di
     validate_config(cfg)
 
     use_seed = cfg["runtime"].get("seed", 42) if seed is None else seed
-    tasks = generate_task_pool(cfg, seed=use_seed)
+    simulation_snapshot = generate_simulation_snapshot(cfg, seed=use_seed)
+    tasks = simulation_snapshot["tasks"]
+    visibility_windows = simulation_snapshot["visibility_windows"]
+    horizon = simulation_snapshot["horizon"]
     result = plan_baseline(tasks, cfg)
 
     log_cfg = cfg["logging"]
@@ -25,10 +28,13 @@ def run_pipeline(config_path: str = "config", seed: int | None = None, output_di
     schedule_file = out_dir / log_cfg.get("schedule_file", "latest_schedule.json")
     cycle_log_file = out_dir / log_cfg.get("cycle_log_file", "cycle_log.jsonl")
     task_pool_file = out_dir / log_cfg.get("task_pool_file", "latest_task_pool.json")
+    visibility_windows_file = out_dir / log_cfg.get("visibility_windows_file", "latest_visibility_windows.json")
 
     write_schedule_result(result, schedule_file)
     write_task_pool(tasks, task_pool_file)
+    write_visibility_windows(visibility_windows, visibility_windows_file, seed=use_seed, horizon=horizon)
     print(f"[simulation] task pool persisted: {task_pool_file}")
+    print(f"[simulation] visibility windows persisted: {visibility_windows_file}")
     violations = {
         "missing_key_tasks": _collect_missing_key_tasks(tasks, result),
         "resource_overflow_count": int(result.constraint_stats.get("resource_overflow_count", 0)),
@@ -75,6 +81,7 @@ def run_pipeline(config_path: str = "config", seed: int | None = None, output_di
         "replan_decision": replan_decision,
         "output_dir": str(out_dir),
         "task_pool_file": str(task_pool_file),
+        "visibility_windows_file": str(visibility_windows_file),
     }
 
 

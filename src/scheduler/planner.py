@@ -163,14 +163,19 @@ def plan_baseline(tasks: list[Task], config: dict[str, Any]) -> ScheduleResult:
 
     solver = cp_model.CpSolver()
     solver.parameters.max_time_in_seconds = float(runtime.get("solver_timeout_sec", 10))
+    if "solver_random_seed" in runtime:
+        solver.parameters.random_seed = int(runtime["solver_random_seed"])
+    if "solver_num_workers" in runtime:
+        solver.parameters.num_search_workers = int(runtime["solver_num_workers"])
     status = solver.solve(model)
 
     if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
+        status_text = "infeasible" if status == cp_model.INFEASIBLE else str(int(status))
         return ScheduleResult(
             scheduled_items=[],
             unscheduled_tasks=tasks,
             objective_value=0.0,
-            constraint_stats={"scheduled_count": 0, "unscheduled_count": len(tasks), "solver_status": int(status)},
+            constraint_stats={"scheduled_count": 0, "unscheduled_count": len(tasks), "solver_status": status_text},
         )
 
     scheduled_items: list[ScheduleItem] = []

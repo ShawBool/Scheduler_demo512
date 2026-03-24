@@ -40,13 +40,13 @@ def _sample_tasks():
             predecessors=[],
             attitude_angle_deg=10.0,
             is_key_task=True,
-            visibility_window=VisibilityWindow("vw_key", 0, 12, "camera"),
+            visibility_window=VisibilityWindow("vw_key", 0, 12),
         ),
-        Task("pre", 4, 10, 1, 0, 2, 1, 1, 1, 1, 1, [], [], [], 20.0, False, VisibilityWindow("vw_pre", 0, 20, "camera")),
-        Task("succ", 5, 20, 1, 0, 2, 1, 1, 1, 1, 1, [], [], ["pre"], 50.0, False, VisibilityWindow("vw_succ", 2, 30, "camera")),
-        Task("switch1", 5, 15, 1, 0, 2, 1, 1, 1, 1, 1, [], [], [], 60.0, False, VisibilityWindow("vw_sw1", 5, 35, "camera")),
-        Task("switch2", 5, 30, 1, 0, 2, 1, 1, 1, 1, 1, [], [], [], 180.0, False, VisibilityWindow("vw_sw2", 5, 45, "camera")),
-        Task("too_heavy", 4, 80, 10, 0, 2, 1, 1, 1, 1, 1, [], [], [], 5.0, False, VisibilityWindow("vw_heavy", 0, 25, "camera")),
+        Task("pre", 4, 10, 1, 0, 2, 1, 1, 1, 1, 1, [], [], [], 20.0, False, VisibilityWindow("vw_pre", 0, 20)),
+        Task("succ", 5, 20, 1, 0, 2, 1, 1, 1, 1, 1, [], [], ["pre"], 50.0, False, VisibilityWindow("vw_succ", 2, 30)),
+        Task("switch1", 5, 15, 1, 0, 2, 1, 1, 1, 1, 1, [], [], [], 60.0, False, VisibilityWindow("vw_sw1", 5, 35)),
+        Task("switch2", 5, 30, 1, 0, 2, 1, 1, 1, 1, 1, [], [], [], 180.0, False, VisibilityWindow("vw_sw2", 5, 45)),
+        Task("too_heavy", 4, 80, 10, 0, 2, 1, 1, 1, 1, 1, [], [], [], 5.0, False, VisibilityWindow("vw_heavy", 0, 25)),
     ]
 
 
@@ -84,9 +84,9 @@ def test_planner_concurrency_core_limit():
     cfg = _base_config()
     cfg["constraints"]["cpu_capacity"] = 2
     tasks = [
-        Task("key", 2, 1, 1, 0, 1, 1, 1, 1, 1, 1, [], [], [], 0.0, True, VisibilityWindow("vw_key", 0, 40, "camera")),
-        Task("c1", 10, 20, 1, 0, 1, 1, 1, 2, 1, 1, [], [], [], 20.0, False, VisibilityWindow("vw_c1", 0, 40, "camera")),
-        Task("c2", 10, 20, 1, 0, 1, 1, 1, 2, 1, 1, [], [], [], 40.0, False, VisibilityWindow("vw_c2", 0, 40, "camera")),
+        Task("key", 2, 1, 1, 0, 1, 1, 1, 1, 1, 1, [], [], [], 0.0, True, VisibilityWindow("vw_key", 0, 40)),
+        Task("c1", 10, 20, 1, 0, 1, 1, 1, 2, 1, 1, [], [], [], 20.0, False, VisibilityWindow("vw_c1", 0, 40)),
+        Task("c2", 10, 20, 1, 0, 1, 1, 1, 2, 1, 1, [], [], [], 40.0, False, VisibilityWindow("vw_c2", 0, 40)),
     ]
 
     result = plan_baseline(tasks, cfg)
@@ -120,11 +120,11 @@ def test_planner_derives_rolling_segments_from_key_tasks_and_dag_sources():
             [],
             0.0,
             True,
-            VisibilityWindow("vw_key_0", 0, 20, "camera"),
+            VisibilityWindow("vw_key_0", 0, 20),
         ),
-        Task("src_A", 5, 20, 1, 0, 1, 1, 1, 1, 1, 1, [], [], [], 10.0, False, VisibilityWindow("vw_src_A", 20, 40, "camera")),
-        Task("src_B", 5, 20, 1, 0, 1, 1, 1, 1, 1, 1, [], [], [], 20.0, False, VisibilityWindow("vw_src_B", 45, 55, "camera")),
-        Task("dep_B", 5, 10, 1, 0, 1, 1, 1, 1, 1, 1, [], [], ["src_B"], 40.0, False, VisibilityWindow("vw_dep_B", 50, 60, "camera")),
+        Task("src_A", 5, 20, 1, 0, 1, 1, 1, 1, 1, 1, [], [], [], 10.0, False, VisibilityWindow("vw_src_A", 20, 40)),
+        Task("src_B", 5, 20, 1, 0, 1, 1, 1, 1, 1, 1, [], [], [], 20.0, False, VisibilityWindow("vw_src_B", 45, 55)),
+        Task("dep_B", 5, 10, 1, 0, 1, 1, 1, 1, 1, 1, [], [], ["src_B"], 40.0, False, VisibilityWindow("vw_dep_B", 50, 60)),
     ]
     result = plan_baseline(tasks, cfg)
     assert result.rolling_segments
@@ -153,7 +153,7 @@ def test_planner_respects_visibility_window_if_present():
         [],
         0.0,
         False,
-        VisibilityWindow("vw1", 10, 20, "camera"),
+        VisibilityWindow("vw1", 10, 20),
     )
     result = plan_baseline([task], cfg)
     item = next(i for i in result.scheduled_items if i.task_id == "w1")

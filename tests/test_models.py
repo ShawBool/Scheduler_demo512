@@ -19,7 +19,7 @@ def test_models_can_be_instantiated_and_contain_chinese_docs():
         predecessors=[],
         attitude_angle_deg=30.0,
         is_key_task=True,
-        visibility_window=VisibilityWindow("vw_t1", 0, 20, "camera"),
+        visibility_window=VisibilityWindow("vw_t1", 0, 20),
     )
     snapshot = ResourceSnapshot(
         timestamp=5,
@@ -68,3 +68,12 @@ def test_task_without_visibility_window_is_free_task():
     )
 
     assert task.visibility_window is None
+
+
+def test_visibility_window_contains_only_id_start_end_fields():
+    window = VisibilityWindow(window_id="vw_simple", start=1, end=9)
+
+    assert window.window_id == "vw_simple"
+    assert window.start == 1
+    assert window.end == 9
+    assert set(window.__slots__) == {"window_id", "start", "end"}
