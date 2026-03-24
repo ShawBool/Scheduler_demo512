@@ -1,6 +1,12 @@
 import json
 
-from scheduler.logging_utils import append_cycle_log, write_schedule_result, write_task_pool # pyright: ignore[reportAttributeAccessIssue]
+from scheduler.logging_utils import (  # pyright: ignore[reportAttributeAccessIssue]
+    append_cycle_log,
+    append_solver_progress_log,
+    ensure_jsonl_file,
+    write_schedule_result,
+    write_task_pool,
+)
 from scheduler.models import ScheduleItem, ScheduleResult, Task
 
 
@@ -8,7 +14,20 @@ def test_logging_utils_write_and_append(tmp_path):
     result = ScheduleResult(
         scheduled_items=[ScheduleItem("t1", 0, 5, 30.0, 10)],
         unscheduled_tasks=[
-            Task("t2", 3, 5, 1, 0, 1, 1, 1, 1, 1, 1, [], [], [], 45.0, False)
+            Task(
+                task_id="t2",
+                duration=3,
+                value=5,
+                cpu=1,
+                gpu=0,
+                memory=1,
+                power=1,
+                payload_type_requirements=[],
+                predecessors=[],
+                attitude_angle_deg=45.0,
+                is_key_task=False,
+                visibility_window=None,
+            )
         ],
         objective_value=10,
         constraint_stats={"scheduled_count": 1, "unscheduled_count": 1},
@@ -41,3 +60,27 @@ def test_logging_utils_write_and_append(tmp_path):
     cycle_payload = json.loads(line)
     assert cycle_payload["cycle_id"] == 1
     assert cycle_payload["selected_tasks"] == ["t1"]
+
+
+def test_solver_progress_jsonl_file_contract_and_fields(tmp_path):
+    solver_progress_path = tmp_path / "solver_progress.jsonl"
+
+    ensure_jsonl_file(solver_progress_path)
+    assert solver_progress_path.exists()
+    assert solver_progress_path.read_text(encoding="utf-8") == ""
+
+    append_solver_progress_log(
+        solver_progress_path,
+        solution_index=1,
+        objective=123.5,
+        wall_time=0.25,
+        best_bound=120.0,
+    )
+
+    lines = solver_progress_path.read_text(encoding="utf-8").splitlines()
+    assert len(lines) == 1
+    payload = json.loads(lines[0])
+    assert payload["solution_index"] == 1
+    assert payload["objective"] == 123.5
+    assert payload["wall_time"] == 0.25
+    assert payload["best_bound"] == 120.0

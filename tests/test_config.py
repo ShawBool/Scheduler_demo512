@@ -50,6 +50,14 @@ def test_load_config_loads_split_json_files():
     assert "logging" in cfg
 
 
+def test_load_config_runtime_defaults_for_static_mode_and_solver_progress_flag():
+    cfg = load_config("config")
+    runtime = cfg["runtime"]
+
+    assert runtime.get("input_mode") == "static"
+    assert runtime.get("solver_progress_enable", True) is True
+
+
 def test_validate_config_allows_nonpositive_dag_groups_for_compatibility():
     cfg = _base_cfg()
     cfg["simulation"]["dag_group_min"] = 0
