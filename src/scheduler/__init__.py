@@ -6,7 +6,10 @@ from .models import ResourceSnapshot, ScheduleItem, ScheduleResult, Task
 from .pipeline import run_pipeline
 from .planner import plan_baseline
 from .replanner import evaluate_replan_trigger
-from .simulation import generate_task_pool
+try:
+    from .simulation import generate_task_pool
+except ImportError:  # pragma: no cover - simulation 可在静态输入模式下缺省
+    generate_task_pool = None
 
 __all__ = [
     "Task",
@@ -15,7 +18,6 @@ __all__ = [
     "ScheduleResult",
     "load_config",
     "validate_config",
-    "generate_task_pool",
     "plan_baseline",
     "evaluate_replan_trigger",
     "write_schedule_result",
@@ -23,3 +25,6 @@ __all__ = [
     "append_cycle_log",
     "run_pipeline",
 ]
+
+if generate_task_pool is not None:
+    __all__.insert(6, "generate_task_pool")

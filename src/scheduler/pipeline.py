@@ -6,10 +6,10 @@ from pathlib import Path
 from typing import Any
 
 from .config import load_config, validate_config
+from .data_loader import load_static_task_bundle
 from .logging_utils import append_cycle_log, write_schedule_result, write_task_pool, write_visibility_windows
 from .planner import plan_baseline
 from .replanner import evaluate_replan_trigger
-from .simulation import generate_simulation_snapshot
 
 
 def run_pipeline(config_path: str = "config", seed: int | None = None, output_dir: str | Path | None = None) -> dict[str, Any]:
@@ -17,10 +17,18 @@ def run_pipeline(config_path: str = "config", seed: int | None = None, output_di
     validate_config(cfg)
 
     use_seed = cfg["runtime"].get("seed", 42) if seed is None else seed
-    simulation_snapshot = generate_simulation_snapshot(cfg, seed=use_seed)
-    tasks = simulation_snapshot["tasks"]
-    visibility_windows = simulation_snapshot["visibility_windows"]
-    horizon = simulation_snapshot["horizon"]
+    input_mode = str(cfg["runtime"].get("input_mode", "static")).strip().lower()
+    if input_mode == "static":
+        tasks, windows_map, _ = load_static_task_bundle(cfg)
+        visibility_windows = list(windows_map.values())
+        horizon = int(cfg["runtime"]["time_horizon"])
+    else:
+        from .simulation import generate_simulation_snapshot
+
+        simulation_snapshot = generate_simulation_snapshot(cfg, seed=use_seed)
+        tasks = simulation_snapshot["tasks"]
+        visibility_windows = simulation_snapshot["visibility_windows"]
+        horizon = simulation_snapshot["horizon"]
     result = plan_baseline(tasks, cfg)
 
     log_cfg = cfg["logging"]
@@ -73,6 +81,7 @@ def run_pipeline(config_path: str = "config", seed: int | None = None, output_di
         )
 
     return {
+        "input_mode": input_mode,
         "scheduled_items": [x.task_id for x in result.scheduled_items],
         "unscheduled_tasks": [x.task_id for x in result.unscheduled_tasks],
         "objective_value": result.objective_value,

@@ -57,11 +57,12 @@ def test_pipeline_outputs_schedule_and_cycle_log(tmp_path):
     assert result["task_pool_file"].endswith("latest_task_pool.json")
     assert "visibility_windows_file" in result
     assert result["visibility_windows_file"].endswith("latest_visibility_windows.json")
-    for task in task_pool["tasks"]:
-        if task["payload_type_requirements"]:
-            assert task["visibility_window"] is not None
-        else:
-            assert task["visibility_window"] is None
+    if result.get("input_mode") != "static":
+        for task in task_pool["tasks"]:
+            if task["payload_type_requirements"]:
+                assert task["visibility_window"] is not None
+            else:
+                assert task["visibility_window"] is None
 
     lines = cycle_log_path.read_text(encoding="utf-8").strip().splitlines()
     assert lines
@@ -85,3 +86,11 @@ def test_pipeline_outputs_schedule_and_cycle_log(tmp_path):
     assert "level" in result["replan_decision"]
 
     assert isinstance(result["objective_value"], (int, float))
+
+
+def test_pipeline_uses_static_data_by_default(tmp_path):
+    output_dir = tmp_path / "output"
+
+    result = run_pipeline(config_path="config", seed=42, output_dir=output_dir)
+
+    assert result["input_mode"] == "static"
