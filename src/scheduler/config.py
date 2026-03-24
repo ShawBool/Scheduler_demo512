@@ -17,6 +17,9 @@ REQUIRED_TOP_LEVEL_KEYS = (
 )
 
 
+ALLOWED_INPUT_MODES = {"static", "simulation"}
+
+
 LEGACY_SIM_KEYS = (
     "sequence_count_min",
     "sequence_count_max",
@@ -179,6 +182,11 @@ def validate_config(cfg: dict[str, Any]) -> None:
     missing = [k for k in REQUIRED_TOP_LEVEL_KEYS if k not in cfg]
     if missing:
         raise ValueError(f"missing required keys: {missing}")
+
+    runtime = cfg.get("runtime", {})
+    input_mode = str(runtime.get("input_mode", "static")).strip().lower()
+    if input_mode not in ALLOWED_INPUT_MODES:
+        raise ValueError("input_mode must be one of: static, simulation")
 
     # 校验阶段避免修改输入对象，且不再重复发兼容 warning。
     sim = dict(cfg["simulation"])

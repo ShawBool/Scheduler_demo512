@@ -1,22 +1,6 @@
 import json
-import importlib
-import pathlib
-import sys
-import types
-from pathlib import Path
 
-ROOT = pathlib.Path(__file__).resolve().parents[1]
-SRC_ROOT = ROOT / "src"
-SCHED_SRC = SRC_ROOT / "scheduler"
-if str(SRC_ROOT) not in sys.path:
-    sys.path.insert(0, str(SRC_ROOT))
-
-if "scheduler" not in sys.modules:
-    scheduler_pkg = types.ModuleType("scheduler")
-    scheduler_pkg.__path__ = [str(SCHED_SRC)]
-    sys.modules["scheduler"] = scheduler_pkg
-
-run_pipeline = importlib.import_module("scheduler.pipeline").run_pipeline
+from scheduler.pipeline import run_pipeline
 
 
 def test_pipeline_outputs_schedule_and_cycle_log(tmp_path):

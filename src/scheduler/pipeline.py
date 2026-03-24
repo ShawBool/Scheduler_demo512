@@ -93,8 +93,9 @@ def run_pipeline(config_path: str = "config", seed: int | None = None, output_di
     write_schedule_result(result, schedule_file)
     write_task_pool(tasks, task_pool_file)
     write_visibility_windows(visibility_windows, visibility_windows_file, seed=use_seed, horizon=horizon)
-    print(f"[simulation] task pool persisted: {task_pool_file}")
-    print(f"[simulation] visibility windows persisted: {visibility_windows_file}")
+    log_prefix = f"[pipeline:{input_mode}]"
+    print(f"{log_prefix} task pool persisted: {task_pool_file}")
+    print(f"{log_prefix} visibility windows persisted: {visibility_windows_file}")
     violations = {
         "missing_key_tasks": _collect_missing_key_tasks(tasks, result),
         "resource_overflow_count": int(result.constraint_stats.get("resource_overflow_count", 0)),
