@@ -105,7 +105,7 @@ def load_static_task_bundle(cfg: dict[str, Any]) -> tuple[list[Task], dict[str, 
             power=int(item["power"]),
             payload_type_requirements=list(item.get("payload_type_requirements", [])),
             predecessors=list(item.get("predecessors", [])),
-            attitude_angle_deg=float(item.get("attitude_angle_deg"),None),
+            attitude_angle_deg=float(item.get("attitude_angle_deg") or 0.0),
             is_key_task=_parse_strict_bool(item.get("is_key_task", False), "is_key_task"),
             visibility_window=visibility_window,
         )
