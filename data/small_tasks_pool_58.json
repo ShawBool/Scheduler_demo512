@@ -24,7 +24,7 @@
       "cpu": 2,
       "gpu": 2,
       "memory": 6,
-      "power": 5,
+      "power": 10,
       "thermal_load": 4,
       "payload_type_requirements": ["radar"],
       "predecessors": ["group01_att"],

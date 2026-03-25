@@ -1,0 +1,1736 @@
+{
+  "schema_version": "2.0",
+  "task_count": 100,
+  "tasks": [
+    {
+      "task_id": "group01_att",
+      "duration": 1,
+      "value": 34,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 2,
+      "power": 1,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [],
+      "visibility_window": "target_1",
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group01_radar",
+      "duration": 8,
+      "value": 89,
+      "cpu": 2,
+      "gpu": 2,
+      "memory": 6,
+      "power": 5,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "predecessors": [
+        "group01_att"
+      ],
+      "visibility_window": "target_1",
+      "attitude_angle_deg": 107.0,
+      "is_key_task": true
+    },
+    {
+      "task_id": "group01_storage",
+      "duration": 3,
+      "value": 21,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 8,
+      "power": 2,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group01_radar"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group01_compute01",
+      "duration": 6,
+      "value": 47,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "power": 4,
+      "thermal_load": 3,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group01_storage"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group01_compute02",
+      "duration": 4,
+      "value": 37,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group01_compute01"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group01_compute03",
+      "duration": 4,
+      "value": 35,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group01_compute02"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group01_relay",
+      "duration": 5,
+      "value": 43,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 3,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "predecessors": [
+        "group01_compute03"
+      ],
+      "visibility_window": "gs_downlink_1",
+      "attitude_angle_deg": 211.0,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group02_att",
+      "duration": 1,
+      "value": 35,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 2,
+      "power": 1,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [],
+      "visibility_window": "target_2",
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group02_camera",
+      "duration": 8,
+      "value": 84,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "predecessors": [
+        "group02_att"
+      ],
+      "visibility_window": "target_2",
+      "attitude_angle_deg": 124.0,
+      "is_key_task": true
+    },
+    {
+      "task_id": "group02_storage",
+      "duration": 4,
+      "value": 22,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 8,
+      "power": 2,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group02_camera"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group02_compute01",
+      "duration": 7,
+      "value": 48,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "power": 4,
+      "thermal_load": 3,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group02_storage"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group02_compute02",
+      "duration": 3,
+      "value": 38,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group02_compute01"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group02_compute03",
+      "duration": 5,
+      "value": 36,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group02_compute02"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group02_relay",
+      "duration": 6,
+      "value": 44,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 3,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "predecessors": [
+        "group02_compute03"
+      ],
+      "visibility_window": "gs_downlink_1",
+      "attitude_angle_deg": 198.0,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group03_att",
+      "duration": 2,
+      "value": 36,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 2,
+      "power": 1,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [],
+      "visibility_window": "target_3",
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group03_radar",
+      "duration": 8,
+      "value": 91,
+      "cpu": 2,
+      "gpu": 2,
+      "memory": 6,
+      "power": 5,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "predecessors": [
+        "group03_att"
+      ],
+      "visibility_window": "target_3",
+      "attitude_angle_deg": 141.0,
+      "is_key_task": true
+    },
+    {
+      "task_id": "group03_storage",
+      "duration": 2,
+      "value": 20,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 8,
+      "power": 2,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group03_radar"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group03_compute01",
+      "duration": 5,
+      "value": 49,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "power": 4,
+      "thermal_load": 3,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group03_storage"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group03_compute02",
+      "duration": 4,
+      "value": 39,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group03_compute01"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group03_compute03",
+      "duration": 3,
+      "value": 37,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group03_compute02"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group03_relay",
+      "duration": 7,
+      "value": 45,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 3,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "predecessors": [
+        "group03_compute03"
+      ],
+      "visibility_window": "gs_downlink_1",
+      "attitude_angle_deg": 211.0,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group04_att",
+      "duration": 1,
+      "value": 33,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 2,
+      "power": 1,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [],
+      "visibility_window": "target_4",
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group04_camera",
+      "duration": 7,
+      "value": 86,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "predecessors": [
+        "group04_att"
+      ],
+      "visibility_window": "target_4",
+      "attitude_angle_deg": 158.0,
+      "is_key_task": true
+    },
+    {
+      "task_id": "group04_storage",
+      "duration": 3,
+      "value": 21,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 8,
+      "power": 2,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group04_camera"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group04_compute01",
+      "duration": 6,
+      "value": 50,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "power": 4,
+      "thermal_load": 3,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group04_storage"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group04_compute02",
+      "duration": 3,
+      "value": 40,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group04_compute01"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group04_compute03",
+      "duration": 4,
+      "value": 38,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group04_compute02"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group04_relay",
+      "duration": 4,
+      "value": 46,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 3,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "predecessors": [
+        "group04_compute03"
+      ],
+      "visibility_window": "gs_downlink_1",
+      "attitude_angle_deg": 198.0,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group05_att",
+      "duration": 1,
+      "value": 34,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 2,
+      "power": 1,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [],
+      "visibility_window": "target_5",
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group05_radar",
+      "duration": 8,
+      "value": 93,
+      "cpu": 2,
+      "gpu": 2,
+      "memory": 6,
+      "power": 5,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "predecessors": [
+        "group05_att"
+      ],
+      "visibility_window": "target_5",
+      "attitude_angle_deg": 175.0,
+      "is_key_task": true
+    },
+    {
+      "task_id": "group05_storage",
+      "duration": 4,
+      "value": 22,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 8,
+      "power": 2,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group05_radar"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group05_compute01",
+      "duration": 7,
+      "value": 51,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "power": 4,
+      "thermal_load": 3,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group05_storage"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group05_compute02",
+      "duration": 4,
+      "value": 41,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group05_compute01"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group05_compute03",
+      "duration": 5,
+      "value": 39,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group05_compute02"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group05_relay",
+      "duration": 5,
+      "value": 47,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 3,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "predecessors": [
+        "group05_compute03"
+      ],
+      "visibility_window": "gs_downlink_1",
+      "attitude_angle_deg": 211.0,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group06_att",
+      "duration": 2,
+      "value": 35,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 2,
+      "power": 1,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [],
+      "visibility_window": "target_6",
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group06_camera",
+      "duration": 6,
+      "value": 88,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "predecessors": [
+        "group06_att"
+      ],
+      "visibility_window": "target_6",
+      "attitude_angle_deg": 92.0,
+      "is_key_task": true
+    },
+    {
+      "task_id": "group06_storage",
+      "duration": 2,
+      "value": 20,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 8,
+      "power": 2,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group06_camera"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group06_compute01",
+      "duration": 5,
+      "value": 52,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "power": 4,
+      "thermal_load": 3,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group06_storage"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group06_compute02",
+      "duration": 3,
+      "value": 42,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group06_compute01"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group06_compute03",
+      "duration": 3,
+      "value": 34,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group06_compute02"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group06_relay",
+      "duration": 6,
+      "value": 42,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 3,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "predecessors": [
+        "group06_compute03"
+      ],
+      "visibility_window": "gs_downlink_1",
+      "attitude_angle_deg": 198.0,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group07_att",
+      "duration": 1,
+      "value": 36,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 2,
+      "power": 1,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [],
+      "visibility_window": "target_1",
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group07_radar",
+      "duration": 8,
+      "value": 88,
+      "cpu": 2,
+      "gpu": 2,
+      "memory": 6,
+      "power": 5,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "predecessors": [
+        "group07_att"
+      ],
+      "visibility_window": "target_1",
+      "attitude_angle_deg": 109.0,
+      "is_key_task": true
+    },
+    {
+      "task_id": "group07_storage",
+      "duration": 3,
+      "value": 21,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 8,
+      "power": 2,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group07_radar"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group07_compute01",
+      "duration": 6,
+      "value": 53,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "power": 4,
+      "thermal_load": 3,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group07_storage"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group07_compute02",
+      "duration": 4,
+      "value": 36,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group07_compute01"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group07_compute03",
+      "duration": 4,
+      "value": 35,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group07_compute02"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group07_relay",
+      "duration": 7,
+      "value": 43,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 3,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "predecessors": [
+        "group07_compute03"
+      ],
+      "visibility_window": "gs_downlink_1",
+      "attitude_angle_deg": 211.0,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group08_att",
+      "duration": 1,
+      "value": 33,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 2,
+      "power": 1,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [],
+      "visibility_window": "target_2",
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group08_camera",
+      "duration": 8,
+      "value": 90,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "predecessors": [
+        "group08_att"
+      ],
+      "visibility_window": "target_2",
+      "attitude_angle_deg": 126.0,
+      "is_key_task": true
+    },
+    {
+      "task_id": "group08_storage",
+      "duration": 4,
+      "value": 22,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 8,
+      "power": 2,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group08_camera"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group08_compute01",
+      "duration": 7,
+      "value": 54,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "power": 4,
+      "thermal_load": 3,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group08_storage"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group08_compute02",
+      "duration": 3,
+      "value": 37,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group08_compute01"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group08_compute03",
+      "duration": 5,
+      "value": 36,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group08_compute02"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group08_relay",
+      "duration": 4,
+      "value": 44,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 3,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "predecessors": [
+        "group08_compute03"
+      ],
+      "visibility_window": "gs_downlink_1",
+      "attitude_angle_deg": 198.0,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group09_att",
+      "duration": 2,
+      "value": 34,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 2,
+      "power": 1,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [],
+      "visibility_window": "target_3",
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group09_radar",
+      "duration": 8,
+      "value": 90,
+      "cpu": 2,
+      "gpu": 2,
+      "memory": 6,
+      "power": 5,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "predecessors": [
+        "group09_att"
+      ],
+      "visibility_window": "target_3",
+      "attitude_angle_deg": 143.0,
+      "is_key_task": true
+    },
+    {
+      "task_id": "group09_storage",
+      "duration": 2,
+      "value": 20,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 8,
+      "power": 2,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group09_radar"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group09_compute01",
+      "duration": 5,
+      "value": 55,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "power": 4,
+      "thermal_load": 3,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group09_storage"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group09_compute02",
+      "duration": 4,
+      "value": 38,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group09_compute01"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group09_compute03",
+      "duration": 3,
+      "value": 37,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group09_compute02"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group09_relay",
+      "duration": 5,
+      "value": 45,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 3,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "predecessors": [
+        "group09_compute03"
+      ],
+      "visibility_window": "gs_downlink_2",
+      "attitude_angle_deg": 211.0,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group10_att",
+      "duration": 1,
+      "value": 35,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 2,
+      "power": 1,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [],
+      "visibility_window": "target_4",
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group10_camera",
+      "duration": 7,
+      "value": 83,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "predecessors": [
+        "group10_att"
+      ],
+      "visibility_window": "target_4",
+      "attitude_angle_deg": 160.0,
+      "is_key_task": true
+    },
+    {
+      "task_id": "group10_storage",
+      "duration": 3,
+      "value": 21,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 8,
+      "power": 2,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group10_camera"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group10_compute01",
+      "duration": 6,
+      "value": 56,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "power": 4,
+      "thermal_load": 3,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group10_storage"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group10_compute02",
+      "duration": 3,
+      "value": 39,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group10_compute01"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group10_compute03",
+      "duration": 4,
+      "value": 38,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group10_compute02"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group10_relay",
+      "duration": 6,
+      "value": 46,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 3,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "predecessors": [
+        "group10_compute03"
+      ],
+      "visibility_window": "gs_downlink_2",
+      "attitude_angle_deg": 198.0,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group11_att",
+      "duration": 1,
+      "value": 36,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 2,
+      "power": 1,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [],
+      "visibility_window": "target_5",
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group11_radar",
+      "duration": 8,
+      "value": 92,
+      "cpu": 2,
+      "gpu": 2,
+      "memory": 6,
+      "power": 5,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "predecessors": [
+        "group11_att"
+      ],
+      "visibility_window": "target_5",
+      "attitude_angle_deg": 177.0,
+      "is_key_task": true
+    },
+    {
+      "task_id": "group11_storage",
+      "duration": 4,
+      "value": 22,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 8,
+      "power": 2,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group11_radar"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group11_compute01",
+      "duration": 7,
+      "value": 46,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "power": 4,
+      "thermal_load": 3,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group11_storage"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group11_compute02",
+      "duration": 4,
+      "value": 40,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group11_compute01"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group11_relay",
+      "duration": 7,
+      "value": 47,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 3,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "predecessors": [
+        "group11_compute02"
+      ],
+      "visibility_window": "gs_downlink_2",
+      "attitude_angle_deg": 211.0,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group12_att",
+      "duration": 2,
+      "value": 33,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 2,
+      "power": 1,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [],
+      "visibility_window": "target_6",
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group12_camera",
+      "duration": 6,
+      "value": 85,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "predecessors": [
+        "group12_att"
+      ],
+      "visibility_window": "target_6",
+      "attitude_angle_deg": 94.0,
+      "is_key_task": true
+    },
+    {
+      "task_id": "group12_storage",
+      "duration": 2,
+      "value": 20,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 8,
+      "power": 2,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group12_camera"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group12_compute01",
+      "duration": 5,
+      "value": 47,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "power": 4,
+      "thermal_load": 3,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group12_storage"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group12_compute02",
+      "duration": 3,
+      "value": 41,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group12_compute01"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group12_relay",
+      "duration": 4,
+      "value": 42,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 3,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "predecessors": [
+        "group12_compute02"
+      ],
+      "visibility_window": "gs_downlink_2",
+      "attitude_angle_deg": 198.0,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group13_att",
+      "duration": 1,
+      "value": 34,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 2,
+      "power": 1,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [],
+      "visibility_window": "target_1",
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group13_radar",
+      "duration": 8,
+      "value": 94,
+      "cpu": 2,
+      "gpu": 2,
+      "memory": 6,
+      "power": 5,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "predecessors": [
+        "group13_att"
+      ],
+      "visibility_window": "target_1",
+      "attitude_angle_deg": 111.0,
+      "is_key_task": true
+    },
+    {
+      "task_id": "group13_storage",
+      "duration": 3,
+      "value": 21,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 8,
+      "power": 2,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group13_radar"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group13_compute01",
+      "duration": 6,
+      "value": 48,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "power": 4,
+      "thermal_load": 3,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group13_storage"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group13_compute02",
+      "duration": 4,
+      "value": 42,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group13_compute01"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group13_relay",
+      "duration": 5,
+      "value": 43,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 3,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "predecessors": [
+        "group13_compute02"
+      ],
+      "visibility_window": "gs_downlink_2",
+      "attitude_angle_deg": 211.0,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group14_att",
+      "duration": 1,
+      "value": 35,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 2,
+      "power": 1,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [],
+      "visibility_window": "target_2",
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group14_camera",
+      "duration": 8,
+      "value": 87,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "camera"
+      ],
+      "predecessors": [
+        "group14_att"
+      ],
+      "visibility_window": "target_2",
+      "attitude_angle_deg": 128.0,
+      "is_key_task": true
+    },
+    {
+      "task_id": "group14_storage",
+      "duration": 4,
+      "value": 22,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 8,
+      "power": 2,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group14_camera"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group14_compute01",
+      "duration": 7,
+      "value": 49,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "power": 4,
+      "thermal_load": 3,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group14_storage"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group14_compute02",
+      "duration": 3,
+      "value": 36,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group14_compute01"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group14_relay",
+      "duration": 6,
+      "value": 44,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 3,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "predecessors": [
+        "group14_compute02"
+      ],
+      "visibility_window": "gs_downlink_2",
+      "attitude_angle_deg": 198.0,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group15_att",
+      "duration": 2,
+      "value": 36,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 2,
+      "power": 1,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [],
+      "visibility_window": "target_3",
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group15_radar",
+      "duration": 8,
+      "value": 89,
+      "cpu": 2,
+      "gpu": 2,
+      "memory": 6,
+      "power": 5,
+      "thermal_load": 4,
+      "payload_type_requirements": [
+        "radar"
+      ],
+      "predecessors": [
+        "group15_att"
+      ],
+      "visibility_window": "target_3",
+      "attitude_angle_deg": 145.0,
+      "is_key_task": true
+    },
+    {
+      "task_id": "group15_storage",
+      "duration": 2,
+      "value": 20,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 8,
+      "power": 2,
+      "thermal_load": 1,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group15_radar"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group15_compute01",
+      "duration": 5,
+      "value": 50,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 5,
+      "power": 4,
+      "thermal_load": 3,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group15_storage"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group15_compute02",
+      "duration": 4,
+      "value": 37,
+      "cpu": 2,
+      "gpu": 1,
+      "memory": 4,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [],
+      "predecessors": [
+        "group15_compute01"
+      ],
+      "visibility_window": null,
+      "attitude_angle_deg": null,
+      "is_key_task": false
+    },
+    {
+      "task_id": "group15_relay",
+      "duration": 7,
+      "value": 45,
+      "cpu": 1,
+      "gpu": 0,
+      "memory": 3,
+      "power": 3,
+      "thermal_load": 2,
+      "payload_type_requirements": [
+        "relay"
+      ],
+      "predecessors": [
+        "group15_compute02"
+      ],
+      "visibility_window": "gs_downlink_2",
+      "attitude_angle_deg": 211.0,
+      "is_key_task": false
+    }
+  ]
+}
