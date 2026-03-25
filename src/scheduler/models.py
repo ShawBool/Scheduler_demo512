@@ -1,4 +1,4 @@
-"""任务规划领域模型。"""
+"""静态基线规划的领域模型定义。"""
 
 from __future__ import annotations
 
@@ -7,7 +7,8 @@ from dataclasses import dataclass, field
 
 @dataclass(slots=True)
 class VisibilityWindow:
-    """可见窗口模型：描述可见窗口的时间范围。"""
+    """可见窗口：任务若绑定该窗口，则执行必须落在该时间段内。"""
+
     window_id: str
     start: int
     end: int
@@ -15,26 +16,57 @@ class VisibilityWindow:
 
 @dataclass(slots=True)
 class Task:
-    """任务模型：描述待规划任务的时间窗、收益、资源与约束。"""
+    """任务实体：与 data/latest_small_tasks_pool.json 一一对齐。"""
 
-    task_id: str  # 任务唯一标识
-    duration: int  # 预计执行时长
-    value: int  # 任务收益
-    cpu: int  # CPU个数
-    gpu: int  # GPU个数
-    memory: int  # 内存占用
-    power: int  # 功率占用
-    payload_type_requirements: list[str] = field(default_factory=list)  # 载荷类型约束
-    # payload_id_requirements: list[str] = field(default_factory=list)  # 指定载荷ID约束，保留字段，默认不参与规划约束
-    predecessors: list[str] = field(default_factory=list)  # 前置依赖任务ID列表
-    attitude_angle_deg: float  =None# 姿态角（度，0-360），缺省则不要求
-    is_key_task: bool = False  # 是否关键任务（必须规划）
-    visibility_window: VisibilityWindow | None = None  # 绑定的可见窗口（可选）
+    task_id: str
+    duration: int
+    value: int
+    cpu: int
+    gpu: int
+    memory: int
+    power: int
+    thermal_load: int
+    payload_type_requirements: list[str] = field(default_factory=list)
+    predecessors: list[str] = field(default_factory=list)
+    attitude_angle_deg: float | None = None
+    is_key_task: bool = False
+    visibility_window: VisibilityWindow | None = None
+
+
+@dataclass(slots=True)
+class ScheduleItem:
+    """单条排程记录：用于输出最终计划与调试信息。"""
+
+    task_id: str
+    start: int
+    end: int
+    value: int
+    is_key_task: bool
+    visibility_window_id: str | None
+
+
+@dataclass(slots=True)
+class UnscheduledItem:
+    """未排程任务记录：用于解释任务为什么被放弃。"""
+
+    task_id: str
+    reason_code: str
+    reason_detail: str
+
+
+@dataclass(slots=True)
+class ScheduleResult:
+    """规划结果：统一承载已排、未排、指标与求解摘要。"""
+
+    schedule: list[ScheduleItem]
+    unscheduled: list[UnscheduledItem]
+    metrics: dict[str, float | int]
+    solver_summary: dict[str, str | int | float | bool]
 
 
 @dataclass(slots=True)
 class ResourceSnapshot:
-    """资源快照模型：记录某时刻的资源使用情况。"""
+    """资源快照：保留用于后续扩展在线监控/重规划。"""
 
     timestamp: int
     cpu: int
