@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import datetime 
 import time
 from pathlib import Path
 
@@ -122,5 +123,8 @@ def run_pipeline(config_path: str, *, seed: int, output_dir: str) -> dict:
         metrics=metrics,
         solver_summary=solver_summary,
     )
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    # 1. 生成带时间戳的持久化文件（永不覆盖）
+    history_file = output_root / f"schedule_{timestamp}.json"
 
-    return write_schedule_result(output_root / "latest_schedule.json", result)
+    return write_schedule_result(history_file, result)

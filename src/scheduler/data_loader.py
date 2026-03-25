@@ -57,7 +57,7 @@ def load_static_task_bundle(cfg: dict[str, Any]) -> tuple[list[Task], dict[str, 
     3. meta: 统计与输入来源
     """
     windows_path = _resolve_runtime_path(cfg, "static_windows_file", "data/latest_windows.json")
-    tasks_path = _resolve_runtime_path(cfg, "static_tasks_file", "data/latest_small_tasks_pool.json")
+    tasks_path = _resolve_runtime_path(cfg, "static_tasks_file", "data/small_tasks_pool_58.json")
 
     windows_payload = _read_json(windows_path)
     windows_items = windows_payload.get("visibility_windows", [])
