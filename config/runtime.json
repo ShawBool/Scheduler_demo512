@@ -6,7 +6,6 @@
   "windows_file": "latest_windows.json",
   "seed": 666,
   "time_horizon": 240,
-  "time_step": 3,
   "solver_timeout_sec": 30,
   "solver_progress_every_n_solutions": 10,
   "solver_progress_enable": true

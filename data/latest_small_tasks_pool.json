@@ -4,7 +4,7 @@
   "tasks": [
     {
       "task_id": "group01_att",
-      "duration": 5,
+      "duration": 1,
       "value": 35,
       "cpu": 1,
       "gpu": 0,
@@ -34,7 +34,7 @@
     },
     {
       "task_id": "group01_storage",
-      "duration": 4,
+      "duration": 2,
       "value": 20,
       "cpu": 1,
       "gpu": 0,
@@ -51,7 +51,7 @@
       "task_id": "group01_compute01",
       "duration": 6,
       "value": 55,
-      "cpu": 3,
+      "cpu": 2,
       "gpu": 2,
       "memory": 6,
       "power": 5,
@@ -64,7 +64,7 @@
     },
     {
       "task_id": "group01_relay",
-      "duration": 7,
+      "duration": 4,
       "value": 45,
       "cpu": 1,
       "gpu": 0,
@@ -80,7 +80,7 @@
 
     {
       "task_id": "group02_att",
-      "duration": 5,
+      "duration": 1,
       "value": 35,
       "cpu": 1,
       "gpu": 0,
@@ -110,7 +110,7 @@
     },
     {
       "task_id": "group02_storage",
-      "duration": 4,
+      "duration": 2,
       "value": 20,
       "cpu": 1,
       "gpu": 0,
@@ -140,7 +140,7 @@
     },
     {
       "task_id": "group02_compute02",
-      "duration": 4,
+      "duration": 3,
       "value": 38,
       "cpu": 2,
       "gpu": 1,
@@ -155,7 +155,7 @@
     },
     {
       "task_id": "group02_relay",
-      "duration": 7,
+      "duration": 4,
       "value": 42,
       "cpu": 1,
       "gpu": 0,
@@ -164,14 +164,14 @@
       "thermal_load": 2,
       "payload_type_requirements": ["relay"],
       "predecessors": ["group02_compute02"],
-      "visibility_window": "gs_downlink_2",
+      "visibility_window": "gs_downlink_1",
       "attitude_angle_deg": 201.0,
       "is_key_task": false
     },
 
     {
       "task_id": "group03_att",
-      "duration": 4,
+      "duration": 1,
       "value": 32,
       "cpu": 1,
       "gpu": 0,
@@ -201,7 +201,7 @@
     },
     {
       "task_id": "group03_storage",
-      "duration": 4,
+      "duration": 2,
       "value": 19,
       "cpu": 1,
       "gpu": 0,
@@ -218,7 +218,7 @@
       "task_id": "group03_compute01",
       "duration": 6,
       "value": 54,
-      "cpu": 3,
+      "cpu": 2,
       "gpu": 2,
       "memory": 6,
       "power": 5,
@@ -231,7 +231,7 @@
     },
     {
       "task_id": "group03_relay",
-      "duration": 7,
+      "duration": 4,
       "value": 44,
       "cpu": 1,
       "gpu": 0,
@@ -247,7 +247,7 @@
 
     {
       "task_id": "group04_att",
-      "duration": 5,
+      "duration": 1,
       "value": 34,
       "cpu": 1,
       "gpu": 0,
@@ -338,7 +338,7 @@
 
     {
       "task_id": "group05_att",
-      "duration": 4,
+      "duration": 1,
       "value": 33,
       "cpu": 1,
       "gpu": 0,
@@ -385,7 +385,7 @@
       "task_id": "group05_compute01",
       "duration": 6,
       "value": 56,
-      "cpu": 3,
+      "cpu": 2,
       "gpu": 2,
       "memory": 6,
       "power": 5,
@@ -398,7 +398,7 @@
     },
     {
       "task_id": "group05_relay",
-      "duration": 7,
+      "duration": 5,
       "value": 46,
       "cpu": 1,
       "gpu": 0,
@@ -407,14 +407,14 @@
       "thermal_load": 2,
       "payload_type_requirements": ["relay"],
       "predecessors": ["group05_compute01"],
-      "visibility_window": "gs_downlink_1",
+      "visibility_window": "gs_downlink_2",
       "attitude_angle_deg": 214.0,
       "is_key_task": false
     },
 
     {
       "task_id": "group06_att",
-      "duration": 5,
+      "duration": 2,
       "value": 36,
       "cpu": 1,
       "gpu": 0,
@@ -429,7 +429,7 @@
     },
     {
       "task_id": "group06_camera",
-      "duration": 7,
+      "duration": 10,
       "value": 86,
       "cpu": 2,
       "gpu": 1,
@@ -444,7 +444,7 @@
     },
     {
       "task_id": "group06_storage",
-      "duration": 4,
+      "duration": 3,
       "value": 22,
       "cpu": 1,
       "gpu": 0,
@@ -459,7 +459,7 @@
     },
     {
       "task_id": "group06_compute01",
-      "duration": 5,
+      "duration": 8,
       "value": 47,
       "cpu": 2,
       "gpu": 1,
@@ -474,7 +474,7 @@
     },
     {
       "task_id": "group06_compute02",
-      "duration": 4,
+      "duration": 8,
       "value": 36,
       "cpu": 2,
       "gpu": 1,
@@ -520,7 +520,7 @@
 
     {
       "task_id": "group07_att",
-      "duration": 5,
+      "duration": 1,
       "value": 34,
       "cpu": 1,
       "gpu": 0,
@@ -535,7 +535,7 @@
     },
     {
       "task_id": "group07_radar",
-      "duration": 7,
+      "duration": 3,
       "value": 89,
       "cpu": 2,
       "gpu": 2,
@@ -550,7 +550,7 @@
     },
     {
       "task_id": "group07_storage",
-      "duration": 4,
+      "duration": 3,
       "value": 20,
       "cpu": 1,
       "gpu": 0,
@@ -565,7 +565,7 @@
     },
     {
       "task_id": "group07_compute01",
-      "duration": 5,
+      "duration": 3,
       "value": 46,
       "cpu": 2,
       "gpu": 1,
@@ -580,7 +580,7 @@
     },
     {
       "task_id": "group07_compute02",
-      "duration": 4,
+      "duration": 3,
       "value": 37,
       "cpu": 2,
       "gpu": 1,
@@ -595,7 +595,7 @@
     },
     {
       "task_id": "group07_relay",
-      "duration": 7,
+      "duration": 3,
       "value": 43,
       "cpu": 1,
       "gpu": 0,

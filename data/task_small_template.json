@@ -140,7 +140,7 @@
         "cpu": 1, "gpu": 0, "memory": 3, "power": 3, "thermal_load": 2,
         "payload_type_requirements": ["relay"], "predecessors": ["group02_compute02"],
         "visibility_window": "gs_downlink_2", "attitude_angle_deg": null,
-        "is_key_task": false, "desc": "数据下传（地面站窗口2）"
+        "is_key_task": false, "desc": "数据下传(地面站窗口2)"
         }
     ]
 }

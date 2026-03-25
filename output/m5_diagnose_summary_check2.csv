@@ -1,5 +1,0 @@
-group,avg_scheduled_ratio,infeasible_ratio,median_scheduled_count
-A_baseline,0.1218,0.6667,0.0
-B_data_feasibility,0.3457,0.0000,29.0
-C_no_attitude_on_B,0.4709,0.0000,39.5
-D_timeout30_on_B,0.3457,0.0000,29.0
