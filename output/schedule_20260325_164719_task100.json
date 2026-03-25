@@ -1,0 +1,765 @@
+{
+  "schedule": [
+    {
+      "task_id": "group01_att",
+      "start": 5,
+      "end": 6,
+      "value": 34,
+      "is_key_task": false,
+      "visibility_window_id": "target_1"
+    },
+    {
+      "task_id": "group07_att",
+      "start": 5,
+      "end": 6,
+      "value": 36,
+      "is_key_task": false,
+      "visibility_window_id": "target_1"
+    },
+    {
+      "task_id": "group13_att",
+      "start": 5,
+      "end": 6,
+      "value": 34,
+      "is_key_task": false,
+      "visibility_window_id": "target_1"
+    },
+    {
+      "task_id": "group01_radar",
+      "start": 6,
+      "end": 14,
+      "value": 89,
+      "is_key_task": true,
+      "visibility_window_id": "target_1"
+    },
+    {
+      "task_id": "group01_storage",
+      "start": 14,
+      "end": 17,
+      "value": 21,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group07_radar",
+      "start": 14,
+      "end": 22,
+      "value": 88,
+      "is_key_task": true,
+      "visibility_window_id": "target_1"
+    },
+    {
+      "task_id": "group01_compute01",
+      "start": 22,
+      "end": 28,
+      "value": 47,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group07_storage",
+      "start": 22,
+      "end": 25,
+      "value": 21,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group07_compute01",
+      "start": 25,
+      "end": 31,
+      "value": 53,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group01_compute02",
+      "start": 28,
+      "end": 32,
+      "value": 37,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group07_compute02",
+      "start": 31,
+      "end": 35,
+      "value": 36,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group01_compute03",
+      "start": 32,
+      "end": 36,
+      "value": 35,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group02_att",
+      "start": 36,
+      "end": 37,
+      "value": 35,
+      "is_key_task": false,
+      "visibility_window_id": "target_2"
+    },
+    {
+      "task_id": "group08_att",
+      "start": 36,
+      "end": 37,
+      "value": 33,
+      "is_key_task": false,
+      "visibility_window_id": "target_2"
+    },
+    {
+      "task_id": "group14_att",
+      "start": 36,
+      "end": 37,
+      "value": 35,
+      "is_key_task": false,
+      "visibility_window_id": "target_2"
+    },
+    {
+      "task_id": "group02_camera",
+      "start": 37,
+      "end": 45,
+      "value": 84,
+      "is_key_task": true,
+      "visibility_window_id": "target_2"
+    },
+    {
+      "task_id": "group08_camera",
+      "start": 37,
+      "end": 45,
+      "value": 90,
+      "is_key_task": true,
+      "visibility_window_id": "target_2"
+    },
+    {
+      "task_id": "group02_storage",
+      "start": 45,
+      "end": 49,
+      "value": 22,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group08_storage",
+      "start": 45,
+      "end": 49,
+      "value": 22,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group14_camera",
+      "start": 45,
+      "end": 53,
+      "value": 87,
+      "is_key_task": true,
+      "visibility_window_id": "target_2"
+    },
+    {
+      "task_id": "group08_compute01",
+      "start": 49,
+      "end": 56,
+      "value": 54,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group02_compute01",
+      "start": 53,
+      "end": 60,
+      "value": 48,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group08_compute02",
+      "start": 56,
+      "end": 59,
+      "value": 37,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group08_compute03",
+      "start": 59,
+      "end": 64,
+      "value": 36,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group02_compute02",
+      "start": 60,
+      "end": 63,
+      "value": 38,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group14_storage",
+      "start": 63,
+      "end": 67,
+      "value": 22,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group03_att",
+      "start": 66,
+      "end": 68,
+      "value": 36,
+      "is_key_task": false,
+      "visibility_window_id": "target_3"
+    },
+    {
+      "task_id": "group09_att",
+      "start": 66,
+      "end": 68,
+      "value": 34,
+      "is_key_task": false,
+      "visibility_window_id": "target_3"
+    },
+    {
+      "task_id": "group15_att",
+      "start": 66,
+      "end": 68,
+      "value": 36,
+      "is_key_task": false,
+      "visibility_window_id": "target_3"
+    },
+    {
+      "task_id": "group09_radar",
+      "start": 68,
+      "end": 76,
+      "value": 90,
+      "is_key_task": true,
+      "visibility_window_id": "target_3"
+    },
+    {
+      "task_id": "group02_compute03",
+      "start": 76,
+      "end": 81,
+      "value": 36,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group07_compute03",
+      "start": 76,
+      "end": 80,
+      "value": 35,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group09_storage",
+      "start": 80,
+      "end": 82,
+      "value": 20,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group01_relay",
+      "start": 85,
+      "end": 90,
+      "value": 43,
+      "is_key_task": false,
+      "visibility_window_id": "gs_downlink_1"
+    },
+    {
+      "task_id": "group02_relay",
+      "start": 85,
+      "end": 91,
+      "value": 44,
+      "is_key_task": false,
+      "visibility_window_id": "gs_downlink_1"
+    },
+    {
+      "task_id": "group07_relay",
+      "start": 85,
+      "end": 92,
+      "value": 43,
+      "is_key_task": false,
+      "visibility_window_id": "gs_downlink_1"
+    },
+    {
+      "task_id": "group08_relay",
+      "start": 90,
+      "end": 94,
+      "value": 44,
+      "is_key_task": false,
+      "visibility_window_id": "gs_downlink_1"
+    },
+    {
+      "task_id": "group09_compute01",
+      "start": 91,
+      "end": 96,
+      "value": 55,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group14_compute01",
+      "start": 94,
+      "end": 101,
+      "value": 49,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group09_compute02",
+      "start": 96,
+      "end": 100,
+      "value": 38,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group09_compute03",
+      "start": 100,
+      "end": 103,
+      "value": 37,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group14_compute02",
+      "start": 101,
+      "end": 104,
+      "value": 36,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group04_att",
+      "start": 106,
+      "end": 107,
+      "value": 33,
+      "is_key_task": false,
+      "visibility_window_id": "target_4"
+    },
+    {
+      "task_id": "group10_att",
+      "start": 106,
+      "end": 107,
+      "value": 35,
+      "is_key_task": false,
+      "visibility_window_id": "target_4"
+    },
+    {
+      "task_id": "group04_camera",
+      "start": 107,
+      "end": 114,
+      "value": 86,
+      "is_key_task": true,
+      "visibility_window_id": "target_4"
+    },
+    {
+      "task_id": "group10_camera",
+      "start": 107,
+      "end": 114,
+      "value": 83,
+      "is_key_task": true,
+      "visibility_window_id": "target_4"
+    },
+    {
+      "task_id": "group04_storage",
+      "start": 114,
+      "end": 117,
+      "value": 21,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group10_storage",
+      "start": 114,
+      "end": 117,
+      "value": 21,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group04_compute01",
+      "start": 117,
+      "end": 123,
+      "value": 50,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group10_compute01",
+      "start": 117,
+      "end": 123,
+      "value": 56,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group04_compute02",
+      "start": 123,
+      "end": 126,
+      "value": 40,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group10_compute02",
+      "start": 123,
+      "end": 126,
+      "value": 39,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group05_att",
+      "start": 126,
+      "end": 127,
+      "value": 34,
+      "is_key_task": false,
+      "visibility_window_id": "target_5"
+    },
+    {
+      "task_id": "group11_att",
+      "start": 126,
+      "end": 127,
+      "value": 36,
+      "is_key_task": false,
+      "visibility_window_id": "target_5"
+    },
+    {
+      "task_id": "group05_radar",
+      "start": 127,
+      "end": 135,
+      "value": 93,
+      "is_key_task": true,
+      "visibility_window_id": "target_5"
+    },
+    {
+      "task_id": "group11_radar",
+      "start": 135,
+      "end": 143,
+      "value": 92,
+      "is_key_task": true,
+      "visibility_window_id": "target_5"
+    },
+    {
+      "task_id": "group05_storage",
+      "start": 138,
+      "end": 142,
+      "value": 22,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group10_compute03",
+      "start": 143,
+      "end": 147,
+      "value": 38,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group11_storage",
+      "start": 143,
+      "end": 147,
+      "value": 22,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group05_compute01",
+      "start": 147,
+      "end": 154,
+      "value": 51,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group11_compute01",
+      "start": 147,
+      "end": 154,
+      "value": 46,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group11_compute02",
+      "start": 154,
+      "end": 158,
+      "value": 40,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group06_att",
+      "start": 155,
+      "end": 157,
+      "value": 35,
+      "is_key_task": false,
+      "visibility_window_id": "target_6"
+    },
+    {
+      "task_id": "group12_att",
+      "start": 155,
+      "end": 157,
+      "value": 33,
+      "is_key_task": false,
+      "visibility_window_id": "target_6"
+    },
+    {
+      "task_id": "group06_camera",
+      "start": 157,
+      "end": 163,
+      "value": 88,
+      "is_key_task": true,
+      "visibility_window_id": "target_6"
+    },
+    {
+      "task_id": "group12_camera",
+      "start": 158,
+      "end": 164,
+      "value": 85,
+      "is_key_task": true,
+      "visibility_window_id": "target_6"
+    },
+    {
+      "task_id": "group06_storage",
+      "start": 163,
+      "end": 165,
+      "value": 20,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group12_storage",
+      "start": 164,
+      "end": 166,
+      "value": 20,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group06_compute01",
+      "start": 165,
+      "end": 170,
+      "value": 52,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group12_compute01",
+      "start": 166,
+      "end": 171,
+      "value": 47,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group06_compute02",
+      "start": 170,
+      "end": 173,
+      "value": 42,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group12_compute02",
+      "start": 171,
+      "end": 174,
+      "value": 41,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group06_compute03",
+      "start": 173,
+      "end": 176,
+      "value": 34,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group05_compute02",
+      "start": 174,
+      "end": 178,
+      "value": 41,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group04_compute03",
+      "start": 176,
+      "end": 180,
+      "value": 38,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group05_compute03",
+      "start": 178,
+      "end": 183,
+      "value": 39,
+      "is_key_task": false,
+      "visibility_window_id": null
+    },
+    {
+      "task_id": "group09_relay",
+      "start": 200,
+      "end": 205,
+      "value": 45,
+      "is_key_task": false,
+      "visibility_window_id": "gs_downlink_2"
+    },
+    {
+      "task_id": "group10_relay",
+      "start": 200,
+      "end": 206,
+      "value": 46,
+      "is_key_task": false,
+      "visibility_window_id": "gs_downlink_2"
+    },
+    {
+      "task_id": "group12_relay",
+      "start": 200,
+      "end": 204,
+      "value": 42,
+      "is_key_task": false,
+      "visibility_window_id": "gs_downlink_2"
+    },
+    {
+      "task_id": "group14_relay",
+      "start": 200,
+      "end": 206,
+      "value": 44,
+      "is_key_task": false,
+      "visibility_window_id": "gs_downlink_2"
+    },
+    {
+      "task_id": "group11_relay",
+      "start": 204,
+      "end": 211,
+      "value": 47,
+      "is_key_task": false,
+      "visibility_window_id": "gs_downlink_2"
+    }
+  ],
+  "unscheduled": [
+    {
+      "task_id": "group03_radar",
+      "reason_code": "resource_conflict",
+      "reason_detail": "not selected in final CP-SAT solution"
+    },
+    {
+      "task_id": "group03_storage",
+      "reason_code": "resource_conflict",
+      "reason_detail": "not selected in final CP-SAT solution"
+    },
+    {
+      "task_id": "group03_compute01",
+      "reason_code": "resource_conflict",
+      "reason_detail": "not selected in final CP-SAT solution"
+    },
+    {
+      "task_id": "group03_compute02",
+      "reason_code": "resource_conflict",
+      "reason_detail": "not selected in final CP-SAT solution"
+    },
+    {
+      "task_id": "group03_compute03",
+      "reason_code": "resource_conflict",
+      "reason_detail": "not selected in final CP-SAT solution"
+    },
+    {
+      "task_id": "group03_relay",
+      "reason_code": "resource_conflict",
+      "reason_detail": "not selected in final CP-SAT solution"
+    },
+    {
+      "task_id": "group04_relay",
+      "reason_code": "resource_conflict",
+      "reason_detail": "not selected in final CP-SAT solution"
+    },
+    {
+      "task_id": "group05_relay",
+      "reason_code": "resource_conflict",
+      "reason_detail": "not selected in final CP-SAT solution"
+    },
+    {
+      "task_id": "group06_relay",
+      "reason_code": "resource_conflict",
+      "reason_detail": "not selected in final CP-SAT solution"
+    },
+    {
+      "task_id": "group13_radar",
+      "reason_code": "resource_conflict",
+      "reason_detail": "not selected in final CP-SAT solution"
+    },
+    {
+      "task_id": "group13_storage",
+      "reason_code": "resource_conflict",
+      "reason_detail": "not selected in final CP-SAT solution"
+    },
+    {
+      "task_id": "group13_compute01",
+      "reason_code": "resource_conflict",
+      "reason_detail": "not selected in final CP-SAT solution"
+    },
+    {
+      "task_id": "group13_compute02",
+      "reason_code": "resource_conflict",
+      "reason_detail": "not selected in final CP-SAT solution"
+    },
+    {
+      "task_id": "group13_relay",
+      "reason_code": "resource_conflict",
+      "reason_detail": "not selected in final CP-SAT solution"
+    },
+    {
+      "task_id": "group15_radar",
+      "reason_code": "resource_conflict",
+      "reason_detail": "not selected in final CP-SAT solution"
+    },
+    {
+      "task_id": "group15_storage",
+      "reason_code": "resource_conflict",
+      "reason_detail": "not selected in final CP-SAT solution"
+    },
+    {
+      "task_id": "group15_compute01",
+      "reason_code": "resource_conflict",
+      "reason_detail": "not selected in final CP-SAT solution"
+    },
+    {
+      "task_id": "group15_compute02",
+      "reason_code": "resource_conflict",
+      "reason_detail": "not selected in final CP-SAT solution"
+    },
+    {
+      "task_id": "group15_relay",
+      "reason_code": "resource_conflict",
+      "reason_detail": "not selected in final CP-SAT solution"
+    }
+  ],
+  "metrics": {
+    "total_value": 3627,
+    "scheduled_task_count": 81,
+    "unscheduled_task_count": 19,
+    "scheduled_task_ratio": 0.81,
+    "key_task_completion_ratio": 0.8
+  },
+  "solver_summary": {
+    "status": "OPTIMAL",
+    "objective_value": 722700.0,
+    "heuristic_runtime_ms": 0,
+    "cpsat_runtime_ms": 43,
+    "total_runtime_ms": 54,
+    "iteration_log_count": 0,
+    "best_effort": false
+  }
+}

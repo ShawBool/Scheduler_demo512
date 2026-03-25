@@ -1,1 +1,1 @@
-{"phase": "terminal", "iteration": 0, "objective_value": 566300.0, "scheduled_task_count": 58, "key_task_scheduled_count": 10, "unscheduled_task_count": 0, "feasible": true, "improvement_delta": 0, "note": "optimal", "timestamp": "2026-03-25T07:41:36+00:00"}
+{"phase": "terminal", "iteration": 0, "objective_value": 722700.0, "scheduled_task_count": 81, "key_task_scheduled_count": 12, "unscheduled_task_count": 19, "feasible": true, "improvement_delta": 0, "note": "optimal", "timestamp": "2026-03-25T08:47:19+00:00"}
