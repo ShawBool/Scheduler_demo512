@@ -16,6 +16,7 @@ class ProblemInstance:
     windows: dict[str, VisibilityWindow]
     topological_tasks: list[str]
     attitude_transition_cost: dict[tuple[str, str], int]
+    attitude_time_per_degree: float
     horizon: int
     capacities: dict[str, int]
 
@@ -88,6 +89,7 @@ def build_problem(
         windows=windows,
         topological_tasks=topological_tasks,
         attitude_transition_cost=transition,
+        attitude_time_per_degree=attitude_time_per_degree,
         horizon=horizon,
         capacities=capacities,
     )

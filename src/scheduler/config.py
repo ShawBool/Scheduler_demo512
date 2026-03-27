@@ -59,10 +59,14 @@ def load_config(path: str | Path) -> dict[str, Any]:
     runtime.setdefault("solver_timeout_sec", 30)
     runtime.setdefault("solver_progress_enable", True)
     runtime.setdefault("solver_progress_every_n_solutions", 10)
+    runtime.setdefault("heuristic_log_every_n", int(runtime["solver_progress_every_n_solutions"]))
+    runtime.setdefault("cpsat_log_every_n", int(runtime["solver_progress_every_n_solutions"]))
+    runtime.setdefault("log_full_solution_content", True)
 
     data_dir = Path(str(runtime["data_dir"]))
     runtime.setdefault("static_tasks_file", str(data_dir / str(runtime["tasks_file"])))
     runtime.setdefault("static_windows_file", str(data_dir / str(runtime["windows_file"])))
+    constraints.setdefault("attitude_power_reserve", 0.0)
 
     return cfg
 
@@ -89,15 +93,31 @@ def validate_config(cfg: dict[str, Any]) -> None:
     if not isinstance(timeout_sec, (int, float)) or timeout_sec <= 0:
         raise ValueError("runtime.solver_timeout_sec must be positive")
 
+    initial_attitude = runtime.get("initial_attitude_angle_deg")
+    if not isinstance(initial_attitude, (int, float)) or not (0 <= float(initial_attitude) <= 360):
+        raise ValueError("runtime.initial_attitude_angle_deg must be number in [0, 360]")
+
     progress_n = runtime.get("solver_progress_every_n_solutions")
     if not isinstance(progress_n, int) or progress_n <= 0:
         raise ValueError("runtime.solver_progress_every_n_solutions must be positive integer")
+
+    heuristic_n = runtime.get("heuristic_log_every_n")
+    if not isinstance(heuristic_n, int) or heuristic_n <= 0:
+        raise ValueError("runtime.heuristic_log_every_n must be positive integer")
+
+    cpsat_n = runtime.get("cpsat_log_every_n")
+    if not isinstance(cpsat_n, int) or cpsat_n <= 0:
+        raise ValueError("runtime.cpsat_log_every_n must be positive integer")
 
     constraints = cfg["constraints"]
     for key in ("cpu_capacity", "gpu_capacity", "memory_capacity", "power_capacity", "attitude_time_per_degree"):
         value = constraints.get(key)
         if not isinstance(value, (int, float)) or value <= 0:
             raise ValueError(f"constraints.{key} must be positive")
+
+    attitude_power_reserve = constraints.get("attitude_power_reserve")
+    if not isinstance(attitude_power_reserve, (int, float)) or attitude_power_reserve < 0:
+        raise ValueError("constraints.attitude_power_reserve must be non-negative")
 
     objective_weights = cfg["objective_weights"]
     for key in ("task_value", "key_task_bonus", "attitude_switch_penalty"):

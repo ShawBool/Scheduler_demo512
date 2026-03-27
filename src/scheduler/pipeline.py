@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import asdict
 from datetime import datetime 
 import time
 from pathlib import Path
@@ -12,7 +13,7 @@ from .data_loader import load_static_task_bundle
 from .heuristic_scheduler import build_initial_schedule
 from .models import ScheduleResult
 from .problem_builder import build_problem
-from .result_writer import append_iteration_log, initialize_iteration_log, write_schedule_result
+from .result_writer import append_iteration_log, initialize_iteration_log, materialize_att_segments, write_schedule_result
 
 
 def _build_metrics(schedule, unscheduled, all_tasks_count: int, total_key_tasks: int) -> dict[str, float | int]:
@@ -66,7 +67,11 @@ def run_pipeline(config_path: str, *, seed: int, output_dir: str) -> dict:
     )
 
     heuristic_started = time.perf_counter()
-    warm = build_initial_schedule(problem, seed=seed)
+    warm = build_initial_schedule(
+        problem,
+        seed=seed,
+        initial_attitude_angle_deg=float(cfg["runtime"]["initial_attitude_angle_deg"]),
+    )
     heuristic_runtime_ms = int((time.perf_counter() - heuristic_started) * 1000)
 
     output_root = Path(output_dir)
@@ -75,13 +80,41 @@ def run_pipeline(config_path: str, *, seed: int, output_dir: str) -> dict:
     progress_file = output_root / "solver_progress.jsonl"
     initialize_iteration_log(progress_file)
 
+    append_iteration_log(
+        progress_file,
+        {
+            "event_type": "heuristic_initial_solution",
+            "phase": "heuristic",
+            "iteration": 0,
+            "solution": {"schedule": [asdict(item) for item in warm.schedule]},
+        },
+    )
+
+    append_iteration_log(
+        progress_file,
+        {
+            "event_type": "heuristic_final_solution",
+            "phase": "heuristic",
+            "iteration": 1,
+            "solution": {"schedule": [asdict(item) for item in warm.schedule]},
+        },
+    )
+
     improve = improve_schedule(
         problem,
         warm,
         log_path=progress_file,
         timeout_sec=float(cfg["runtime"]["solver_timeout_sec"]),
-        progress_every_n=int(cfg["runtime"]["solver_progress_every_n_solutions"]),
+        progress_every_n=int(cfg["runtime"]["cpsat_log_every_n"]),
         key_task_bonus=float(cfg["objective_weights"]["key_task_bonus"]),
+        initial_attitude_angle_deg=float(cfg["runtime"]["initial_attitude_angle_deg"]),
+    )
+
+    materialized_schedule = materialize_att_segments(
+        improve.schedule,
+        task_map=problem.task_map,
+        initial_attitude_angle_deg=float(cfg["runtime"]["initial_attitude_angle_deg"]),
+        attitude_time_per_degree=float(constraints["attitude_time_per_degree"]),
     )
 
     metrics = _build_metrics(
@@ -105,6 +138,7 @@ def run_pipeline(config_path: str, *, seed: int, output_dir: str) -> dict:
     append_iteration_log(
         progress_file,
         {
+            "event_type": "terminal",
             "phase": "terminal",
             "iteration": improve.iteration_log_count,
             "objective_value": improve.objective_value,
@@ -118,7 +152,7 @@ def run_pipeline(config_path: str, *, seed: int, output_dir: str) -> dict:
     )
 
     result = ScheduleResult(
-        schedule=improve.schedule,
+        schedule=materialized_schedule,
         unscheduled=improve.unscheduled,
         metrics=metrics,
         solver_summary=solver_summary,

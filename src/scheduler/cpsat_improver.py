@@ -78,6 +78,14 @@ def _safe_window_bounds(task: Task, horizon: int) -> tuple[int, int]:
     return earliest, latest
 
 
+def _transition_time_from_initial(initial_angle: float, task_angle: float | None, per_degree: float) -> int:
+    if task_angle is None:
+        return 0
+    delta = abs(float(initial_angle) - float(task_angle))
+    delta = min(delta, 360.0 - delta)
+    return int(round(delta * per_degree))
+
+
 def improve_schedule(
     problem: ProblemInstance,
     warm_start: HeuristicResult,
@@ -86,6 +94,7 @@ def improve_schedule(
     timeout_sec: float,
     progress_every_n: int,
     key_task_bonus: float,
+    initial_attitude_angle_deg: float = 0.0,
 ) -> ImproveResult:
     """使用可选区间 + 累积约束构建 CP-SAT，并在时限内优化。"""
     started = time.perf_counter()
@@ -121,6 +130,37 @@ def improve_schedule(
         for pred in task.predecessors:
             model.Add(selected[task.task_id] <= selected[pred])
             model.Add(starts[task.task_id] >= ends[pred]).OnlyEnforceIf([selected[task.task_id], selected[pred]])
+
+    # 初始姿态约束：被选中的任务开始时间必须不早于从初始姿态转到目标姿态的最短时间。
+    for task in problem.tasks:
+        init_transition = _transition_time_from_initial(
+            initial_attitude_angle_deg,
+            task.attitude_angle_deg,
+            problem.attitude_time_per_degree,
+        )
+        if init_transition > 0:
+            model.Add(starts[task.task_id] >= init_transition).OnlyEnforceIf(selected[task.task_id])
+
+    # 隐式姿态切换约束：当两个有姿态任务都被选中时，必须满足二选一顺序与对应转姿间隔。
+    for left_idx in range(len(problem.tasks)):
+        left = problem.tasks[left_idx]
+        if left.attitude_angle_deg is None:
+            continue
+        for right_idx in range(left_idx + 1, len(problem.tasks)):
+            right = problem.tasks[right_idx]
+            if right.attitude_angle_deg is None:
+                continue
+
+            left_before_right = model.NewBoolVar(f"ord_{left.task_id}_before_{right.task_id}")
+            lr_gap = int(problem.attitude_transition_cost[(left.task_id, right.task_id)])
+            rl_gap = int(problem.attitude_transition_cost[(right.task_id, left.task_id)])
+
+            model.Add(starts[right.task_id] >= ends[left.task_id] + lr_gap).OnlyEnforceIf(
+                [selected[left.task_id], selected[right.task_id], left_before_right]
+            )
+            model.Add(starts[left.task_id] >= ends[right.task_id] + rl_gap).OnlyEnforceIf(
+                [selected[left.task_id], selected[right.task_id], left_before_right.Not()]
+            )
 
     # 关键任务仍是“尽量必排”，通过目标奖励提升优先级，而非强制必须选中。
     objective_terms: list[cp_model.LinearExpr] = []
