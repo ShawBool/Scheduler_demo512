@@ -1,3 +1,5 @@
+import pytest
+
 from scheduler.models import Task, VisibilityWindow
 from scheduler.data_loader import load_static_task_bundle
 from scheduler.heuristic_scheduler import build_initial_schedule
@@ -63,3 +65,66 @@ def test_heuristic_respects_attitude_transition_time():
     result = build_initial_schedule(problem, seed=666)
     schedule = {item.task_id: item for item in result.schedule}
     assert schedule["t2"].start >= schedule["t1"].end + 180
+
+
+@pytest.fixture
+def thermal_problem_fixture():
+    window = VisibilityWindow(window_id="w1", start=0, end=200)
+    tasks = [
+        Task(
+            task_id="HOT_TASK",
+            duration=10,
+            value=100,
+            cpu=1,
+            gpu=1,
+            memory=10,
+            power=20,
+            thermal_load=20,
+            attitude_angle_deg=0,
+            visibility_window=window,
+        ),
+        Task(
+            task_id="COOLER_TASK",
+            duration=10,
+            value=50,
+            cpu=1,
+            gpu=0,
+            memory=10,
+            power=2,
+            thermal_load=1,
+            attitude_angle_deg=0,
+            visibility_window=window,
+        ),
+    ]
+
+    return build_problem(
+        tasks,
+        {"w1": window},
+        horizon=200,
+        capacities={"cpu": 2, "gpu": 1, "memory": 64, "power": 30},
+        attitude_time_per_degree=0.01,
+        thermal_config={
+            "thermal_time_step": 1.0,
+            "initial_temperature": 25.0,
+            "warning_threshold": 27.0,
+            "danger_threshold": 28.0,
+            "max_warning_duration": 100,
+            "env_temperature": 20.0,
+            "coefficients": {
+                "a_p": 0.02,
+                "a_c": 0.02,
+                "lambda_concurrency": 0.01,
+                "a_cpu": 0.05,
+                "a_gpu": 0.05,
+                "a_mem": 0.01,
+                "a_s": 0.0,
+                "k_cool": 0.0,
+                "b_att": 0.0,
+            },
+        },
+    )
+
+
+def test_heuristic_rejects_candidate_when_danger_threshold_would_be_exceeded(thermal_problem_fixture):
+    result = build_initial_schedule(thermal_problem_fixture, seed=1, initial_attitude_angle_deg=0)
+    assert all(item.task_id != "HOT_TASK" for item in result.schedule)
