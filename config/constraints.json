@@ -4,6 +4,25 @@
   "memory_capacity": 512,
   "power_capacity": 60,
   "thermal_capacity": 100,
+  "thermal": {
+    "warning_threshold": 90,
+    "danger_threshold": 100,
+    "max_warning_duration": 60,
+    "env_temperature": 20,
+    "coefficients": {
+      "a_p": 0.002,
+      "a_c": 0.03,
+      "lambda_concurrency": 0.01,
+      "a_cpu": 0.2,
+      "a_gpu": 0.25,
+      "a_mem": 0.15,
+      "a_s": 0.1,
+      "k_cool": 0.005,
+      "b_att": 0.0
+    },
+    "payload_mix_factor": 0.0,
+    "eclipse_factor": 0.0
+  },
   "attitude_time_per_degree": 0.01,
   "critical_payload_ids": [
     "C1",

@@ -33,3 +33,32 @@ def test_validate_config_rejects_non_positive_phase_log_frequency():
 
     with pytest.raises(ValueError, match="runtime.heuristic_log_every_n"):
         validate_config(cfg)
+
+
+def test_validate_config_requires_positive_thermal_time_step():
+    cfg = _base_cfg()
+    cfg["runtime"]["thermal_time_step"] = 0
+
+    with pytest.raises(ValueError, match="runtime.thermal_time_step"):
+        validate_config(cfg)
+
+
+def test_validate_config_rejects_warning_not_less_than_danger():
+    cfg = _base_cfg()
+    cfg["constraints"]["thermal"] = {
+        "warning_threshold": 100,
+        "danger_threshold": 100,
+    }
+
+    with pytest.raises(ValueError, match="warning_threshold"):
+        validate_config(cfg)
+
+
+def test_validate_config_maps_old_thermal_capacity_to_danger_threshold():
+    cfg = _base_cfg()
+    cfg["constraints"].pop("thermal", None)
+    cfg["constraints"]["thermal_capacity"] = 88
+
+    validate_config(cfg)
+
+    assert cfg["constraints"]["thermal"]["danger_threshold"] == 88
