@@ -128,3 +128,144 @@ def thermal_problem_fixture():
 def test_heuristic_rejects_candidate_when_danger_threshold_would_be_exceeded(thermal_problem_fixture):
     result = build_initial_schedule(thermal_problem_fixture, seed=1, initial_attitude_angle_deg=0)
     assert all(item.task_id != "HOT_TASK" for item in result.schedule)
+
+
+def test_heuristic_prefers_lower_thermal_penalty_start_time_when_both_feasible():
+    window = VisibilityWindow(window_id="w1", start=0, end=30)
+    tasks = [
+        Task(
+            task_id="HOT_BUT_FEASIBLE",
+            duration=2,
+            value=10,
+            cpu=1,
+            gpu=0,
+            memory=1,
+            power=10,
+            thermal_load=1,
+            attitude_angle_deg=0,
+            visibility_window=window,
+        )
+    ]
+    problem = build_problem(
+        tasks,
+        {"w1": window},
+        horizon=30,
+        capacities={"cpu": 2, "gpu": 1, "memory": 64, "power": 20},
+        attitude_time_per_degree=0.01,
+        thermal_config={
+            "thermal_time_step": 1.0,
+            "initial_temperature": 29.5,
+            "warning_threshold": 30.0,
+            "danger_threshold": 100.0,
+            "max_warning_duration": 100.0,
+            "env_temperature": 20.0,
+            "coefficients": {
+                "a_p": 1.0,
+                "a_c": 0.0,
+                "lambda_concurrency": 0.0,
+                "a_cpu": 0.0,
+                "a_gpu": 0.0,
+                "a_mem": 0.0,
+                "a_s": 0.0,
+                "k_cool": 0.5,
+                "b_att": 0.0,
+            },
+        },
+    )
+
+    result = build_initial_schedule(problem, seed=1, initial_attitude_angle_deg=0)
+    assert result.schedule[0].start > 0
+
+
+def test_heuristic_rejects_candidate_exceeding_max_warning_duration():
+    window = VisibilityWindow(window_id="w1", start=0, end=20)
+    tasks = [
+        Task(
+            task_id="LONG_WARNING_TASK",
+            duration=3,
+            value=10,
+            cpu=1,
+            gpu=0,
+            memory=1,
+            power=1,
+            thermal_load=1,
+            attitude_angle_deg=0,
+            visibility_window=window,
+        )
+    ]
+    problem = build_problem(
+        tasks,
+        {"w1": window},
+        horizon=20,
+        capacities={"cpu": 2, "gpu": 1, "memory": 64, "power": 20},
+        attitude_time_per_degree=0.01,
+        thermal_config={
+            "thermal_time_step": 1.0,
+            "initial_temperature": 30.0,
+            "warning_threshold": 29.0,
+            "danger_threshold": 35.0,
+            "max_warning_duration": 2.0,
+            "env_temperature": 20.0,
+            "coefficients": {
+                "a_p": 0.0,
+                "a_c": 0.0,
+                "lambda_concurrency": 0.0,
+                "a_cpu": 0.0,
+                "a_gpu": 0.0,
+                "a_mem": 0.0,
+                "a_s": 0.0,
+                "k_cool": 0.0,
+                "b_att": 0.0,
+            },
+        },
+    )
+
+    result = build_initial_schedule(problem, seed=1, initial_attitude_angle_deg=0)
+    assert "LONG_WARNING_TASK" not in {item.task_id for item in result.schedule}
+
+
+def test_heuristic_allows_candidate_at_warning_duration_boundary():
+    window = VisibilityWindow(window_id="w1", start=0, end=20)
+    tasks = [
+        Task(
+            task_id="BOUNDARY_WARNING_TASK",
+            duration=2,
+            value=10,
+            cpu=1,
+            gpu=0,
+            memory=1,
+            power=1,
+            thermal_load=1,
+            attitude_angle_deg=0,
+            visibility_window=window,
+        )
+    ]
+    problem = build_problem(
+        tasks,
+        {"w1": window},
+        horizon=20,
+        capacities={"cpu": 2, "gpu": 1, "memory": 64, "power": 20},
+        attitude_time_per_degree=0.01,
+        thermal_config={
+            "thermal_time_step": 1.0,
+            "initial_temperature": 30.0,
+            "warning_threshold": 29.0,
+            "danger_threshold": 35.0,
+            "max_warning_duration": 2.0,
+            "env_temperature": 20.0,
+            "coefficients": {
+                "a_p": 0.0,
+                "a_c": 0.0,
+                "lambda_concurrency": 0.0,
+                "a_cpu": 0.0,
+                "a_gpu": 0.0,
+                "a_mem": 0.0,
+                "a_s": 0.0,
+                "k_cool": 0.0,
+                "b_att": 0.0,
+            },
+        },
+    )
+
+    result = build_initial_schedule(problem, seed=1, initial_attitude_angle_deg=0)
+    assert "BOUNDARY_WARNING_TASK" in {item.task_id for item in result.schedule}

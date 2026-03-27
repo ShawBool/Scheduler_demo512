@@ -91,6 +91,31 @@ def _simulate_task_thermal_trace(
     return temperatures, cursor
 
 
+def _simulate_idle_thermal(
+    *,
+    model: SemiEmpiricalThermalModelV1,
+    state: dict[str, float],
+    idle_duration: int,
+    dt: float,
+) -> dict[str, float]:
+    cursor = dict(state)
+    for _ in range(max(idle_duration, 0)):
+        cursor = model.update(
+            cursor,
+            {
+                "power_total": 0.0,
+                "concurrency": 0.0,
+                "cpu_util": 0.0,
+                "gpu_util": 0.0,
+                "memory_util": 0.0,
+                "attitude_switch_rate": 0.0,
+                "attitude_cooling_disturbance": 0.0,
+            },
+            dt,
+        )
+    return cursor
+
+
 def build_initial_schedule(
     problem: ProblemInstance,
     seed: int = 666,
@@ -180,15 +205,23 @@ def build_initial_schedule(
             continue
 
         picked_start: int | None = None
+        picked_penalty: float | None = None
+        thermal_candidate_state = current_thermal_state
         for candidate in range(earliest, latest_bound + 1):
             if not _fits_time_window(task, candidate):
                 continue
             if _resources_ok(task, usage, problem.capacities, candidate):
                 if thermal_enabled and thermal_model is not None:
+                    state_at_candidate = _simulate_idle_thermal(
+                        model=thermal_model,
+                        state=current_thermal_state,
+                        idle_duration=candidate - current_time,
+                        dt=thermal_time_step,
+                    )
                     temperatures, end_state = _simulate_task_thermal_trace(
                         model=thermal_model,
                         task=task,
-                        state=current_thermal_state,
+                        state=state_at_candidate,
                         capacities=problem.capacities,
                         dt=thermal_time_step,
                     )
@@ -198,11 +231,17 @@ def build_initial_schedule(
                     max_warning_steps = thermal_model.max_continuous_warning_steps(warning_flags)
                     if max_warning_steps * thermal_time_step > max_warning_duration:
                         continue
-                    thermal_candidate_state = end_state
+                    thermal_penalty = sum(max(0.0, temp - warning_threshold) for temp in temperatures)
+                    better = picked_start is None or picked_penalty is None or thermal_penalty < picked_penalty
+                    same_penalty_earlier = picked_start is not None and picked_penalty is not None and thermal_penalty == picked_penalty and candidate < picked_start
+                    if better or same_penalty_earlier:
+                        thermal_candidate_state = end_state
+                        picked_start = candidate
+                        picked_penalty = thermal_penalty
                 else:
+                    picked_start = candidate
                     thermal_candidate_state = current_thermal_state
-                picked_start = candidate
-                break
+                    break
 
         if picked_start is None:
             unscheduled.append(
