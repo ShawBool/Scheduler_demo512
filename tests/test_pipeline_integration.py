@@ -40,3 +40,13 @@ def test_replan_contract_types_exist():
 def test_doc_mentions_iteration_log_every_10_generations():
     content = Path("docs/地面站基线任务规划组件开发的初步计划.md").read_text(encoding="utf-8")
     assert "每隔10" in content or "每10代" in content
+
+
+def test_pipeline_outputs_thermal_metrics(tmp_path):
+    result = run_pipeline("config", seed=42, output_dir=str(tmp_path))
+    metrics = result["metrics"]
+    assert "peak_temperature" in metrics
+    assert "min_thermal_margin" in metrics
+    assert "warning_duration" in metrics
+    assert "max_continuous_warning_duration" in metrics
+    assert "thermal_penalty_total" in metrics

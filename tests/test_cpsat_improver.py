@@ -1,5 +1,5 @@
 from scheduler.models import Task, VisibilityWindow
-from scheduler.cpsat_improver import improve_schedule
+from scheduler.cpsat_improver import _piecewise_square_upper_bound, improve_schedule
 from scheduler.data_loader import load_static_task_bundle
 from scheduler.heuristic_scheduler import build_initial_schedule
 from scheduler.problem_builder import build_problem
@@ -86,3 +86,36 @@ def test_cpsat_respects_initial_attitude_for_first_task(tmp_path):
     schedule = sorted(result.schedule, key=lambda x: x.start)
     assert schedule
     assert schedule[0].start >= 180
+
+
+def test_piecewise_square_upper_bound_is_conservative():
+    for c_max in (1, 2, 3, 6):
+        for c in range(0, c_max + 1):
+            assert _piecewise_square_upper_bound(c, c_max) >= c * c
+
+
+def test_cpsat_limits_continuous_high_warning_selection(tmp_path):
+    window = VisibilityWindow(window_id="w1", start=0, end=500)
+    tasks = [
+        Task("h1", 5, 100, 1, 0, 1, 1, 10, attitude_angle_deg=0, visibility_window=window),
+        Task("h2", 5, 100, 1, 0, 1, 1, 10, attitude_angle_deg=0, visibility_window=window),
+        Task("h3", 5, 100, 1, 0, 1, 1, 10, attitude_angle_deg=0, visibility_window=window),
+    ]
+    problem = build_problem(
+        tasks,
+        {"w1": window},
+        horizon=500,
+        capacities={"cpu": 4, "gpu": 1, "memory": 20, "power": 20},
+        attitude_time_per_degree=0.01,
+        thermal_config={
+            "thermal_time_step": 1.0,
+            "max_warning_duration": 1.0,
+            "warning_thermal_load": 5,
+            "concurrency_upper_bound": 3,
+        },
+    )
+    warm = build_initial_schedule(problem, seed=666)
+    log_path = initialize_iteration_log(tmp_path / "solver_progress.jsonl")
+    result = improve_schedule(problem, warm, log_path=log_path, timeout_sec=2, progress_every_n=1, key_task_bonus=0)
+    selected_ids = {item.task_id for item in result.schedule}
+    assert len(selected_ids) <= 2

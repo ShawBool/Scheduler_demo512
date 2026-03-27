@@ -24,6 +24,33 @@ class ImproveResult:
     runtime_ms: int
 
 
+def _piecewise_square_upper_bound(c: int, c_max: int) -> int:
+    """并发平方项保守上界。"""
+    if c_max <= 0:
+        return 0
+    c_int = max(0, min(int(c), int(c_max)))
+    c_max_int = int(c_max)
+    if c_max_int < 3:
+        return c_max_int * c_int
+
+    c1 = c_max_int // 3
+    c2 = (2 * c_max_int) // 3
+    if c1 <= 0:
+        c1 = 1
+    if c2 <= c1:
+        c2 = c1 + 1
+
+    bounds: list[int] = []
+    for left, right in ((0, c1), (c1, c2), (c2, c_max_int)):
+        if right == left:
+            bounds.append(right * right)
+            continue
+        slope = (right * right - left * left) / (right - left)
+        intercept = left * left - slope * left
+        bounds.append(int(round(slope * c_int + intercept)))
+    return max(bounds)
+
+
 class _ProgressCallback(cp_model.CpSolverSolutionCallback):
     """解回调：按配置周期写出中间摘要。"""
 
@@ -167,6 +194,36 @@ def improve_schedule(
     for task in problem.tasks:
         weight = task.value + (key_task_bonus if task.is_key_task else 0.0)
         objective_terms.append(int(weight * 100) * selected[task.task_id])
+
+    thermal_cfg = problem.thermal_config or {}
+    concurrency_upper_bound = int(thermal_cfg.get("concurrency_upper_bound", 1))
+    thermal_proxy_terms: list[cp_model.LinearExpr] = []
+    for task in problem.tasks:
+        c_bound = _piecewise_square_upper_bound(1, concurrency_upper_bound)
+        q_proxy = model.NewIntVar(0, max(1, concurrency_upper_bound * concurrency_upper_bound), f"qproxy_{task.task_id}")
+        model.Add(q_proxy >= c_bound * selected[task.task_id])
+        thermal_proxy_terms.append(q_proxy)
+
+    if thermal_proxy_terms:
+        objective_terms.append(-sum(thermal_proxy_terms))
+
+    warning_load = thermal_cfg.get("warning_thermal_load")
+    if isinstance(warning_load, (int, float)):
+        thermal_step = float(thermal_cfg.get("thermal_time_step", 1.0))
+        max_warning_duration = float(thermal_cfg.get("max_warning_duration", 0.0))
+        lmax = int(max_warning_duration // max(thermal_step, 1e-9))
+        if lmax >= 0:
+            ordered_ids = list(problem.topological_tasks)
+            if len(ordered_ids) >= lmax + 1:
+                for i in range(0, len(ordered_ids) - lmax):
+                    window_ids = ordered_ids[i : i + lmax + 1]
+                    high_vars = [
+                        selected[tid]
+                        for tid in window_ids
+                        if float(problem.task_map[tid].thermal_load) >= float(warning_load)
+                    ]
+                    if high_vars:
+                        model.Add(sum(high_vars) <= lmax)
 
     # 资源累积约束：每种资源都是一个容量约束。
     all_intervals = [intervals[tid] for tid in intervals]
