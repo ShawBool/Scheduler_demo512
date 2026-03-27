@@ -2,11 +2,15 @@
   "python_path": "D:/software/anaconda3/python.exe",
   "input_mode": "static",
   "data_dir": "data",
-  "tasks_file": "small_tasks_pool_100.json",
+  "tasks_file": "small_tasks_pool_48_withoutAtt.json",
   "windows_file": "latest_windows.json",
   "seed": 666,
   "time_horizon": 240,
   "solver_timeout_sec": 60,
+  "initial_attitude_angle_deg": 0,
+  "heuristic_log_every_n": 10,
+  "cpsat_log_every_n": 10,
+  "log_full_solution_content": true,
   "solver_progress_every_n_solutions": 10,
   "solver_progress_enable": true
 }

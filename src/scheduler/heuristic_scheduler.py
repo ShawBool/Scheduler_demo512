@@ -51,7 +51,20 @@ def _apply_usage(task: Task, usage: dict[int, dict[str, int]], start: int) -> No
         point["power"] += task.power
 
 
-def build_initial_schedule(problem: ProblemInstance, seed: int = 666) -> HeuristicResult:
+def _transition_time(current_angle: float | None, target_angle: float | None, per_degree: float) -> int:
+    if current_angle is None or target_angle is None:
+        return 0
+    delta = abs(float(current_angle) - float(target_angle))
+    delta = min(delta, 360.0 - delta)
+    return int(round(delta * per_degree))
+
+
+def build_initial_schedule(
+    problem: ProblemInstance,
+    seed: int = 666,
+    *,
+    initial_attitude_angle_deg: float = 0.0,
+) -> HeuristicResult:
     """构建启发式初解。
 
     设计要点：
@@ -65,6 +78,8 @@ def build_initial_schedule(problem: ProblemInstance, seed: int = 666) -> Heurist
     scheduled: list[ScheduleItem] = []
     unscheduled: list[UnscheduledItem] = []
     finished_at: dict[str, int] = {}
+    current_time = 0
+    current_attitude: float | None = float(initial_attitude_angle_deg)
 
     # 关键点：严格保持拓扑顺序，避免“子任务先于前驱”导致关键任务被错误阻塞。
     # 在当前一期中，优先保证依赖可行性，后续再演进为“就绪队列 + 多目标排序”。
@@ -86,6 +101,10 @@ def build_initial_schedule(problem: ProblemInstance, seed: int = 666) -> Heurist
             continue
 
         earliest = 0 if not task.predecessors else max(finished_at[pred] for pred in task.predecessors)
+        earliest = max(
+            earliest,
+            current_time + _transition_time(current_attitude, task.attitude_angle_deg, problem.attitude_time_per_degree),
+        )
         latest_bound = problem.horizon - task.duration
         if task.visibility_window is not None:
             earliest = max(earliest, task.visibility_window.start)
@@ -122,6 +141,9 @@ def build_initial_schedule(problem: ProblemInstance, seed: int = 666) -> Heurist
         _apply_usage(task, usage, picked_start)
         end = picked_start + task.duration
         finished_at[task.task_id] = end
+        current_time = end
+        if task.attitude_angle_deg is not None:
+            current_attitude = float(task.attitude_angle_deg)
         scheduled.append(
             ScheduleItem(
                 task_id=task.task_id,

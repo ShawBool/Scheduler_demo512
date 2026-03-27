@@ -1,4 +1,5 @@
 from pathlib import Path
+import json
 
 from scheduler.pipeline import run_pipeline
 from scheduler.replan_interface import ReplanRequest, ReplanResponse
@@ -11,8 +12,22 @@ def test_main_pipeline_returns_schedule_and_unscheduled_sections(tmp_path):
     assert "metrics" in result
     assert "solver_summary" in result
 
-    assert (tmp_path / "latest_schedule.json").exists()
     assert (tmp_path / "solver_progress.jsonl").exists()
+
+    history_files = list(tmp_path.glob("schedule_*.json"))
+    assert history_files
+
+    rows = [
+        json.loads(line)
+        for line in (tmp_path / "solver_progress.jsonl").read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    event_types = {row.get("event_type") for row in rows}
+    assert "heuristic_initial_solution" in event_types
+    assert "heuristic_final_solution" in event_types
+    assert "terminal" in event_types
+
+    assert any(item.get("item_type") == "ATTITUDE" for item in result["schedule"])
 
 
 def test_replan_contract_types_exist():

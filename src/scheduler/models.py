@@ -43,6 +43,7 @@ class ScheduleItem:
     value: int
     is_key_task: bool
     visibility_window_id: str | None
+    item_type: str = "BUSINESS"
 
 
 @dataclass(slots=True)
