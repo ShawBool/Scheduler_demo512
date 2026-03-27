@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import asdict
 from datetime import datetime 
+import json
 import time
 from pathlib import Path
 
@@ -72,6 +73,10 @@ def run_pipeline(config_path: str, *, seed: int, output_dir: str) -> dict:
         seed=seed,
         initial_attitude_angle_deg=float(cfg["runtime"]["initial_attitude_angle_deg"]),
     )
+    # 这里打印启发式结果，方便调试和验证初解质量。
+    # 使用 asdict 递归转换所有 dataclass 对象
+    warm_dict = asdict(warm)
+    print(json.dumps(warm_dict, ensure_ascii=False, indent=2))
     heuristic_runtime_ms = int((time.perf_counter() - heuristic_started) * 1000)
 
     output_root = Path(output_dir)

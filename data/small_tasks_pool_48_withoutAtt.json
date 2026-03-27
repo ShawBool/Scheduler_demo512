@@ -567,7 +567,7 @@
 
     {
       "task_id": "group09_camera",
-      "duration": 10,
+      "duration": 2,
       "value": 86,
       "cpu": 2,
       "gpu": 1,
@@ -577,7 +577,7 @@
       "payload_type_requirements": ["camera"],
       "predecessors": [],
       "visibility_window": "target_6",
-      "attitude_angle_deg": 124.0,
+      "attitude_angle_deg": 24.0,
       "is_key_task": true
     },
     {

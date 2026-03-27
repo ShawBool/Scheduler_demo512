@@ -2,7 +2,7 @@
   "python_path": "D:/software/anaconda3/python.exe",
   "input_mode": "static",
   "data_dir": "data",
-  "tasks_file": "small_tasks_pool_100.json",
+  "tasks_file": "small_tasks_pool_48_withoutAtt.json",
   "windows_file": "latest_windows.json",
   "seed": 666,
   "time_horizon": 240,
