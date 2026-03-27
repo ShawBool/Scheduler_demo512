@@ -11,10 +11,6 @@ class ThermalCoefficients:
     a_p: float
     a_c: float
     lambda_concurrency: float
-    a_cpu: float
-    a_gpu: float
-    a_mem: float
-    a_s: float
     k_cool: float
     b_att: float
 
@@ -37,20 +33,12 @@ class SemiEmpiricalThermalModelV1:
 
         power_total = float(features.get("power_total", 0.0))
         concurrency = float(features.get("concurrency", 0.0))
-        cpu_util = float(features.get("cpu_util", 0.0))
-        gpu_util = float(features.get("gpu_util", 0.0))
-        memory_util = float(features.get("memory_util", 0.0))
-        attitude_switch_rate = float(features.get("attitude_switch_rate", 0.0))
         attitude_cooling_disturbance = float(features.get("attitude_cooling_disturbance", 0.0))
 
         q_gen = (
             self._coeff.a_p * power_total
             + self._coeff.a_c * concurrency
             + self._coeff.lambda_concurrency * (concurrency**2)
-            + self._coeff.a_cpu * cpu_util
-            + self._coeff.a_gpu * gpu_util
-            + self._coeff.a_mem * memory_util
-            + self._coeff.a_s * attitude_switch_rate
         )
         q_cool = self._coeff.k_cool * (temperature - self._env_temperature) + self._coeff.b_att * attitude_cooling_disturbance
 

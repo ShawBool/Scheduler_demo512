@@ -70,19 +70,12 @@ def _simulate_task_thermal_trace(
 ) -> tuple[list[float], dict[str, float]]:
     cursor = dict(state)
     temperatures: list[float] = []
-    cpu_util = float(task.cpu) / max(float(capacities.get("cpu", 1)), 1.0)
-    gpu_util = float(task.gpu) / max(float(capacities.get("gpu", 1)), 1.0)
-    memory_util = float(task.memory) / max(float(capacities.get("memory", 1)), 1.0)
     for _ in range(task.duration):
         cursor = model.update(
             cursor,
             {
                 "power_total": float(task.power),
                 "concurrency": 1.0,
-                "cpu_util": min(max(cpu_util, 0.0), 1.0),
-                "gpu_util": min(max(gpu_util, 0.0), 1.0),
-                "memory_util": min(max(memory_util, 0.0), 1.0),
-                "attitude_switch_rate": 0.0,
                 "attitude_cooling_disturbance": 0.0,
             },
             dt,
@@ -105,10 +98,6 @@ def _simulate_idle_thermal(
             {
                 "power_total": 0.0,
                 "concurrency": 0.0,
-                "cpu_util": 0.0,
-                "gpu_util": 0.0,
-                "memory_util": 0.0,
-                "attitude_switch_rate": 0.0,
                 "attitude_cooling_disturbance": 0.0,
             },
             dt,
@@ -155,10 +144,6 @@ def build_initial_schedule(
                 a_p=float(thermal_coeff.get("a_p", 0.0)),
                 a_c=float(thermal_coeff.get("a_c", 0.0)),
                 lambda_concurrency=float(thermal_coeff.get("lambda_concurrency", 0.0)),
-                a_cpu=float(thermal_coeff.get("a_cpu", 0.0)),
-                a_gpu=float(thermal_coeff.get("a_gpu", 0.0)),
-                a_mem=float(thermal_coeff.get("a_mem", 0.0)),
-                a_s=float(thermal_coeff.get("a_s", 0.0)),
                 k_cool=float(thermal_coeff.get("k_cool", 0.0)),
                 b_att=float(thermal_coeff.get("b_att", 0.0)),
             ),

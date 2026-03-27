@@ -20,10 +20,6 @@ def _default_thermal_coefficients() -> dict[str, float]:
         "a_p": 0.002,
         "a_c": 0.03,
         "lambda_concurrency": 0.01,
-        "a_cpu": 0.2,
-        "a_gpu": 0.25,
-        "a_mem": 0.15,
-        "a_s": 0.1,
         "k_cool": 0.005,
         "b_att": 0.0,
     }
