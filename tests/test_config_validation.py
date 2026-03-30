@@ -62,3 +62,14 @@ def test_validate_config_maps_old_thermal_capacity_to_danger_threshold():
     validate_config(cfg)
 
     assert cfg["constraints"]["thermal"]["danger_threshold"] == 88
+
+
+def test_validate_config_rejects_objective_weights_not_sum_to_one():
+    cfg = _base_cfg()
+    cfg["constraints"]["objective_profiles"] = {
+        "base": {"task_value": 0.6, "completion": 0.6},
+        "thermal": {"task_value": 0.3, "completion": 0.7},
+    }
+
+    with pytest.raises(ValueError, match="sum to 1"):
+        validate_config(cfg)

@@ -21,7 +21,41 @@ def _default_thermal_coefficients() -> dict[str, float]:
         "a_c": 0.03,
         "lambda_concurrency": 0.01,
         "k_cool": 0.005,
-        "b_att": 0.0,
+    }
+
+
+def _default_objective_profiles() -> dict[str, dict[str, float]]:
+    return {
+        "base": {
+            "task_value": 0.40,
+            "completion": 0.15,
+            "association": 0.10,
+            "thermal_safety": 0.15,
+            "power_smoothing": 0.10,
+            "resource_utilization": 0.05,
+            "smoothness": 0.05,
+        },
+        "thermal": {
+            "task_value": 0.25,
+            "completion": 0.10,
+            "association": 0.05,
+            "thermal_safety": 0.35,
+            "power_smoothing": 0.10,
+            "resource_utilization": 0.10,
+            "smoothness": 0.05,
+        },
+    }
+
+
+def _default_objective_scaling() -> dict[str, list[float]]:
+    return {
+        "task_value": [0.0, 100.0],
+        "completion": [0.0, 1.0],
+        "association": [0.0, 1.0],
+        "thermal_safety": [0.0, 1.0],
+        "power_smoothing": [0.0, 1.0],
+        "resource_utilization": [0.0, 1.0],
+        "smoothness": [0.0, 1.0],
     }
 
 
@@ -76,6 +110,9 @@ def load_config(path: str | Path) -> dict[str, Any]:
     runtime.setdefault("initial_temperature_fallback", 25.0)
     runtime.setdefault("thermal_initial_source", "last_state_first")
     runtime.setdefault("replan_state_max_age_sec", 600)
+    runtime.setdefault("dynamic_weight_enable", True)
+    runtime.setdefault("thermal_weight_trigger_ratio", 0.8)
+    runtime.setdefault("max_reweight_rounds", 1)
 
     data_dir = Path(str(runtime["data_dir"]))
     runtime.setdefault("static_tasks_file", str(data_dir / str(runtime["tasks_file"])))
@@ -94,6 +131,28 @@ def load_config(path: str | Path) -> dict[str, Any]:
         coefficients.setdefault(key, value)
     thermal_cfg.setdefault("payload_mix_factor", 0.0)
     thermal_cfg.setdefault("eclipse_factor", 0.0)
+
+    objective_profiles = constraints.setdefault("objective_profiles", _default_objective_profiles())
+    if not isinstance(objective_profiles, dict):
+        constraints["objective_profiles"] = _default_objective_profiles()
+    else:
+        default_profiles = _default_objective_profiles()
+        for profile_name, default_weights in default_profiles.items():
+            weights = objective_profiles.setdefault(profile_name, {})
+            if not isinstance(weights, dict):
+                objective_profiles[profile_name] = dict(default_weights)
+                continue
+            for key, value in default_weights.items():
+                weights.setdefault(key, value)
+
+    objective_scaling = constraints.setdefault("objective_scaling", _default_objective_scaling())
+    if not isinstance(objective_scaling, dict):
+        constraints["objective_scaling"] = _default_objective_scaling()
+    else:
+        for key, default_range in _default_objective_scaling().items():
+            value = objective_scaling.get(key)
+            if not isinstance(value, list) or len(value) != 2:
+                objective_scaling[key] = list(default_range)
 
     return cfg
 
@@ -144,6 +203,18 @@ def validate_config(cfg: dict[str, Any]) -> None:
     if not isinstance(replan_state_max_age_sec, (int, float)) or float(replan_state_max_age_sec) < 0:
         raise ValueError("runtime.replan_state_max_age_sec must be non-negative")
 
+    dynamic_weight_enable = runtime.get("dynamic_weight_enable")
+    if not isinstance(dynamic_weight_enable, bool):
+        raise ValueError("runtime.dynamic_weight_enable must be bool")
+
+    thermal_weight_trigger_ratio = runtime.get("thermal_weight_trigger_ratio")
+    if not isinstance(thermal_weight_trigger_ratio, (int, float)) or not (0.0 <= float(thermal_weight_trigger_ratio) <= 1.0):
+        raise ValueError("runtime.thermal_weight_trigger_ratio must be in [0, 1]")
+
+    max_reweight_rounds = runtime.get("max_reweight_rounds")
+    if not isinstance(max_reweight_rounds, int) or max_reweight_rounds < 1:
+        raise ValueError("runtime.max_reweight_rounds must be integer >= 1")
+
     constraints = cfg["constraints"]
     for key in ("cpu_capacity", "gpu_capacity", "memory_capacity", "power_capacity", "attitude_time_per_degree"):
         value = constraints.get(key)
@@ -193,3 +264,38 @@ def validate_config(cfg: dict[str, Any]) -> None:
         value = objective_weights.get(key)
         if not isinstance(value, (int, float)):
             raise ValueError(f"objective_weights.{key} must be number")
+
+    objective_profiles = constraints.get("objective_profiles")
+    if not isinstance(objective_profiles, dict):
+        raise ValueError("constraints.objective_profiles must be object")
+
+    required_profiles = {"base", "thermal"}
+    if not required_profiles.issubset(set(objective_profiles.keys())):
+        raise ValueError("constraints.objective_profiles must contain base and thermal")
+
+    for profile_name, weights in objective_profiles.items():
+        if not isinstance(weights, dict):
+            raise ValueError(f"constraints.objective_profiles.{profile_name} must be object")
+        total = 0.0
+        for metric, weight in weights.items():
+            if not isinstance(weight, (int, float)):
+                raise ValueError(f"constraints.objective_profiles.{profile_name}.{metric} must be number")
+            if float(weight) < 0.0:
+                raise ValueError(f"constraints.objective_profiles.{profile_name}.{metric} must be non-negative")
+            total += float(weight)
+        if abs(total - 1.0) > 1e-6:
+            raise ValueError(f"constraints.objective_profiles.{profile_name} weights must sum to 1")
+
+    objective_scaling = constraints.get("objective_scaling")
+    if not isinstance(objective_scaling, dict):
+        raise ValueError("constraints.objective_scaling must be object")
+    for key in _default_objective_scaling().keys():
+        bounds = objective_scaling.get(key)
+        if not isinstance(bounds, (list, tuple)) or len(bounds) != 2:
+            raise ValueError(f"constraints.objective_scaling.{key} must be [min, max]")
+        low = bounds[0]
+        high = bounds[1]
+        if not isinstance(low, (int, float)) or not isinstance(high, (int, float)):
+            raise ValueError(f"constraints.objective_scaling.{key} bounds must be numbers")
+        if float(high) <= float(low):
+            raise ValueError(f"constraints.objective_scaling.{key} max must be greater than min")

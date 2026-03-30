@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Mapping, Protocol
 
 
 @dataclass(slots=True)
@@ -12,7 +12,31 @@ class ThermalCoefficients:
     a_c: float
     lambda_concurrency: float
     k_cool: float
-    b_att: float
+
+
+def _clamp_01(value: float) -> float:
+    return max(0.0, min(1.0, float(value)))
+
+
+def derive_concurrency(features: Mapping[str, float]) -> float:
+    """由资源利用率推导并发度。
+
+    优先使用 cpu/gpu 使用率推导，若缺失则回退到历史的 concurrency 字段。
+    """
+    has_cpu = "cpu_used" in features and "cpu_capacity" in features
+    has_gpu = "gpu_used" in features and "gpu_capacity" in features
+    if has_cpu or has_gpu:
+        cpu_ratio = 0.0
+        gpu_ratio = 0.0
+        if has_cpu:
+            cpu_capacity = max(float(features.get("cpu_capacity", 0.0)), 1e-6)
+            cpu_ratio = float(features.get("cpu_used", 0.0)) / cpu_capacity
+        if has_gpu:
+            gpu_capacity = max(float(features.get("gpu_capacity", 0.0)), 1e-6)
+            gpu_ratio = float(features.get("gpu_used", 0.0)) / gpu_capacity
+        return _clamp_01(cpu_ratio + gpu_ratio)
+
+    return _clamp_01(float(features.get("concurrency", 0.0)))
 
 
 class ThermalModelProtocol(Protocol):
@@ -32,15 +56,14 @@ class SemiEmpiricalThermalModelV1:
         dt_value = float(dt)
 
         power_total = float(features.get("power_total", 0.0))
-        concurrency = float(features.get("concurrency", 0.0))
-        attitude_cooling_disturbance = float(features.get("attitude_cooling_disturbance", 0.0))
+        concurrency = derive_concurrency(features)
 
         q_gen = (
             self._coeff.a_p * power_total
             + self._coeff.a_c * concurrency
             + self._coeff.lambda_concurrency * (concurrency**2)
         )
-        q_cool = self._coeff.k_cool * (temperature - self._env_temperature) + self._coeff.b_att * attitude_cooling_disturbance
+        q_cool = self._coeff.k_cool * (temperature - self._env_temperature)
 
         next_temperature = temperature + (q_gen - q_cool) * dt_value
         next_state = dict(state)

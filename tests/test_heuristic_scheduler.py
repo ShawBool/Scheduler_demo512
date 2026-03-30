@@ -253,3 +253,103 @@ def test_heuristic_allows_candidate_at_warning_duration_boundary():
 
     result = build_initial_schedule(problem, seed=1, initial_attitude_angle_deg=0)
     assert "BOUNDARY_WARNING_TASK" in {item.task_id for item in result.schedule}
+
+
+@pytest.fixture
+def composite_problem_fixture():
+    window = VisibilityWindow(window_id="w1", start=0, end=40)
+    tasks = [
+        Task(
+            task_id="A_HIGH_VALUE",
+            duration=5,
+            value=100,
+            cpu=1,
+            gpu=0,
+            memory=1,
+            power=18,
+            thermal_load=8,
+            attitude_angle_deg=0,
+            visibility_window=window,
+        ),
+        Task(
+            task_id="B_BALANCED_TASK",
+            duration=5,
+            value=85,
+            cpu=1,
+            gpu=0,
+            memory=1,
+            power=4,
+            thermal_load=2,
+            attitude_angle_deg=0,
+            visibility_window=window,
+        ),
+    ]
+    return build_problem(
+        tasks,
+        {"w1": window},
+        horizon=40,
+        capacities={"cpu": 2, "gpu": 1, "memory": 20, "power": 30},
+        attitude_time_per_degree=0.01,
+        thermal_config={
+            "thermal_time_step": 1.0,
+            "initial_temperature": 25.0,
+            "warning_threshold": 40.0,
+            "danger_threshold": 100.0,
+            "max_warning_duration": 100.0,
+            "env_temperature": 20.0,
+            "coefficients": {
+                "a_p": 0.3,
+                "a_c": 0.0,
+                "lambda_concurrency": 0.0,
+                "k_cool": 0.1,
+                "b_att": 0.0,
+            },
+            "objective_profiles": {
+                "base": {
+                    "task_value": 0.1,
+                    "completion": 0.2,
+                    "association": 0.0,
+                    "thermal_safety": 0.6,
+                    "power_smoothing": 0.1,
+                    "resource_utilization": 0.0,
+                    "smoothness": 0.0,
+                },
+                "thermal": {
+                    "task_value": 0.05,
+                    "completion": 0.1,
+                    "association": 0.0,
+                    "thermal_safety": 0.75,
+                    "power_smoothing": 0.1,
+                    "resource_utilization": 0.0,
+                    "smoothness": 0.0,
+                },
+            },
+            "dynamic_weight_enable": True,
+            "thermal_weight_trigger_ratio": 0.8,
+        },
+    )
+
+
+def test_heuristic_prefers_higher_composite_score_over_raw_value(composite_problem_fixture):
+    result = build_initial_schedule(composite_problem_fixture, seed=7, initial_attitude_angle_deg=0)
+    assert result.schedule[0].task_id == "B_BALANCED_TASK"
+
+
+def test_heuristic_switches_to_thermal_weights_when_ratio_reaches_threshold(composite_problem_fixture):
+    hot_problem = composite_problem_fixture
+    hot_problem.thermal_config["initial_temperature"] = 81.0
+    hot_problem.thermal_config["danger_threshold"] = 100.0
+
+    result = build_initial_schedule(hot_problem, seed=8, initial_attitude_angle_deg=0)
+    assert result.solver_metadata["active_weight_profile"] == "thermal"
+    assert result.solver_metadata["switch_reason"] == "thermal_ratio_triggered"
+
+
+def test_heuristic_switches_back_to_base_when_thermal_ratio_recovers(composite_problem_fixture):
+    cool_problem = composite_problem_fixture
+    cool_problem.thermal_config["initial_temperature"] = 50.0
+    cool_problem.thermal_config["danger_threshold"] = 100.0
+
+    result = build_initial_schedule(cool_problem, seed=9, initial_attitude_angle_deg=0)
+    assert result.solver_metadata["active_weight_profile"] == "base"
+    assert result.solver_metadata["switch_reason"] == "base_profile"

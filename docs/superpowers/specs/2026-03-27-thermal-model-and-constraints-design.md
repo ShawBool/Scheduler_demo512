@@ -37,6 +37,17 @@
 10. 散热项：线性散热 + 姿态相关扰动挂点。
 11. 初始温度来源：上一轮状态优先，缺失回退配置值。
 
+## 2.1 当前实现补充（2026-03-30）
+
+以下口径已在当前代码中落地，用于和设计稿区分历史描述：
+
+1. `b_att` 已从热模型系数和更新方程中移除，当前热更新只保留功耗、并发与线性散热项。
+2. 并发不再由外部硬编码传入，而是优先由 `cpu_used`/`gpu_used` 与容量比值推导；缺失时才回退 `concurrency`。
+3. CP-SAT 热约束已改为真实时间轴上的高热任务并发限制，不再按拓扑顺序窗口截断。
+4. 多目标量纲与缩放已下沉到 `objective_engine`，支持 `objective_scaling` 配置。
+5. pipeline 已加入 rolling reweight 迭代，并在 `solver_summary.weight_profile_history` 中记录每轮 profile 切换。
+6. `solver_summary` 现在同时输出 `objective_breakdown`、`objective_breakdown_raw`、`active_weight_profile` 和 `switch_reason`，便于回放与复盘。
+
 ## 3. 模型形式
 
 ### 3.0 变量单位与取值域（第一版固定口径）

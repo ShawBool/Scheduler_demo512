@@ -1,4 +1,19 @@
-from scheduler.thermal_model import NoOpThermalModel, SemiEmpiricalThermalModelV1, ThermalCoefficients
+from scheduler.thermal_model import (
+    NoOpThermalModel,
+    SemiEmpiricalThermalModelV1,
+    ThermalCoefficients,
+    derive_concurrency,
+)
+
+
+def test_concurrency_is_derived_from_resource_utilization_not_direct_literal():
+    features = {
+        "cpu_used": 2.0,
+        "gpu_used": 1.0,
+        "cpu_capacity": 4.0,
+        "gpu_capacity": 2.0,
+    }
+    assert derive_concurrency(features) == 1.0
 
 
 def test_update_temperature_includes_quadratic_concurrency_term():
@@ -8,7 +23,6 @@ def test_update_temperature_includes_quadratic_concurrency_term():
             a_c=0.0,
             lambda_concurrency=0.2,
             k_cool=0.0,
-            b_att=0.0,
         ),
         env_temperature=20.0,
     )
@@ -17,13 +31,15 @@ def test_update_temperature_includes_quadratic_concurrency_term():
         state={"temperature": 30.0},
         features={
             "power_total": 1.0,
-            "concurrency": 2,
-            "attitude_cooling_disturbance": 0.0,
+            "cpu_used": 2.0,
+            "gpu_used": 1.0,
+            "cpu_capacity": 4.0,
+            "gpu_capacity": 2.0,
         },
         dt=1.0,
     )
 
-    assert nxt["temperature"] == 30.9
+    assert nxt["temperature"] == 30.3
 
 
 def test_max_continuous_warning_duration_is_detected():
@@ -38,7 +54,6 @@ def test_temperature_keeps_when_at_env_and_no_heat_gen():
             a_c=0.0,
             lambda_concurrency=0.0,
             k_cool=0.1,
-            b_att=0.0,
         ),
         env_temperature=20.0,
     )
@@ -47,8 +62,10 @@ def test_temperature_keeps_when_at_env_and_no_heat_gen():
         state={"temperature": 20.0},
         features={
             "power_total": 0.0,
-            "concurrency": 0,
-            "attitude_cooling_disturbance": 0.0,
+            "cpu_used": 0.0,
+            "gpu_used": 0.0,
+            "cpu_capacity": 4.0,
+            "gpu_capacity": 2.0,
         },
         dt=1.0,
     )
@@ -56,14 +73,13 @@ def test_temperature_keeps_when_at_env_and_no_heat_gen():
     assert nxt["temperature"] == 20.0
 
 
-def test_attitude_cooling_disturbance_hook_affects_temperature():
+def test_update_falls_back_to_direct_concurrency_when_capacity_missing():
     model = SemiEmpiricalThermalModelV1(
         ThermalCoefficients(
-            a_p=0.0,
+            a_p=0.1,
             a_c=0.0,
-            lambda_concurrency=0.0,
+            lambda_concurrency=0.2,
             k_cool=0.0,
-            b_att=1.0,
         ),
         env_temperature=20.0,
     )
@@ -71,14 +87,13 @@ def test_attitude_cooling_disturbance_hook_affects_temperature():
     nxt = model.update(
         state={"temperature": 30.0},
         features={
-            "power_total": 0.0,
-            "concurrency": 0,
-            "attitude_cooling_disturbance": 2.0,
+            "power_total": 1.0,
+            "concurrency": 1.0,
         },
         dt=1.0,
     )
 
-    assert nxt["temperature"] == 28.0
+    assert nxt["temperature"] == 30.3
 
 
 def test_noop_model_returns_input_temperature():
@@ -89,7 +104,7 @@ def test_noop_model_returns_input_temperature():
 
 def test_model_ignores_cpu_gpu_memory_fields_in_features():
     model = SemiEmpiricalThermalModelV1(
-        ThermalCoefficients(a_p=0.5, a_c=0.5, lambda_concurrency=0.0, k_cool=0.0, b_att=0.0),
+        ThermalCoefficients(a_p=0.5, a_c=0.5, lambda_concurrency=0.0, k_cool=0.0),
         env_temperature=20.0,
     )
     base = model.update(

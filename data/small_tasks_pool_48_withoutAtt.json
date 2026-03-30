@@ -135,7 +135,7 @@
       "payload_type_requirements": ["relay"],
       "predecessors": ["group02_compute02"],
       "visibility_window": "gs_downlink_1",
-      "attitude_angle_deg": 201.0,
+      "attitude_angle_deg": 223.0,
       "is_key_task": false
     },
 
@@ -196,7 +196,7 @@
       "payload_type_requirements": ["relay"],
       "predecessors": ["group03_compute01"],
       "visibility_window": "gs_downlink_1",
-      "attitude_angle_deg": 219.0,
+      "attitude_angle_deg": 223.0,
       "is_key_task": false
     },
 
@@ -263,7 +263,7 @@
     {
       "task_id": "group04_relay",
       "duration": 7,
-      "value": 43,
+      "value": 45,
       "cpu": 1,
       "gpu": 0,
       "memory": 3,
@@ -272,7 +272,7 @@
       "payload_type_requirements": ["relay"],
       "predecessors": ["group04_compute02"],
       "visibility_window": "gs_downlink_2",
-      "attitude_angle_deg": 198.0,
+      "attitude_angle_deg": 98.0,
       "is_key_task": false
     },
 
@@ -333,7 +333,7 @@
       "payload_type_requirements": ["relay"],
       "predecessors": ["group05_compute01"],
       "visibility_window": "gs_downlink_2",
-      "attitude_angle_deg": 214.0,
+      "attitude_angle_deg": 98.0,
       "is_key_task": false
     },
 
@@ -424,7 +424,7 @@
       "payload_type_requirements": ["relay"],
       "predecessors": ["group06_compute03"],
       "visibility_window": "gs_downlink_2",
-      "attitude_angle_deg": 206.0,
+      "attitude_angle_deg": 98.0,
       "is_key_task": false
     },
 
@@ -500,7 +500,7 @@
       "payload_type_requirements": ["relay"],
       "predecessors": ["group07_compute02"],
       "visibility_window": "gs_downlink_1",
-      "attitude_angle_deg": 217.0,
+      "attitude_angle_deg": 223.0,
       "is_key_task": false
     },
   
@@ -561,7 +561,7 @@
       "payload_type_requirements": ["relay"],
       "predecessors": ["group08_compute01"],
       "visibility_window": "gs_downlink_2",
-      "attitude_angle_deg": 214.0,
+      "attitude_angle_deg": 98.0,
       "is_key_task": false
     },
 
@@ -652,7 +652,7 @@
       "payload_type_requirements": ["relay"],
       "predecessors": ["group09_compute03"],
       "visibility_window": "gs_downlink_2",
-      "attitude_angle_deg": 206.0,
+      "attitude_angle_deg": 98.0,
       "is_key_task": false
     },
 
@@ -728,7 +728,7 @@
       "payload_type_requirements": ["relay"],
       "predecessors": ["group10_compute02"],
       "visibility_window": "gs_downlink_1",
-      "attitude_angle_deg": 217.0,
+      "attitude_angle_deg": 223.0,
       "is_key_task": false
     }
   ]
