@@ -8,7 +8,9 @@ from pathlib import Path
 
 from ortools.sat.python import cp_model
 
+from . import constraint_value_engine
 from .heuristic_scheduler import HeuristicResult
+from .objective_engine import build_scale_config, normalize_to_scale
 from .models import ScheduleItem, Task, UnscheduledItem
 from .problem_builder import ProblemInstance
 from .result_writer import append_iteration_log
@@ -22,6 +24,8 @@ class ImproveResult:
     objective_value: float
     iteration_log_count: int
     runtime_ms: int
+    objective_breakdown: dict[str, float]
+
 
 
 class _ProgressCallback(cp_model.CpSolverSolutionCallback):
@@ -86,6 +90,14 @@ def _transition_time_from_initial(initial_angle: float, task_angle: float | None
     return int(round(delta * per_degree))
 
 
+def _piecewise_square_upper_bound(value: int, upper: int) -> int:
+    """给平方项提供保守上界，保持向上取整的单调性。"""
+    value = max(0, int(value))
+    upper = max(0, int(upper))
+    capped = min(value, upper)
+    return capped * capped
+
+
 def improve_schedule(
     problem: ProblemInstance,
     warm_start: HeuristicResult,
@@ -126,6 +138,8 @@ def improve_schedule(
         selected[task.task_id] = sel
         intervals[task.task_id] = interval
 
+    # 约束组1：任务依赖约束。
+    # 工程语义：若子任务被选中，其前驱必须被选中且前驱先完成。
     for task in problem.tasks:
         for pred in task.predecessors:
             model.Add(selected[task.task_id] <= selected[pred])
@@ -142,6 +156,8 @@ def improve_schedule(
             model.Add(starts[task.task_id] >= init_transition).OnlyEnforceIf(selected[task.task_id])
 
     # 隐式姿态切换约束：当两个有姿态任务都被选中时，必须满足二选一顺序与对应转姿间隔。
+    transition_cost_vars: list[cp_model.IntVar] = []
+    max_transition_cost = max(problem.attitude_transition_cost.values(), default=1)
     for left_idx in range(len(problem.tasks)):
         left = problem.tasks[left_idx]
         if left.attitude_angle_deg is None:
@@ -155,6 +171,10 @@ def improve_schedule(
             lr_gap = int(problem.attitude_transition_cost[(left.task_id, right.task_id)])
             rl_gap = int(problem.attitude_transition_cost[(right.task_id, left.task_id)])
 
+            if lr_gap == 0 and rl_gap == 0:
+                # 同姿态无需转姿，是否重叠由资源累积约束统一裁决。
+                continue
+
             model.Add(starts[right.task_id] >= ends[left.task_id] + lr_gap).OnlyEnforceIf(
                 [selected[left.task_id], selected[right.task_id], left_before_right]
             )
@@ -162,11 +182,109 @@ def improve_schedule(
                 [selected[left.task_id], selected[right.task_id], left_before_right.Not()]
             )
 
+            # 工程语义：平滑度应惩罚“真实转姿成本”，而非绝对姿态角。
+            # pair_active 表示两个任务都被选择，cost_var 表示这对任务的实际转姿代价。
+            pair_active = model.NewBoolVar(f"pair_{left.task_id}_{right.task_id}")
+            model.AddBoolAnd([selected[left.task_id], selected[right.task_id]]).OnlyEnforceIf(pair_active)
+            model.AddBoolOr([selected[left.task_id].Not(), selected[right.task_id].Not(), pair_active])
+
+            cost_var = model.NewIntVar(0, max_transition_cost, f"transition_cost_{left.task_id}_{right.task_id}")
+            model.Add(cost_var == 0).OnlyEnforceIf(pair_active.Not())
+            model.Add(cost_var == lr_gap).OnlyEnforceIf([pair_active, left_before_right])
+            model.Add(cost_var == rl_gap).OnlyEnforceIf([pair_active, left_before_right.Not()])
+            transition_cost_vars.append(cost_var)
+
+    thermal_cfg = problem.thermal_config or {}
+    profiles = thermal_cfg.get("objective_profiles", {})
+    base_weights = profiles.get(
+        "base",
+        {
+            "task_value": 0.4,
+            "completion": 0.15,
+            "association": 0.1,
+            "thermal_safety": 0.15,
+            "power_smoothing": 0.1,
+            "resource_utilization": 0.05,
+            "smoothness": 0.05,
+        },
+    )
+    active_weights = {key: float(value) for key, value in base_weights.items()}
+
+    scale_cfg = build_scale_config(thermal_cfg.get("objective_scaling", {}), target_min=0.0, target_max=1.0)
+    objective_ranges = scale_cfg.ranges
+    component_scale = max(int(thermal_cfg.get("objective_component_scale", 1000)), 1)
+    weight_scale = max(int(thermal_cfg.get("objective_weight_scale", 1000)), 1)
+
     # 关键任务仍是“尽量必排”，通过目标奖励提升优先级，而非强制必须选中。
+    total_tasks = max(len(problem.tasks), 1)
+    max_thermal_load = max((float(task.thermal_load) for task in problem.tasks), default=1.0)
+    power_capacity = max(float(problem.capacities["power"]), 1.0)
+    safe_power_ratio = float(thermal_cfg.get("power_safe_ratio", 0.7))
+    safe_power_limit = max(0.0, min(power_capacity, power_capacity * safe_power_ratio))
+
+    solver_coefficients = constraint_value_engine.build_solver_coefficients(
+        tasks=problem.tasks,
+        capacities=problem.capacities,
+        thermal_cfg=thermal_cfg,
+        key_task_bonus=key_task_bonus,
+        objective_ranges=objective_ranges,
+        component_scale=component_scale,
+    )
+    task_value_coeff = dict(solver_coefficients.get("task_value", {}))
+    association_coeff = dict(solver_coefficients.get("association", {}))
+    thermal_proxy_coeff = dict(solver_coefficients.get("thermal_proxy", {}))
+    power_proxy_coeff = dict(solver_coefficients.get("power_proxy", {}))
+    utilization_coeff = dict(solver_coefficients.get("utilization", {}))
+    completion_step = int(solver_coefficients.get("completion_step", 1))
+
+    task_value_expr = sum(
+        int(task_value_coeff.get(task.task_id, 0)) * selected[task.task_id]
+        for task in problem.tasks
+    )
+    completion_expr = completion_step * sum(selected[task.task_id] for task in problem.tasks)
+    association_expr = sum(
+        int(association_coeff.get(task.task_id, 0)) * selected[task.task_id]
+        for task in problem.tasks
+    )
+    thermal_proxy_expr = sum(
+        int(thermal_proxy_coeff.get(task.task_id, 0)) * selected[task.task_id]
+        for task in problem.tasks
+    )
+    power_proxy_expr = sum(
+        int(power_proxy_coeff.get(task.task_id, 0)) * selected[task.task_id]
+        for task in problem.tasks
+    )
+    utilization_expr = sum(
+        int(utilization_coeff.get(task.task_id, 0)) * selected[task.task_id]
+        for task in problem.tasks
+    )
+    transition_scale = max(max_transition_cost, 1)
+    smoothness_proxy_expr: cp_model.LinearExpr = 0
+    if transition_cost_vars:
+        smoothness_unit = max(1, int(solver_coefficients.get("smoothness_scale", 1)))
+        smoothness_proxy_expr = smoothness_unit * sum(transition_cost_vars)
+
+    # 目标组装：收益项正向、风险项负向，统一在一个线性目标中加权求和。
     objective_terms: list[cp_model.LinearExpr] = []
-    for task in problem.tasks:
-        weight = task.value + (key_task_bonus if task.is_key_task else 0.0)
-        objective_terms.append(int(weight * 100) * selected[task.task_id])
+    objective_terms.append(int(active_weights.get("task_value", 0.0) * weight_scale) * task_value_expr)
+    objective_terms.append(int(active_weights.get("completion", 0.0) * weight_scale) * completion_expr)
+    objective_terms.append(int(active_weights.get("association", 0.0) * weight_scale) * association_expr)
+    objective_terms.append(-int(active_weights.get("thermal_safety", 0.0) * weight_scale) * thermal_proxy_expr)
+    objective_terms.append(-int(active_weights.get("power_smoothing", 0.0) * weight_scale) * power_proxy_expr)
+    objective_terms.append(int(active_weights.get("resource_utilization", 0.0) * weight_scale) * utilization_expr)
+    objective_terms.append(-int(active_weights.get("smoothness", 0.0) * weight_scale) * smoothness_proxy_expr)
+
+    warning_load = thermal_cfg.get("warning_thermal_load")
+    if isinstance(warning_load, (int, float)):
+        thermal_concurrency_limit = max(1, int(thermal_cfg.get("thermal_concurrency_limit", 1)))
+        high_heat_intervals = [
+            intervals[task.task_id]
+            for task in problem.tasks
+            if task.task_id in intervals and float(task.thermal_load) >= float(warning_load)
+        ]
+        if high_heat_intervals:
+            # 工程语义：在真实时间轴限制高热任务并发，而非按拓扑序窗口截断。
+            model.AddCumulative(high_heat_intervals, [1] * len(high_heat_intervals), thermal_concurrency_limit)
 
     # 资源累积约束：每种资源都是一个容量约束。
     all_intervals = [intervals[tid] for tid in intervals]
@@ -211,6 +329,15 @@ def improve_schedule(
             objective_value=0.0,
             iteration_log_count=callback.log_count,
             runtime_ms=runtime_ms,
+            objective_breakdown={
+                "task_value": 0.0,
+                "completion": 0.0,
+                "association": 0.0,
+                "thermal_safety": 0.0,
+                "power_smoothing": 0.0,
+                "resource_utilization": 0.0,
+                "smoothness": 0.0,
+            },
         )
 
     chosen: list[ScheduleItem] = []
@@ -227,6 +354,7 @@ def improve_schedule(
                     value=task.value,
                     is_key_task=task.is_key_task,
                     visibility_window_id=task.visibility_window.window_id if task.visibility_window else None,
+                    cpu=task.cpu,
                 )
             )
         else:
@@ -240,6 +368,87 @@ def improve_schedule(
             )
 
     chosen.sort(key=lambda x: (x.start, x.task_id))
+    if chosen:
+        avg_value = sum(float(item.value) for item in chosen) / len(chosen)
+        avg_power = sum(float(problem.task_map[item.task_id].power) for item in chosen) / len(chosen)
+        avg_thermal_load = sum(float(problem.task_map[item.task_id].thermal_load) for item in chosen) / len(chosen)
+        avg_transition = 0.0
+        for idx in range(1, len(chosen)):
+            left = problem.task_map[chosen[idx - 1].task_id]
+            right = problem.task_map[chosen[idx].task_id]
+            avg_transition += float(problem.attitude_transition_cost[(left.task_id, right.task_id)])
+        avg_transition = avg_transition / max(len(chosen) - 1, 1)
+    else:
+        avg_value = 0.0
+        avg_power = 0.0
+        avg_thermal_load = 0.0
+        avg_transition = 0.0
+
+    total_tasks = max(len(problem.tasks), 1)
+    completion_ratio = len(chosen) / total_tasks
+    association_ratio = sum(1 for item in chosen if problem.task_map[item.task_id].predecessors) / max(len(chosen), 1)
+    thermal_safety_ratio = max(0.0, 1.0 - min(1.0, avg_thermal_load / max(max_thermal_load, 1e-6)))
+    power_over = max(0.0, avg_power - safe_power_limit)
+    power_denominator = max(power_capacity - safe_power_limit, 1.0)
+    power_smoothing_ratio = max(0.0, 1.0 - min(1.0, power_over / power_denominator))
+    utilization_ratio = min(
+        1.0,
+        sum(problem.task_map[item.task_id].cpu + problem.task_map[item.task_id].gpu for item in chosen)
+        / max(float(len(chosen) * (problem.capacities["cpu"] + problem.capacities["gpu"])), 1.0),
+    )
+    smoothness_ratio = max(0.0, 1.0 - min(1.0, avg_transition / max(float(transition_scale), 1.0)))
+
+    objective_breakdown = {
+        "task_value": normalize_to_scale(
+            avg_value,
+            objective_ranges["task_value"][0],
+            objective_ranges["task_value"][1],
+            target_min=0.0,
+            target_max=100.0,
+        ),
+        "completion": normalize_to_scale(
+            completion_ratio,
+            objective_ranges["completion"][0],
+            objective_ranges["completion"][1],
+            target_min=0.0,
+            target_max=100.0,
+        ),
+        "association": normalize_to_scale(
+            association_ratio,
+            objective_ranges["association"][0],
+            objective_ranges["association"][1],
+            target_min=0.0,
+            target_max=100.0,
+        ),
+        "thermal_safety": normalize_to_scale(
+            thermal_safety_ratio,
+            objective_ranges["thermal_safety"][0],
+            objective_ranges["thermal_safety"][1],
+            target_min=0.0,
+            target_max=100.0,
+        ),
+        "power_smoothing": normalize_to_scale(
+            power_smoothing_ratio,
+            objective_ranges["power_smoothing"][0],
+            objective_ranges["power_smoothing"][1],
+            target_min=0.0,
+            target_max=100.0,
+        ),
+        "resource_utilization": normalize_to_scale(
+            utilization_ratio,
+            objective_ranges["resource_utilization"][0],
+            objective_ranges["resource_utilization"][1],
+            target_min=0.0,
+            target_max=100.0,
+        ),
+        "smoothness": normalize_to_scale(
+            smoothness_ratio,
+            objective_ranges["smoothness"][0],
+            objective_ranges["smoothness"][1],
+            target_min=0.0,
+            target_max=100.0,
+        ),
+    }
     runtime_ms = int((time.perf_counter() - started) * 1000)
     return ImproveResult(
         schedule=chosen,
@@ -248,4 +457,5 @@ def improve_schedule(
         objective_value=float(solver.ObjectiveValue()),
         iteration_log_count=callback.log_count,
         runtime_ms=runtime_ms,
+        objective_breakdown=objective_breakdown,
     )

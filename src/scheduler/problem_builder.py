@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any
 
 from .models import Task, VisibilityWindow
 
@@ -19,6 +20,7 @@ class ProblemInstance:
     attitude_time_per_degree: float
     horizon: int
     capacities: dict[str, int]
+    thermal_config: dict[str, Any]
 
 
 def _topological_sort(tasks: list[Task]) -> list[str]:
@@ -78,6 +80,7 @@ def build_problem(
     horizon: int,
     capacities: dict[str, int],
     attitude_time_per_degree: float,
+    thermal_config: dict[str, Any] | None = None,
 ) -> ProblemInstance:
     """将输入任务构建为统一问题对象。"""
     topological_tasks = _topological_sort(tasks)
@@ -92,4 +95,5 @@ def build_problem(
         attitude_time_per_degree=attitude_time_per_degree,
         horizon=horizon,
         capacities=capacities,
+        thermal_config=thermal_config or {},
     )

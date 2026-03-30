@@ -15,6 +15,7 @@ from .heuristic_scheduler import build_initial_schedule
 from .models import ScheduleResult
 from .problem_builder import build_problem
 from .result_writer import append_iteration_log, initialize_iteration_log, materialize_att_segments, write_schedule_result
+from .thermal_model import SemiEmpiricalThermalModelV1, ThermalCoefficients
 
 
 def _build_metrics(schedule, unscheduled, all_tasks_count: int, total_key_tasks: int) -> dict[str, float | int]:
@@ -31,6 +32,124 @@ def _build_metrics(schedule, unscheduled, all_tasks_count: int, total_key_tasks:
         "unscheduled_task_count": len(unscheduled),
         "scheduled_task_ratio": round(len(schedule) / max(all_tasks_count, 1), 4),
         "key_task_completion_ratio": round(key_done / max(key_total, 1), 4),
+    }
+
+
+def _resolve_initial_temperature(runtime_cfg: dict, output_root: Path) -> float:
+    fallback = float(runtime_cfg.get("initial_temperature_fallback", 25.0))
+    if str(runtime_cfg.get("thermal_initial_source", "last_state_first")) != "last_state_first":
+        return fallback
+
+    last_state_file = output_root / "last_state.json"
+    if not last_state_file.exists():
+        return fallback
+
+    try:
+        payload = json.loads(last_state_file.read_text(encoding="utf-8"))
+    except Exception:
+        return fallback
+
+    temperature = payload.get("temperature")
+    if not isinstance(temperature, (int, float)):
+        return fallback
+
+    max_age = float(runtime_cfg.get("replan_state_max_age_sec", 600))
+    ts = payload.get("timestamp")
+    if isinstance(ts, (int, float)):
+        now = time.time()
+        if now - float(ts) > max_age:
+            return fallback
+
+    return float(temperature)
+
+
+def _simulate_thermal_metrics(
+    schedule: list,
+    *,
+    task_map: dict,
+    capacities: dict[str, int],
+    thermal_cfg: dict,
+    initial_temperature: float,
+) -> dict[str, float]:
+    coeff = thermal_cfg.get("coefficients", {})
+    model = SemiEmpiricalThermalModelV1(
+        ThermalCoefficients(
+            a_p=float(coeff.get("a_p", 0.0)),
+            a_c=float(coeff.get("a_c", 0.0)),
+            lambda_concurrency=float(coeff.get("lambda_concurrency", 0.0)),
+            k_cool=float(coeff.get("k_cool", 0.0)),
+        ),
+        env_temperature=float(thermal_cfg.get("env_temperature", 20.0)),
+    )
+    warning = float(thermal_cfg.get("warning_threshold", 0.0))
+    danger = float(thermal_cfg.get("danger_threshold", warning + 1.0))
+    dt = float(thermal_cfg.get("thermal_time_step", 1.0))
+
+    state = {"temperature": float(initial_temperature)}
+    peak = state["temperature"]
+    warning_steps = 0
+    max_warning_steps = 0
+    running_warning = 0
+    penalty_total = 0.0
+
+    ordered = sorted([x for x in schedule if x.item_type == "BUSINESS"], key=lambda x: (x.start, x.task_id))
+    current_time = 0
+
+    for item in ordered:
+        idle = max(0, int(item.start - current_time))
+        for _ in range(idle):
+            state = model.update(
+                state,
+                {
+                    "power_total": 0.0,
+                    "cpu_used": 0.0,
+                    "gpu_used": 0.0,
+                    "cpu_capacity": max(float(capacities.get("cpu", 1)), 1.0),
+                    "gpu_capacity": max(float(capacities.get("gpu", 1)), 1.0),
+                },
+                dt,
+            )
+            temp = float(state["temperature"])
+            peak = max(peak, temp)
+            if warning <= temp < danger:
+                warning_steps += 1
+                running_warning += 1
+            else:
+                running_warning = 0
+            max_warning_steps = max(max_warning_steps, running_warning)
+            penalty_total += max(0.0, temp - warning)
+
+        task = task_map[item.task_id]
+        for _ in range(int(task.duration)):
+            state = model.update(
+                state,
+                {
+                    "power_total": float(task.power),
+                    "cpu_used": float(task.cpu),
+                    "gpu_used": float(task.gpu),
+                    "cpu_capacity": max(float(capacities.get("cpu", 1)), 1.0),
+                    "gpu_capacity": max(float(capacities.get("gpu", 1)), 1.0),
+                },
+                dt,
+            )
+            temp = float(state["temperature"])
+            peak = max(peak, temp)
+            if warning <= temp < danger:
+                warning_steps += 1
+                running_warning += 1
+            else:
+                running_warning = 0
+            max_warning_steps = max(max_warning_steps, running_warning)
+            penalty_total += max(0.0, temp - warning)
+
+        current_time = int(item.end)
+
+    return {
+        "peak_temperature": float(round(peak, 4)),
+        "min_thermal_margin": float(round(danger - peak, 4)),
+        "warning_duration": float(round(warning_steps * dt, 4)),
+        "max_continuous_warning_duration": float(round(max_warning_steps * dt, 4)),
+        "thermal_penalty_total": float(round(penalty_total, 4)),
     }
 
 
@@ -54,6 +173,9 @@ def run_pipeline(config_path: str, *, seed: int, output_dir: str) -> dict:
     tasks, windows, _ = load_static_task_bundle(cfg)
 
     constraints = cfg["constraints"]
+    output_root = Path(output_dir)
+    output_root.mkdir(parents=True, exist_ok=True)
+    initial_temperature = _resolve_initial_temperature(cfg["runtime"], output_root)
     problem = build_problem(
         tasks=tasks,
         windows=windows,
@@ -65,6 +187,13 @@ def run_pipeline(config_path: str, *, seed: int, output_dir: str) -> dict:
             "power": int(constraints["power_capacity"]),
         },
         attitude_time_per_degree=float(constraints["attitude_time_per_degree"]),
+        thermal_config={
+            **dict(constraints.get("thermal", {})),
+            "thermal_time_step": float(cfg["runtime"]["thermal_time_step"]),
+            "initial_temperature": float(initial_temperature),
+            "initial_temperature_fallback": float(cfg["runtime"]["initial_temperature_fallback"]),
+            "objective_scaling": dict(constraints.get("objective_scaling", {})),
+        },
     )
 
     heuristic_started = time.perf_counter()
@@ -78,9 +207,6 @@ def run_pipeline(config_path: str, *, seed: int, output_dir: str) -> dict:
     warm_dict = asdict(warm)
     print(json.dumps(warm_dict, ensure_ascii=False, indent=2))
     heuristic_runtime_ms = int((time.perf_counter() - heuristic_started) * 1000)
-
-    output_root = Path(output_dir)
-    output_root.mkdir(parents=True, exist_ok=True)
 
     progress_file = output_root / "solver_progress.jsonl"
     initialize_iteration_log(progress_file)
@@ -115,6 +241,14 @@ def run_pipeline(config_path: str, *, seed: int, output_dir: str) -> dict:
         initial_attitude_angle_deg=float(cfg["runtime"]["initial_attitude_angle_deg"]),
     )
 
+    final_thermal_metrics = _simulate_thermal_metrics(
+        improve.schedule,
+        task_map=problem.task_map,
+        capacities=problem.capacities,
+        thermal_cfg=problem.thermal_config,
+        initial_temperature=initial_temperature,
+    )
+
     materialized_schedule = materialize_att_segments(
         improve.schedule,
         task_map=problem.task_map,
@@ -128,11 +262,13 @@ def run_pipeline(config_path: str, *, seed: int, output_dir: str) -> dict:
         len(tasks),
         total_key_tasks=sum(1 for t in tasks if t.is_key_task),
     )
+    metrics.update(final_thermal_metrics)
     total_runtime_ms = int((time.perf_counter() - started) * 1000)
 
     solver_summary = {
         "status": improve.solver_status,
         "objective_value": improve.objective_value,
+        "objective_breakdown": improve.objective_breakdown,
         "heuristic_runtime_ms": heuristic_runtime_ms,
         "cpsat_runtime_ms": improve.runtime_ms,
         "total_runtime_ms": total_runtime_ms,

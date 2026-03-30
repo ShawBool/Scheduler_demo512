@@ -43,6 +43,7 @@ class ScheduleItem:
     value: int
     is_key_task: bool
     visibility_window_id: str | None
+    cpu: int = 0
     item_type: str = "BUSINESS"
 
 

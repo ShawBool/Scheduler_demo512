@@ -1,21 +1,31 @@
 {
   "cpu_capacity": 4,
-  "gpu_capacity": 2,
+  "gpu_capacity":3,
   "memory_capacity": 512,
-  "power_capacity": 60,
-  "thermal_capacity": 100,
+  "power_capacity": 10,
+  "thermal": {
+    "warning_threshold": 80,
+    "danger_threshold": 100,
+    "max_warning_duration": 60,
+    "warning_thermal_load": 5,
+    "thermal_concurrency_limit": 1,
+    "power_safe_ratio": 0.7,
+    "env_temperature": 20,
+    "coefficients": {
+      "a_p": 0.002,
+      "a_c": 0.03,
+      "lambda_concurrency": 0.01,
+      "k_cool": 0.005
+    }
+  },
   "attitude_time_per_degree": 0.01,
-  "critical_payload_ids": [
-    "C1",
-    "C2",
-    "R2",
-    "R1",
-    "A1",
-    "A2"
-  ],
-  "payload_type_capacity": {
-    "camera": 2,
-    "radar": 2,
-    "relay": 2
+  "objective_scaling": {
+    "task_value": [0, 100],
+    "completion": [0, 1],
+    "association": [0, 1],
+    "thermal_safety": [0, 1],
+    "power_smoothing": [0, 1],
+    "resource_utilization": [0, 1],
+    "smoothness": [0, 1]
   }
 }

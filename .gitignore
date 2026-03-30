@@ -72,3 +72,5 @@ site/
 
 # Git worktrees
 .worktrees/
+# output
+output/
