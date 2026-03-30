@@ -91,24 +91,25 @@ def materialize_att_segments(
 
         if target_att is not None:
             transition = _transition_duration(current_attitude, target_att, attitude_time_per_degree)
-            att_end = item.start
-            att_start = att_end - transition
-            if materialized and att_start < materialized[-1].end:
-                att_start = materialized[-1].end
-                if att_start > att_end:
-                    att_start = att_end
+            if transition > 0:
+                att_end = item.start
+                att_start = att_end - transition
+                if materialized and att_start < materialized[-1].end:
+                    att_start = materialized[-1].end
+                    if att_start > att_end:
+                        att_start = att_end
 
-            materialized.append(
-                ScheduleItem(
-                    task_id=f"{item.task_id}_att",
-                    start=att_start,
-                    end=att_end,
-                    value=0,
-                    is_key_task=False,
-                    visibility_window_id=item.visibility_window_id,
-                    item_type="ATTITUDE",
+                materialized.append(
+                    ScheduleItem(
+                        task_id=f"{item.task_id}_att",
+                        start=att_start,
+                        end=att_end,
+                        value=0,
+                        is_key_task=False,
+                        visibility_window_id=item.visibility_window_id,
+                        item_type="ATTITUDE",
+                    )
                 )
-            )
 
         materialized.append(
             ScheduleItem(

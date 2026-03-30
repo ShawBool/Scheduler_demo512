@@ -53,53 +53,32 @@ def test_pipeline_outputs_thermal_metrics(tmp_path):
     assert "thermal_penalty_total" in metrics
 
 
-def test_pipeline_outputs_objective_breakdown_and_active_profile(tmp_path):
+def test_pipeline_outputs_objective_breakdown(tmp_path):
     out = run_pipeline("config", seed=42, output_dir=tmp_path.as_posix())
     assert "objective_breakdown" in out["solver_summary"]
-    assert "active_weight_profile" in out["solver_summary"]
-    assert "switch_reason" in out["solver_summary"]
+    assert "objective_breakdown_raw" not in out["solver_summary"]
+    assert "active_weight_profile" not in out["solver_summary"]
+    assert "switch_reason" not in out["solver_summary"]
+    assert "weight_profile_history" not in out["solver_summary"]
 
 
-def test_dynamic_weight_profile_changes_after_simulated_thermal_replay(tmp_path):
-    config_dir = tmp_path / "config_case_reweight"
-    config_dir.mkdir(parents=True, exist_ok=True)
-    for name in ("runtime.json", "constraints.json", "logging.json", "replan.json"):
-        shutil.copy(Path("config") / name, config_dir / name)
-
-    runtime_path = config_dir / "runtime.json"
-    runtime_cfg = json.loads(runtime_path.read_text(encoding="utf-8"))
-    runtime_cfg["dynamic_weight_enable"] = True
-    runtime_cfg["thermal_weight_trigger_ratio"] = 0.2
-    runtime_cfg["max_reweight_rounds"] = 3
-    runtime_path.write_text(json.dumps(runtime_cfg, ensure_ascii=False, indent=2), encoding="utf-8")
-
-    out = run_pipeline(str(config_dir), seed=42, output_dir=tmp_path.as_posix())
-    history = out["solver_summary"].get("weight_profile_history", [])
-    assert len(history) >= 2
-    assert any(item["profile"] == "thermal" for item in history)
-
-
-def test_thermal_profile_increases_thermal_safety_weight_effect(tmp_path):
+def test_pipeline_can_run_with_copied_config_directory(tmp_path):
     config_dir = tmp_path / "config_case"
     config_dir.mkdir(parents=True, exist_ok=True)
-    for name in ("runtime.json", "constraints.json", "logging.json", "replan.json"):
+    for name in ("runtime.json", "constraints.json", "logging.json"):
         shutil.copy(Path("config") / name, config_dir / name)
 
-    runtime_path = config_dir / "runtime.json"
-    runtime_cfg = json.loads(runtime_path.read_text(encoding="utf-8"))
-    runtime_cfg["thermal_weight_trigger_ratio"] = 0.9
-    runtime_path.write_text(json.dumps(runtime_cfg, ensure_ascii=False, indent=2), encoding="utf-8")
+    out = run_pipeline(str(config_dir), seed=42, output_dir=(tmp_path / "run").as_posix())
+    assert "objective_breakdown" in out["solver_summary"]
 
-    constraints_path = config_dir / "constraints.json"
-    constraints_cfg = json.loads(constraints_path.read_text(encoding="utf-8"))
-    constraints_cfg.setdefault("thermal", {})["danger_threshold"] = 100
-    constraints_path.write_text(json.dumps(constraints_cfg, ensure_ascii=False, indent=2), encoding="utf-8")
 
-    base_out = run_pipeline(str(config_dir), seed=42, output_dir=(tmp_path / "base").as_posix())
-    assert base_out["solver_summary"]["active_weight_profile"] == "base"
+def test_solver_summary_does_not_expose_objective_breakdown_raw(tmp_path):
+    out = run_pipeline("config", seed=42, output_dir=tmp_path.as_posix())
+    assert "objective_breakdown_raw" not in out["solver_summary"]
 
-    runtime_cfg["thermal_weight_trigger_ratio"] = 0.2
-    runtime_path.write_text(json.dumps(runtime_cfg, ensure_ascii=False, indent=2), encoding="utf-8")
-    thermal_out = run_pipeline(str(config_dir), seed=42, output_dir=(tmp_path / "thermal").as_posix())
 
-    assert thermal_out["solver_summary"]["active_weight_profile"] == "thermal"
+def test_config_comment_doc_covers_all_json_configs():
+    text = Path("docs/配置文件注释说明.md").read_text(encoding="utf-8")
+    assert "runtime.json" in text
+    assert "constraints.json" in text
+    assert "logging.json" in text

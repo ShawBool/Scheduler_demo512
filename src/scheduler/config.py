@@ -24,29 +24,6 @@ def _default_thermal_coefficients() -> dict[str, float]:
     }
 
 
-def _default_objective_profiles() -> dict[str, dict[str, float]]:
-    return {
-        "base": {
-            "task_value": 0.40,
-            "completion": 0.15,
-            "association": 0.10,
-            "thermal_safety": 0.15,
-            "power_smoothing": 0.10,
-            "resource_utilization": 0.05,
-            "smoothness": 0.05,
-        },
-        "thermal": {
-            "task_value": 0.25,
-            "completion": 0.10,
-            "association": 0.05,
-            "thermal_safety": 0.35,
-            "power_smoothing": 0.10,
-            "resource_utilization": 0.10,
-            "smoothness": 0.05,
-        },
-    }
-
-
 def _default_objective_scaling() -> dict[str, list[float]]:
     return {
         "task_value": [0.0, 100.0],
@@ -63,7 +40,7 @@ def load_config(path: str | Path) -> dict[str, Any]:
     """加载配置目录。
 
     说明：
-    1. 一期仅做静态基线规划，因此只依赖 runtime/constraints/logging/replan。
+    1. 一期仅做静态基线规划，因此只依赖 runtime/constraints/logging。
     2. objective_weights 仍保留，便于控制关键任务权重与收益权重。
     """
     cfg_path = Path(path)
@@ -76,7 +53,6 @@ def load_config(path: str | Path) -> dict[str, Any]:
     runtime = _read_json(cfg_path / "runtime.json")
     constraints = _read_json(cfg_path / "constraints.json")
     logging_cfg = _read_json(cfg_path / "logging.json")
-    replan = _read_json(cfg_path / "replan.json")
 
     # 一期默认目标权重，避免额外配置文件缺失导致程序无法运行。
     objective_weights = {
@@ -89,7 +65,6 @@ def load_config(path: str | Path) -> dict[str, Any]:
         "runtime": runtime,
         "constraints": constraints,
         "logging": logging_cfg,
-        "replan": replan,
         "objective_weights": objective_weights,
     }
 
@@ -101,27 +76,19 @@ def load_config(path: str | Path) -> dict[str, Any]:
     runtime.setdefault("tasks_file", "latest_small_tasks_pool.json")
     runtime.setdefault("windows_file", "latest_windows.json")
     runtime.setdefault("solver_timeout_sec", 30)
-    runtime.setdefault("solver_progress_enable", True)
     runtime.setdefault("solver_progress_every_n_solutions", 10)
     runtime.setdefault("heuristic_log_every_n", int(runtime["solver_progress_every_n_solutions"]))
     runtime.setdefault("cpsat_log_every_n", int(runtime["solver_progress_every_n_solutions"]))
-    runtime.setdefault("log_full_solution_content", True)
     runtime.setdefault("thermal_time_step", int(runtime["time_step"]))
     runtime.setdefault("initial_temperature_fallback", 25.0)
     runtime.setdefault("thermal_initial_source", "last_state_first")
     runtime.setdefault("replan_state_max_age_sec", 600)
-    runtime.setdefault("dynamic_weight_enable", True)
-    runtime.setdefault("thermal_weight_trigger_ratio", 0.8)
-    runtime.setdefault("max_reweight_rounds", 1)
 
     data_dir = Path(str(runtime["data_dir"]))
     runtime.setdefault("static_tasks_file", str(data_dir / str(runtime["tasks_file"])))
     runtime.setdefault("static_windows_file", str(data_dir / str(runtime["windows_file"])))
-    constraints.setdefault("attitude_power_reserve", 0.0)
 
     thermal_cfg = constraints.setdefault("thermal", {})
-    if "danger_threshold" not in thermal_cfg and "thermal_capacity" in constraints:
-        thermal_cfg["danger_threshold"] = float(constraints["thermal_capacity"])
     thermal_cfg.setdefault("danger_threshold", 100.0)
     thermal_cfg.setdefault("warning_threshold", float(thermal_cfg["danger_threshold"]) - 10.0)
     thermal_cfg.setdefault("max_warning_duration", 60)
@@ -129,21 +96,6 @@ def load_config(path: str | Path) -> dict[str, Any]:
     coefficients = thermal_cfg.setdefault("coefficients", {})
     for key, value in _default_thermal_coefficients().items():
         coefficients.setdefault(key, value)
-    thermal_cfg.setdefault("payload_mix_factor", 0.0)
-    thermal_cfg.setdefault("eclipse_factor", 0.0)
-
-    objective_profiles = constraints.setdefault("objective_profiles", _default_objective_profiles())
-    if not isinstance(objective_profiles, dict):
-        constraints["objective_profiles"] = _default_objective_profiles()
-    else:
-        default_profiles = _default_objective_profiles()
-        for profile_name, default_weights in default_profiles.items():
-            weights = objective_profiles.setdefault(profile_name, {})
-            if not isinstance(weights, dict):
-                objective_profiles[profile_name] = dict(default_weights)
-                continue
-            for key, value in default_weights.items():
-                weights.setdefault(key, value)
 
     objective_scaling = constraints.setdefault("objective_scaling", _default_objective_scaling())
     if not isinstance(objective_scaling, dict):
@@ -163,7 +115,7 @@ def validate_config(cfg: dict[str, Any]) -> None:
     这里坚持“尽量早失败”的原则，让错误在配置阶段就暴露，
     而不是推迟到求解阶段才报模糊错误。
     """
-    for section in ("runtime", "constraints", "logging", "objective_weights", "replan"):
+    for section in ("runtime", "constraints", "logging", "objective_weights"):
         if section not in cfg:
             raise ValueError(f"missing required config section: {section}")
 
@@ -203,27 +155,11 @@ def validate_config(cfg: dict[str, Any]) -> None:
     if not isinstance(replan_state_max_age_sec, (int, float)) or float(replan_state_max_age_sec) < 0:
         raise ValueError("runtime.replan_state_max_age_sec must be non-negative")
 
-    dynamic_weight_enable = runtime.get("dynamic_weight_enable")
-    if not isinstance(dynamic_weight_enable, bool):
-        raise ValueError("runtime.dynamic_weight_enable must be bool")
-
-    thermal_weight_trigger_ratio = runtime.get("thermal_weight_trigger_ratio")
-    if not isinstance(thermal_weight_trigger_ratio, (int, float)) or not (0.0 <= float(thermal_weight_trigger_ratio) <= 1.0):
-        raise ValueError("runtime.thermal_weight_trigger_ratio must be in [0, 1]")
-
-    max_reweight_rounds = runtime.get("max_reweight_rounds")
-    if not isinstance(max_reweight_rounds, int) or max_reweight_rounds < 1:
-        raise ValueError("runtime.max_reweight_rounds must be integer >= 1")
-
     constraints = cfg["constraints"]
     for key in ("cpu_capacity", "gpu_capacity", "memory_capacity", "power_capacity", "attitude_time_per_degree"):
         value = constraints.get(key)
         if not isinstance(value, (int, float)) or value <= 0:
             raise ValueError(f"constraints.{key} must be positive")
-
-    attitude_power_reserve = constraints.get("attitude_power_reserve")
-    if not isinstance(attitude_power_reserve, (int, float)) or attitude_power_reserve < 0:
-        raise ValueError("constraints.attitude_power_reserve must be non-negative")
 
     thermal_cfg = constraints.get("thermal")
     if thermal_cfg is None:
@@ -231,9 +167,9 @@ def validate_config(cfg: dict[str, Any]) -> None:
         constraints["thermal"] = thermal_cfg
     if not isinstance(thermal_cfg, dict):
         raise ValueError("constraints.thermal must be object")
-    if "danger_threshold" not in thermal_cfg and "thermal_capacity" in constraints:
-        thermal_cfg["danger_threshold"] = float(constraints["thermal_capacity"])
-    if "warning_threshold" not in thermal_cfg and "danger_threshold" in thermal_cfg:
+    if "danger_threshold" not in thermal_cfg:
+        thermal_cfg["danger_threshold"] = 100.0
+    if "warning_threshold" not in thermal_cfg:
         thermal_cfg["warning_threshold"] = float(thermal_cfg["danger_threshold"]) - 10.0
     if "max_warning_duration" not in thermal_cfg:
         thermal_cfg["max_warning_duration"] = 60
@@ -264,27 +200,6 @@ def validate_config(cfg: dict[str, Any]) -> None:
         value = objective_weights.get(key)
         if not isinstance(value, (int, float)):
             raise ValueError(f"objective_weights.{key} must be number")
-
-    objective_profiles = constraints.get("objective_profiles")
-    if not isinstance(objective_profiles, dict):
-        raise ValueError("constraints.objective_profiles must be object")
-
-    required_profiles = {"base", "thermal"}
-    if not required_profiles.issubset(set(objective_profiles.keys())):
-        raise ValueError("constraints.objective_profiles must contain base and thermal")
-
-    for profile_name, weights in objective_profiles.items():
-        if not isinstance(weights, dict):
-            raise ValueError(f"constraints.objective_profiles.{profile_name} must be object")
-        total = 0.0
-        for metric, weight in weights.items():
-            if not isinstance(weight, (int, float)):
-                raise ValueError(f"constraints.objective_profiles.{profile_name}.{metric} must be number")
-            if float(weight) < 0.0:
-                raise ValueError(f"constraints.objective_profiles.{profile_name}.{metric} must be non-negative")
-            total += float(weight)
-        if abs(total - 1.0) > 1e-6:
-            raise ValueError(f"constraints.objective_profiles.{profile_name} weights must sum to 1")
 
     objective_scaling = constraints.get("objective_scaling")
     if not isinstance(objective_scaling, dict):

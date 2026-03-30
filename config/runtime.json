@@ -1,8 +1,7 @@
 {
-  "python_path": "D:/software/anaconda3/python.exe",
   "input_mode": "static",
   "data_dir": "data",
-  "tasks_file": "small_tasks_pool_48_withoutAtt.json",
+  "tasks_file": "small_tasks_pool_100_withoutAtt.json",
   "windows_file": "latest_windows.json",
   "seed": 666,
   "time_horizon": 240,
@@ -12,12 +11,7 @@
   "initial_temperature_fallback": 25.0,
   "thermal_initial_source": "last_state_first",
   "replan_state_max_age_sec": 600,
-  "dynamic_weight_enable": true,
-  "thermal_weight_trigger_ratio": 0.8,
-  "max_reweight_rounds": 3,
   "heuristic_log_every_n": 10,
   "cpsat_log_every_n": 5,
-  "log_full_solution_content": true,
-  "solver_progress_every_n_solutions": 5,
-  "solver_progress_enable": true
+  "solver_progress_every_n_solutions": 5
 }

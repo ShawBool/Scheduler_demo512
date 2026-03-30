@@ -314,18 +314,7 @@ def composite_problem_fixture():
                     "resource_utilization": 0.0,
                     "smoothness": 0.0,
                 },
-                "thermal": {
-                    "task_value": 0.05,
-                    "completion": 0.1,
-                    "association": 0.0,
-                    "thermal_safety": 0.75,
-                    "power_smoothing": 0.1,
-                    "resource_utilization": 0.0,
-                    "smoothness": 0.0,
-                },
             },
-            "dynamic_weight_enable": True,
-            "thermal_weight_trigger_ratio": 0.8,
         },
     )
 
@@ -335,21 +324,36 @@ def test_heuristic_prefers_higher_composite_score_over_raw_value(composite_probl
     assert result.schedule[0].task_id == "B_BALANCED_TASK"
 
 
-def test_heuristic_switches_to_thermal_weights_when_ratio_reaches_threshold(composite_problem_fixture):
+def test_heuristic_keeps_static_base_profile_when_temperature_high(composite_problem_fixture):
     hot_problem = composite_problem_fixture
     hot_problem.thermal_config["initial_temperature"] = 81.0
     hot_problem.thermal_config["danger_threshold"] = 100.0
 
     result = build_initial_schedule(hot_problem, seed=8, initial_attitude_angle_deg=0)
-    assert result.solver_metadata["active_weight_profile"] == "thermal"
-    assert result.solver_metadata["switch_reason"] == "thermal_ratio_triggered"
+    assert result.solver_metadata["active_weight_profile"] == "base"
+    assert result.solver_metadata["switch_reason"] == "static_profile"
 
 
-def test_heuristic_switches_back_to_base_when_thermal_ratio_recovers(composite_problem_fixture):
+def test_heuristic_keeps_static_base_profile_when_temperature_low(composite_problem_fixture):
     cool_problem = composite_problem_fixture
     cool_problem.thermal_config["initial_temperature"] = 50.0
     cool_problem.thermal_config["danger_threshold"] = 100.0
 
     result = build_initial_schedule(cool_problem, seed=9, initial_attitude_angle_deg=0)
     assert result.solver_metadata["active_weight_profile"] == "base"
-    assert result.solver_metadata["switch_reason"] == "base_profile"
+    assert result.solver_metadata["switch_reason"] == "static_profile"
+
+
+def test_heuristic_uses_constraint_value_engine_for_thermal_scoring(monkeypatch, composite_problem_fixture):
+    import scheduler.constraint_value_engine as cve
+
+    called = {"hit": False}
+
+    def fake_score_task_candidate(*args, **kwargs):
+        called["hit"] = True
+        return {"total_score": 1.0, "objective_breakdown": {"thermal_safety": 1.0}}
+
+    monkeypatch.setattr(cve, "score_task_candidate", fake_score_task_candidate)
+    build_initial_schedule(composite_problem_fixture, seed=1, initial_attitude_angle_deg=0)
+
+    assert called["hit"] is True

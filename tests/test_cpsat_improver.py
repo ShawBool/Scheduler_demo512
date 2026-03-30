@@ -216,8 +216,8 @@ def test_thermal_proxy_and_power_proxy_are_not_identical_formula(tmp_path):
     warm = build_initial_schedule(problem, seed=1)
     log_path = initialize_iteration_log(tmp_path / "solver_progress.jsonl")
     result = improve_schedule(problem, warm, log_path=log_path, timeout_sec=2, progress_every_n=5, key_task_bonus=0)
-    raw = result.objective_breakdown_raw
-    assert raw["thermal_safety"] != raw["power_smoothing"]
+    breakdown = result.objective_breakdown
+    assert breakdown["thermal_safety"] != breakdown["power_smoothing"]
 
 
 def test_smoothness_uses_transition_cost_not_absolute_angle(tmp_path):
@@ -237,4 +237,63 @@ def test_smoothness_uses_transition_cost_not_absolute_angle(tmp_path):
     warm = build_initial_schedule(problem, seed=1)
     log_path = initialize_iteration_log(tmp_path / "solver_progress.jsonl")
     result = improve_schedule(problem, warm, log_path=log_path, timeout_sec=2, progress_every_n=5, key_task_bonus=0)
-    assert result.objective_breakdown_raw["smoothness"] < 1.0
+    assert result.objective_breakdown["smoothness"] < 100.0
+
+
+def test_same_attitude_tasks_can_overlap_when_resources_allow(tmp_path):
+    window = VisibilityWindow(window_id="w1", start=0, end=50)
+    tasks = [
+        Task("a", 10, 10, 1, 0, 1, 1, 0, attitude_angle_deg=30, visibility_window=window),
+        Task("b", 10, 10, 1, 0, 1, 1, 0, attitude_angle_deg=30, visibility_window=window),
+    ]
+    problem = build_problem(
+        tasks,
+        {"w1": window},
+        horizon=60,
+        capacities={"cpu": 4, "gpu": 1, "memory": 32, "power": 10},
+        attitude_time_per_degree=1.0,
+        thermal_config={"thermal_time_step": 1.0},
+    )
+    warm = build_initial_schedule(problem, seed=1)
+    log_path = initialize_iteration_log(tmp_path / "solver_progress.jsonl")
+    result = improve_schedule(problem, warm, log_path=log_path, timeout_sec=2, progress_every_n=1, key_task_bonus=0)
+    selected = [item for item in result.schedule if item.task_id in {"a", "b"}]
+    assert len(selected) == 2
+    assert selected[0].start == selected[1].start
+
+
+def test_solver_calls_constraint_value_engine_for_objective_coefficients(monkeypatch, tmp_path):
+    import scheduler.constraint_value_engine as cve
+
+    called = {"hit": False}
+
+    def fake_build_solver_coefficients(*args, **kwargs):
+        called["hit"] = True
+        tasks = kwargs["tasks"]
+        return {
+            "task_value": {task.task_id: 1 for task in tasks},
+            "completion_step": 1,
+            "association": {task.task_id: 1 for task in tasks},
+            "thermal_proxy": {task.task_id: 1 for task in tasks},
+            "power_proxy": {task.task_id: 0 for task in tasks},
+            "utilization": {task.task_id: 1 for task in tasks},
+            "smoothness_scale": 1,
+        }
+
+    monkeypatch.setattr(cve, "build_solver_coefficients", fake_build_solver_coefficients)
+
+    window = VisibilityWindow(window_id="w", start=0, end=30)
+    tasks = [Task("x", 5, 10, 1, 0, 1, 1, 1, attitude_angle_deg=0, visibility_window=window)]
+    problem = build_problem(
+        tasks,
+        {"w": window},
+        horizon=30,
+        capacities={"cpu": 2, "gpu": 1, "memory": 10, "power": 10},
+        attitude_time_per_degree=0.1,
+        thermal_config={"thermal_time_step": 1.0},
+    )
+    warm = build_initial_schedule(problem, seed=1)
+    log_path = initialize_iteration_log(tmp_path / "solver_progress.jsonl")
+    improve_schedule(problem, warm, log_path=log_path, timeout_sec=1, progress_every_n=1, key_task_bonus=0)
+
+    assert called["hit"] is True

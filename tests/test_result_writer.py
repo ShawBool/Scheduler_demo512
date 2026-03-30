@@ -60,3 +60,29 @@ def test_materialize_att_before_attitude_tasks():
     assert materialized[1].item_type == "BUSINESS"
     assert materialized[0].end == materialized[1].start
     assert materialized[0].task_id.endswith("_att")
+
+
+def test_materialize_skips_attitude_item_when_transition_is_zero():
+    schedule = [
+        ScheduleItem(task_id="t_same", start=10, end=15, value=1, is_key_task=False, visibility_window_id="w"),
+    ]
+    task_map = {
+        "t_same": Task(
+            task_id="t_same",
+            duration=5,
+            value=1,
+            cpu=1,
+            gpu=0,
+            memory=1,
+            power=1,
+            thermal_load=1,
+            attitude_angle_deg=0,
+        )
+    }
+    out = materialize_att_segments(
+        schedule,
+        task_map=task_map,
+        initial_attitude_angle_deg=0,
+        attitude_time_per_degree=1.0,
+    )
+    assert len([x for x in out if x.item_type == "ATTITUDE"]) == 0

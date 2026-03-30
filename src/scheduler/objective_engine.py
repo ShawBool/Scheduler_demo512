@@ -1,4 +1,4 @@
-"""多目标归一化与动态权重引擎。"""
+"""多目标归一化与静态权重打分引擎。"""
 
 from __future__ import annotations
 
@@ -82,20 +82,6 @@ def _sanitize_weights(weights: Mapping[str, float]) -> dict[str, float]:
     if total <= 0:
         return {k: 0.0 for k in DEFAULT_OBJECTIVE_KEYS}
     return {k: sanitized.get(k, 0.0) / total for k in DEFAULT_OBJECTIVE_KEYS}
-
-
-def select_active_weights(
-    *,
-    base_weights: Mapping[str, float],
-    thermal_weights: Mapping[str, float],
-    thermal_ratio: float,
-    trigger_threshold: float,
-) -> tuple[dict[str, float], str]:
-    ratio = float(thermal_ratio)
-    threshold = float(trigger_threshold)
-    if ratio >= threshold:
-        return _sanitize_weights(thermal_weights), "thermal_ratio_triggered"
-    return _sanitize_weights(base_weights), "base_profile"
 
 
 def score_candidate(

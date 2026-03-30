@@ -54,22 +54,31 @@ def test_validate_config_rejects_warning_not_less_than_danger():
         validate_config(cfg)
 
 
-def test_validate_config_maps_old_thermal_capacity_to_danger_threshold():
+def test_validate_config_sets_default_thermal_thresholds_when_missing():
     cfg = _base_cfg()
     cfg["constraints"].pop("thermal", None)
-    cfg["constraints"]["thermal_capacity"] = 88
 
     validate_config(cfg)
 
-    assert cfg["constraints"]["thermal"]["danger_threshold"] == 88
+    assert cfg["constraints"]["thermal"]["danger_threshold"] == 100.0
 
 
-def test_validate_config_rejects_objective_weights_not_sum_to_one():
+def test_validate_config_rejects_invalid_objective_scaling_bounds():
     cfg = _base_cfg()
-    cfg["constraints"]["objective_profiles"] = {
-        "base": {"task_value": 0.6, "completion": 0.6},
-        "thermal": {"task_value": 0.3, "completion": 0.7},
-    }
+    cfg["constraints"]["objective_scaling"]["task_value"] = [10, 10]
 
-    with pytest.raises(ValueError, match="sum to 1"):
+    with pytest.raises(ValueError, match="max must be greater"):
         validate_config(cfg)
+
+
+def test_validate_config_rejects_removed_runtime_dynamic_weight_fields():
+    cfg = load_config("config")
+    assert "dynamic_weight_enable" not in cfg["runtime"]
+    assert "thermal_weight_trigger_ratio" not in cfg["runtime"]
+    assert "max_reweight_rounds" not in cfg["runtime"]
+
+
+def test_validate_config_no_longer_requires_replan_section():
+    cfg = load_config("config")
+    cfg.pop("replan", None)
+    validate_config(cfg)

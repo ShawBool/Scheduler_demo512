@@ -4,8 +4,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from . import constraint_value_engine
 from .models import ScheduleItem, Task, UnscheduledItem
-from .objective_engine import DEFAULT_OBJECTIVE_KEYS, build_scale_config, score_candidate, select_active_weights
+from .objective_engine import DEFAULT_OBJECTIVE_KEYS, build_scale_config
 from .problem_builder import ProblemInstance
 from .thermal_model import SemiEmpiricalThermalModelV1, ThermalCoefficients
 
@@ -136,32 +137,6 @@ def _default_profiles() -> dict[str, dict[str, float]]:
     }
 
 
-def _candidate_objective_raw(
-    *,
-    task: Task,
-    temperatures: list[float],
-    warning_threshold: float,
-    danger_threshold: float,
-    power_capacity: int,
-    transition_time: int,
-) -> dict[str, float]:
-    peak_temp = max(temperatures) if temperatures else warning_threshold
-    denom = max(danger_threshold - warning_threshold, 1e-6)
-    thermal_risk = max(0.0, peak_temp - warning_threshold) / denom
-    thermal_safety = max(0.0, 1.0 - min(1.0, thermal_risk))
-    power_smoothing = max(0.0, 1.0 - float(task.power) / max(float(power_capacity), 1.0))
-
-    return {
-        "task_value": float(task.value),
-        "completion": 1.0,
-        "association": 1.0 if task.predecessors else 0.5,
-        "thermal_safety": thermal_safety,
-        "power_smoothing": power_smoothing,
-        "resource_utilization": min(1.0, float(task.cpu + task.gpu) / 4.0),
-        "smoothness": max(0.0, 1.0 - float(transition_time) / 180.0),
-    }
-
-
 def build_initial_schedule(
     problem: ProblemInstance,
     seed: int = 666,
@@ -183,9 +158,6 @@ def build_initial_schedule(
     finished_at: dict[str, int] = {}
     current_time = 0
     current_attitude: float | None = float(initial_attitude_angle_deg)
-    active_profile_name = "base"
-    switch_reason = "base_profile"
-    thermal_triggered_any = False
 
     thermal_cfg = problem.thermal_config or {}
     thermal_coeff = thermal_cfg.get("coefficients", {})
@@ -211,9 +183,6 @@ def build_initial_schedule(
 
     objective_profiles = thermal_cfg.get("objective_profiles", _default_profiles())
     base_weights = objective_profiles.get("base", _default_profiles()["base"])
-    thermal_weights = objective_profiles.get("thermal", _default_profiles()["thermal"])
-    dynamic_weight_enable = bool(thermal_cfg.get("dynamic_weight_enable", True))
-    trigger_ratio = float(thermal_cfg.get("thermal_weight_trigger_ratio", 0.8))
 
     objective_ranges = build_scale_config(thermal_cfg.get("objective_scaling", {})).ranges
 
@@ -233,33 +202,17 @@ def build_initial_schedule(
                 dt=thermal_time_step,
             )
             transition = _transition_time(current_attitude, task.attitude_angle_deg, problem.attitude_time_per_degree)
-            raw = _candidate_objective_raw(
+            score_detail = constraint_value_engine.score_task_candidate(
                 task=task,
-                temperatures=temps,
-                warning_threshold=warning_threshold,
-                danger_threshold=danger_threshold,
-                power_capacity=problem.capacities["power"],
+                state_at_candidate=current_thermal_state,
+                capacities=problem.capacities,
+                thermal_cfg=problem.thermal_config,
+                objective_ranges=objective_ranges,
+                weights=base_weights,
                 transition_time=transition,
+                temperatures=temps,
             )
-            ratio = max(
-                float(current_thermal_state.get("temperature", warning_threshold)),
-                float(max(temps) if temps else warning_threshold),
-            ) / max(danger_threshold, 1e-6)
-            if dynamic_weight_enable:
-                active_weights, reason = select_active_weights(
-                    base_weights=base_weights,
-                    thermal_weights=thermal_weights,
-                    thermal_ratio=ratio,
-                    trigger_threshold=trigger_ratio,
-                )
-            else:
-                active_weights, reason = (base_weights, "base_profile")
-            detail = score_candidate(objective_raw=raw, objective_ranges=objective_ranges, weights=active_weights)
-            ranked.append((detail.total_score, tid))
-            switch_reason = reason
-            active_profile_name = "thermal" if reason != "base_profile" else "base"
-            if reason != "base_profile":
-                thermal_triggered_any = True
+            ranked.append((float(score_detail["total_score"]), tid))
         root_sorted = [tid for _, tid in sorted(ranked, key=lambda x: (-x[0], x[1]))]
         ordered_ids = root_sorted + [tid for tid in ordered_ids if tid not in set(root_ids)]
 
@@ -279,10 +232,9 @@ def build_initial_schedule(
             continue
 
         earliest = 0 if not task.predecessors else max(finished_at[pred] for pred in task.predecessors)
-        earliest = max(
-            earliest,
-            current_time + _transition_time(current_attitude, task.attitude_angle_deg, problem.attitude_time_per_degree),
-        )
+        transition_ready = _transition_time(current_attitude, task.attitude_angle_deg, problem.attitude_time_per_degree)
+        if transition_ready > 0:
+            earliest = max(earliest, current_time + transition_ready)
         latest_bound = problem.horizon - task.duration
         if task.visibility_window is not None:
             earliest = max(earliest, task.visibility_window.start)
@@ -306,7 +258,7 @@ def build_initial_schedule(
                 continue
             if _resources_ok(task, usage, problem.capacities, candidate):
                 if thermal_enabled and thermal_model is not None:
-                    state_at_candidate = _simulate_idle_thermal(
+                    state_at_candidate = constraint_value_engine.replay_idle_thermal_state(
                         model=thermal_model,
                         state=current_thermal_state,
                         idle_duration=candidate - current_time,
@@ -325,47 +277,26 @@ def build_initial_schedule(
                     max_warning_steps = thermal_model.max_continuous_warning_steps(warning_flags)
                     if max_warning_steps * thermal_time_step > max_warning_duration:
                         continue
-                    thermal_penalty = sum(max(0.0, temp - warning_threshold) for temp in temperatures)
                     transition = _transition_time(current_attitude, task.attitude_angle_deg, problem.attitude_time_per_degree)
-                    raw = _candidate_objective_raw(
+                    score_detail = constraint_value_engine.score_task_candidate(
                         task=task,
-                        temperatures=temperatures,
-                        warning_threshold=warning_threshold,
-                        danger_threshold=danger_threshold,
-                        power_capacity=problem.capacities["power"],
-                        transition_time=transition,
-                    )
-                    ratio = max(
-                        float(state_at_candidate.get("temperature", warning_threshold)),
-                        float(max(temperatures) if temperatures else warning_threshold),
-                    ) / max(danger_threshold, 1e-6)
-                    if dynamic_weight_enable:
-                        active_weights, reason = select_active_weights(
-                            base_weights=base_weights,
-                            thermal_weights=thermal_weights,
-                            thermal_ratio=ratio,
-                            trigger_threshold=trigger_ratio,
-                        )
-                    else:
-                        active_weights, reason = (base_weights, "base_profile")
-                    score_detail = score_candidate(
-                        objective_raw=raw,
+                        state_at_candidate=state_at_candidate,
+                        capacities=problem.capacities,
+                        thermal_cfg=problem.thermal_config,
                         objective_ranges=objective_ranges,
-                        weights=active_weights,
+                        weights=base_weights,
+                        transition_time=transition,
+                        temperatures=temperatures,
                     )
-                    score = score_detail.total_score
+                    score = float(score_detail["total_score"])
                     if picked_penalty is None:
                         picked_penalty = -1e9
                     better = picked_start is None or score > picked_penalty
-                    same_penalty_earlier = picked_start is not None and picked_penalty is not None and thermal_penalty == picked_penalty and candidate < picked_start
+                    same_penalty_earlier = picked_start is not None and picked_penalty is not None and score == picked_penalty and candidate < picked_start
                     if better or same_penalty_earlier:
                         thermal_candidate_state = end_state
                         picked_start = candidate
                         picked_penalty = score
-                        switch_reason = reason
-                        active_profile_name = "thermal" if reason != "base_profile" else "base"
-                        if reason != "base_profile":
-                            thermal_triggered_any = True
                 else:
                     picked_start = candidate
                     thermal_candidate_state = current_thermal_state
@@ -384,7 +315,7 @@ def build_initial_schedule(
         _apply_usage(task, usage, picked_start)
         end = picked_start + task.duration
         finished_at[task.task_id] = end
-        current_time = end
+        current_time = max(current_time, end)
         if task.attitude_angle_deg is not None:
             current_attitude = float(task.attitude_angle_deg)
         current_thermal_state = thermal_candidate_state
@@ -400,12 +331,9 @@ def build_initial_schedule(
         )
 
     scheduled.sort(key=lambda x: (x.start, x.task_id))
-    if thermal_triggered_any:
-        active_profile_name = "thermal"
-        switch_reason = "thermal_ratio_triggered"
     metadata = {
-        "active_weight_profile": active_profile_name,
-        "switch_reason": switch_reason,
+        "active_weight_profile": "base",
+        "switch_reason": "static_profile",
         "objective_components": ",".join(DEFAULT_OBJECTIVE_KEYS),
     }
     return HeuristicResult(schedule=scheduled, unscheduled=unscheduled, solver_metadata=metadata)

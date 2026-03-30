@@ -11,7 +11,7 @@ from pathlib import Path
 from .config import load_config, validate_config
 from .cpsat_improver import improve_schedule
 from .data_loader import load_static_task_bundle
-from .heuristic_scheduler import HeuristicResult, build_initial_schedule
+from .heuristic_scheduler import build_initial_schedule
 from .models import ScheduleResult
 from .problem_builder import build_problem
 from .result_writer import append_iteration_log, initialize_iteration_log, materialize_att_segments, write_schedule_result
@@ -153,14 +153,6 @@ def _simulate_thermal_metrics(
     }
 
 
-def _select_profile_from_metrics(*, thermal_metrics: dict[str, float], danger_threshold: float, trigger_ratio: float) -> tuple[str, str, float]:
-    peak = float(thermal_metrics.get("peak_temperature", 0.0))
-    ratio = peak / max(float(danger_threshold), 1e-6)
-    if ratio >= float(trigger_ratio):
-        return "thermal", "thermal_trace_triggered", ratio
-    return "base", "thermal_trace_safe", ratio
-
-
 def run_pipeline(config_path: str, *, seed: int, output_dir: str) -> dict:
     """运行静态基线规划。
 
@@ -200,10 +192,7 @@ def run_pipeline(config_path: str, *, seed: int, output_dir: str) -> dict:
             "thermal_time_step": float(cfg["runtime"]["thermal_time_step"]),
             "initial_temperature": float(initial_temperature),
             "initial_temperature_fallback": float(cfg["runtime"]["initial_temperature_fallback"]),
-            "objective_profiles": dict(constraints.get("objective_profiles", {})),
             "objective_scaling": dict(constraints.get("objective_scaling", {})),
-            "dynamic_weight_enable": bool(cfg["runtime"].get("dynamic_weight_enable", True)),
-            "thermal_weight_trigger_ratio": float(cfg["runtime"].get("thermal_weight_trigger_ratio", 0.8)),
         },
     )
 
@@ -242,61 +231,23 @@ def run_pipeline(config_path: str, *, seed: int, output_dir: str) -> dict:
         },
     )
 
-    dynamic_weight_enable = bool(cfg["runtime"].get("dynamic_weight_enable", True))
-    max_reweight_rounds = int(cfg["runtime"].get("max_reweight_rounds", 1))
-    if not dynamic_weight_enable:
-        max_reweight_rounds = 1
+    improve = improve_schedule(
+        problem,
+        warm,
+        log_path=progress_file,
+        timeout_sec=float(cfg["runtime"]["solver_timeout_sec"]),
+        progress_every_n=int(cfg["runtime"]["cpsat_log_every_n"]),
+        key_task_bonus=float(cfg["objective_weights"]["key_task_bonus"]),
+        initial_attitude_angle_deg=float(cfg["runtime"]["initial_attitude_angle_deg"]),
+    )
 
-    # rolling reweight 以 base profile 起步，再由热回放结果决定是否切到 thermal。
-    current_profile = "base"
-
-    weight_profile_history: list[dict[str, float | str | int]] = []
-    improve = None
-    final_thermal_metrics: dict[str, float] | None = None
-    warm_for_next: HeuristicResult = warm
-    for round_idx in range(max_reweight_rounds):
-        improve = improve_schedule(
-            problem,
-            warm_for_next,
-            log_path=progress_file,
-            timeout_sec=float(cfg["runtime"]["solver_timeout_sec"]),
-            progress_every_n=int(cfg["runtime"]["cpsat_log_every_n"]),
-            key_task_bonus=float(cfg["objective_weights"]["key_task_bonus"]),
-            initial_attitude_angle_deg=float(cfg["runtime"]["initial_attitude_angle_deg"]),
-            active_profile=current_profile,
-        )
-
-        current_metrics = _simulate_thermal_metrics(
-            improve.schedule,
-            task_map=problem.task_map,
-            capacities=problem.capacities,
-            thermal_cfg=problem.thermal_config,
-            initial_temperature=initial_temperature,
-        )
-        next_profile, reason, ratio = _select_profile_from_metrics(
-            thermal_metrics=current_metrics,
-            danger_threshold=float(problem.thermal_config.get("danger_threshold", 100.0)),
-            trigger_ratio=float(cfg["runtime"].get("thermal_weight_trigger_ratio", 0.8)),
-        )
-        weight_profile_history.append(
-            {
-                "round": round_idx,
-                "profile": current_profile,
-                "next_profile": next_profile,
-                "reason": reason,
-                "thermal_ratio": float(round(ratio, 6)),
-            }
-        )
-        final_thermal_metrics = current_metrics
-
-        if round_idx + 1 >= max_reweight_rounds or next_profile == current_profile:
-            break
-
-        warm_for_next = HeuristicResult(schedule=improve.schedule, unscheduled=improve.unscheduled)
-        current_profile = next_profile
-
-    if improve is None or final_thermal_metrics is None:
-        raise RuntimeError("solver did not produce any solution in rolling reweight loop")
+    final_thermal_metrics = _simulate_thermal_metrics(
+        improve.schedule,
+        task_map=problem.task_map,
+        capacities=problem.capacities,
+        thermal_cfg=problem.thermal_config,
+        initial_temperature=initial_temperature,
+    )
 
     materialized_schedule = materialize_att_segments(
         improve.schedule,
@@ -318,10 +269,6 @@ def run_pipeline(config_path: str, *, seed: int, output_dir: str) -> dict:
         "status": improve.solver_status,
         "objective_value": improve.objective_value,
         "objective_breakdown": improve.objective_breakdown,
-        "objective_breakdown_raw": improve.objective_breakdown_raw,
-        "active_weight_profile": improve.active_weight_profile,
-        "switch_reason": improve.switch_reason,
-        "weight_profile_history": weight_profile_history,
         "heuristic_runtime_ms": heuristic_runtime_ms,
         "cpsat_runtime_ms": improve.runtime_ms,
         "total_runtime_ms": total_runtime_ms,
