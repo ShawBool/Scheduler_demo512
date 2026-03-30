@@ -4,7 +4,7 @@
   "tasks": [
     {
       "task_id": "group01_radar",
-      "duration": 1,
+      "duration": 16,
       "value": 290,
       "cpu": 2,
       "gpu": 2,

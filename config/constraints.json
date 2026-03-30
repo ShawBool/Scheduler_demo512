@@ -1,11 +1,11 @@
 {
   "cpu_capacity": 4,
-  "gpu_capacity": 2,
+  "gpu_capacity":3,
   "memory_capacity": 512,
   "power_capacity": 10,
   "thermal": {
-    "warning_threshold": 24,
-    "danger_threshold": 25,
+    "warning_threshold": 80,
+    "danger_threshold": 100,
     "max_warning_duration": 60,
     "warning_thermal_load": 5,
     "thermal_concurrency_limit": 1,
@@ -18,7 +18,7 @@
       "k_cool": 0.005
     }
   },
-  "attitude_time_per_degree": 0.1,
+  "attitude_time_per_degree": 0.01,
   "objective_scaling": {
     "task_value": [0, 100],
     "completion": [0, 1],

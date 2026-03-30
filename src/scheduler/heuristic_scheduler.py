@@ -327,6 +327,7 @@ def build_initial_schedule(
                 value=task.value,
                 is_key_task=task.is_key_task,
                 visibility_window_id=task.visibility_window.window_id if task.visibility_window else None,
+                cpu=task.cpu,
             )
         )
 

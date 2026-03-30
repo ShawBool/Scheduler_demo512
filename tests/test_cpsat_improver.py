@@ -262,6 +262,8 @@ def test_same_attitude_tasks_can_overlap_when_resources_allow(tmp_path):
     assert selected[0].start == selected[1].start
 
 
+
+
 def test_solver_calls_constraint_value_engine_for_objective_coefficients(monkeypatch, tmp_path):
     import scheduler.constraint_value_engine as cve
 

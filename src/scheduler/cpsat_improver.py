@@ -90,6 +90,14 @@ def _transition_time_from_initial(initial_angle: float, task_angle: float | None
     return int(round(delta * per_degree))
 
 
+def _piecewise_square_upper_bound(value: int, upper: int) -> int:
+    """给平方项提供保守上界，保持向上取整的单调性。"""
+    value = max(0, int(value))
+    upper = max(0, int(upper))
+    capped = min(value, upper)
+    return capped * capped
+
+
 def improve_schedule(
     problem: ProblemInstance,
     warm_start: HeuristicResult,
@@ -346,6 +354,7 @@ def improve_schedule(
                     value=task.value,
                     is_key_task=task.is_key_task,
                     visibility_window_id=task.visibility_window.window_id if task.visibility_window else None,
+                    cpu=task.cpu,
                 )
             )
         else:

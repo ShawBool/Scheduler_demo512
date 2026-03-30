@@ -86,3 +86,65 @@ def test_materialize_skips_attitude_item_when_transition_is_zero():
         attitude_time_per_degree=1.0,
     )
     assert len([x for x in out if x.item_type == "ATTITUDE"]) == 0
+
+
+def test_materialize_preserves_full_attitude_transition_without_shifting_business_items():
+    schedule = [
+        ScheduleItem(task_id="t_turn_48", start=5, end=10, value=10, is_key_task=False, visibility_window_id="w1"),
+        ScheduleItem(task_id="t_idle", start=10, end=16, value=3, is_key_task=False, visibility_window_id=None),
+        ScheduleItem(task_id="t_turn_138", start=16, end=24, value=10, is_key_task=False, visibility_window_id="w1"),
+    ]
+    task_map = {
+        "t_turn_48": Task(
+            task_id="t_turn_48",
+            duration=5,
+            value=10,
+            cpu=1,
+            gpu=0,
+            memory=1,
+            power=1,
+            thermal_load=1,
+            attitude_angle_deg=48,
+        ),
+        "t_idle": Task(
+            task_id="t_idle",
+            duration=6,
+            value=3,
+            cpu=1,
+            gpu=0,
+            memory=1,
+            power=1,
+            thermal_load=1,
+            attitude_angle_deg=None,
+        ),
+        "t_turn_138": Task(
+            task_id="t_turn_138",
+            duration=8,
+            value=10,
+            cpu=1,
+            gpu=0,
+            memory=1,
+            power=1,
+            thermal_load=1,
+            attitude_angle_deg=138,
+        ),
+    }
+
+    materialized = materialize_att_segments(
+        schedule,
+        task_map=task_map,
+        initial_attitude_angle_deg=0,
+        attitude_time_per_degree=0.1,
+    )
+
+    attitude_items = [item for item in materialized if item.item_type == "ATTITUDE"]
+    assert len(attitude_items) == 2
+    assert attitude_items[1].start == 7
+    assert attitude_items[1].end == 16
+    assert attitude_items[1].cpu == 1
+
+    business_items = {item.task_id: item for item in materialized if item.item_type == "BUSINESS"}
+    assert business_items["t_idle"].start == 10
+    assert business_items["t_idle"].end == 16
+    assert business_items["t_turn_138"].start == 16
+    assert business_items["t_turn_138"].end == 24

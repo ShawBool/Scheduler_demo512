@@ -7,9 +7,9 @@
     {"window_id": "target_2", "start": 36, "end": 60},
     {"window_id": "target_3", "start": 66, "end": 80},
     {"window_id": "gs_downlink_1", "start": 85, "end": 105},
-    {"window_id": "target_4", "start": 106, "end": 122},
+    {"window_id": "target_4", "start": 106, "end": 125},
     {"window_id": "target_5", "start": 126, "end": 144},
-    {"window_id": "target_6", "start": 155, "end": 170},
+    {"window_id": "target_6", "start": 155, "end": 190},
     {"window_id": "gs_downlink_2", "start": 200, "end": 230}
   ]
 }
